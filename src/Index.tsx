@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { ClipData } from "./clipboard";
 import * as clipboard from "./clipboard";
 
-export default function Index() {
+export default function Index(): JSX.Element {
     const [clipDatas, setClipDatas] = useState<ClipData[]>([]);
     const ref = useRef<ClipData[]>([]);
 
@@ -13,8 +13,7 @@ export default function Index() {
         setClipDatas(ref.current);
 
         clipboard.onChange((data: ClipData) => {
-            const list = ref.current;
-            const updated = list.filter((d) => d.id !== data.id);
+            const updated = ref.current.filter((d) => d.id !== data.id);
             updated.unshift(data);
             ref.current = updated;
             setClipDatas(ref.current);
@@ -42,10 +41,10 @@ export default function Index() {
     );
 }
 
-function renderData(data: ClipData) {
+function renderData(data: ClipData): JSX.Element {
     switch (data.type) {
         case "image":
-            return <img src={data.dataUrl} className="clip-image" />;
+            return <img className="clip-image" src={data.dataUrl} />;
         case "text":
             return (
                 <pre className="clip-text" title={data.text}>
@@ -53,6 +52,4 @@ function renderData(data: ClipData) {
                 </pre>
             );
     }
-
-    return undefined;
 }
