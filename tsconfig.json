@@ -1,13 +1,16 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
+        "module": "CommonJS",
+        "target": "ESNext",
+        "moduleResolution": "node",
+        "jsx": "react-jsx",
         "noImplicitAny": true,
         "sourceMap": true,
+        "strict": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
         "outDir": "out",
-        "baseUrl": ".",
-        "paths": {
-            "*": ["node_modules/*"]
-        }
+        "baseUrl": "."
     },
     "include": ["src/**/*"]
 }
