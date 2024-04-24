@@ -1,0 +1,9 @@
+.clip-number {
+    vertical-align: middle;
+    width: 2rem;
+}
+
+.clip-image {
+    max-width: 100%;
+    max-height: 10rem;
+}
