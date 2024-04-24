@@ -1,0 +1,20 @@
+{
+    "name": "clipboard-manager",
+    "displayName": "Clipboard manager",
+    "description": "Clipboard manager",
+    "version": "1.0.0",
+    "author": "AndreasArvidsson",
+    "license": "MIT",
+    "main": "out/main.js",
+    "scripts": {
+        "build": "tsc -p . && npm run copyFiles",
+        "start": "npm run build && electron .",
+        "copyFiles": "cp src/index.html out/index.html"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "@electron-forge/cli": "^7.4.0",
+        "electron": "^30.0.1",
+        "typescript": "^5.4.5"
+    }
+}
