@@ -5,6 +5,9 @@ const createWindow = () => {
     const win = new BrowserWindow({
         width: 800,
         height: 1200,
+        // useContentSize: true,
+        // alwaysOnTop: true,
+        center: true,
         autoHideMenuBar: true,
         webPreferences: {
             nodeIntegration: true,

@@ -21,7 +21,7 @@ export default function Index(): JSX.Element {
     }, []);
 
     return (
-        <div className="table-container">
+        <div className="overflow-x-hidden">
             <table>
                 <tbody>
                     {clipDatas.map((data, i) => (
@@ -44,12 +44,8 @@ export default function Index(): JSX.Element {
 function renderData(data: ClipData): JSX.Element {
     switch (data.type) {
         case "image":
-            return <img className="clip-image" src={data.dataUrl} />;
+            return <img src={data.dataUrl} />;
         case "text":
-            return (
-                <pre className="clip-text" title={data.text}>
-                    {data.text}
-                </pre>
-            );
+            return <pre title={data.text}>{data.text}</pre>;
     }
 }
