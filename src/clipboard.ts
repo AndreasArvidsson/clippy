@@ -1,44 +1,50 @@
 import clipboardListener from "clipboard-event";
 import { clipboard, type NativeImage } from "electron";
 
-export interface ClipData {
-    text?: string;
-    html?: string;
-    rtf?: string;
-    image?: NativeImage;
+export interface ClipDataText {
+    type: "text";
+    id: string;
+    text: string;
 }
+
+interface ClipDataImage {
+    type: "image";
+    id: string;
+    raw: NativeImage;
+    dataUrl: string;
+}
+
+export type ClipData = ClipDataText | ClipDataImage;
 
 let listening = false;
 
-export function read(): ClipData {
-    const data: ClipData = {};
+export function read(): ClipData | null {
+    const formats = clipboard.availableFormats();
 
-    for (const format of clipboard.availableFormats()) {
-        switch (format) {
-            case "text/plain":
-                data.text = clipboard.readText();
-                break;
-            case "text/html":
-                data.html = clipboard.readHTML();
-                break;
-            case "text/rtf":
-                data.rtf = clipboard.readRTF();
-                break;
-            default:
-                if (format.startsWith("image/")) {
-                    data.image = clipboard.readImage();
-                } else {
-                    // console.log(clipboard.readText());
-                    // console.log(clipboard.readHTML());
-                    // console.log(clipboard.readRTF());
-                    // console.log(clipboard.readBuffer(format));
-                    // console.log(clipboard.read(format));
-                    console.warn(`Unsupported clipboard format: ${format}`);
-                }
+    for (const format of formats) {
+        if (format.startsWith("image/")) {
+            const image = clipboard.readImage();
+            const dataUrl = image.toDataURL();
+            return {
+                type: "image",
+                id: dataUrl,
+                raw: image,
+                dataUrl,
+            };
+        }
+        if (format === "text/plain") {
+            const text = clipboard.readText();
+            return {
+                type: "text",
+                id: text,
+                text,
+            };
         }
     }
 
-    return data;
+    console.warn(`Unsupported clipboard formats: [${formats.join(", ")}]`);
+
+    return null;
 }
 
 export function onChange(callback: (data: ClipData) => void) {
@@ -48,6 +54,9 @@ export function onChange(callback: (data: ClipData) => void) {
     }
 
     clipboardListener.on("change", () => {
-        callback(read());
+        const data = read();
+        if (data != null) {
+            callback(data);
+        }
     });
 }

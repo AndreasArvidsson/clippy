@@ -1,17 +1,23 @@
-import { useEffect, useState } from "react";
-import * as clipboard from "./clipboard";
-import type { ClipData } from "./clipboard";
 import classnames from "classnames";
+import { useCallback, useEffect, useRef, useState } from "react";
+import type { ClipData } from "./clipboard";
+import * as clipboard from "./clipboard";
 
 export default function Index() {
     const [clipDatas, setClipDatas] = useState<ClipData[]>([]);
+    const ref = useRef<ClipData[]>([]);
 
     useEffect(() => {
-        setClipDatas([clipboard.read()]);
+        const data = clipboard.read();
+        ref.current = data != null ? [data] : [];
+        setClipDatas(ref.current);
 
-        clipboard.onChange((data) => {
-            clipDatas.push(data);
-            setClipDatas([...clipDatas]);
+        clipboard.onChange((data: ClipData) => {
+            const list = ref.current;
+            const updated = list.filter((d) => d.id !== data.id);
+            updated.push(data);
+            ref.current = updated;
+            setClipDatas(ref.current);
         });
     }, []);
 
@@ -35,11 +41,16 @@ export default function Index() {
 }
 
 function renderData(data: ClipData) {
-    if (data.image != null) {
-        return <img src={data.image.toDataURL()} className="clip-image" />;
+    switch (data.type) {
+        case "image":
+            return <img src={data.dataUrl} className="clip-image" />;
+        case "text":
+            return (
+                <pre className="clip-text" title={data.text}>
+                    {data.text}
+                </pre>
+            );
     }
-    if (data.text != null) {
-        return data.text;
-    }
+
     return undefined;
 }
