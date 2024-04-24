@@ -1,6 +1,21 @@
-.clip-number {
+.table-container {
+    overflow-x: hidden;
+}
+
+.clip-number,
+.clip-content {
     vertical-align: middle;
-    width: 2rem;
+    margin: 0;
+}
+
+.clip-number {
+    width: 1%;
+    padding: 0.25rem;
+    padding-right: 0.5rem;
+}
+
+.clip-content {
+    padding: 0.5rem;
 }
 
 .clip-text,
@@ -8,4 +23,5 @@
     max-width: 100%;
     max-height: 10rem;
     overflow: hidden;
+    margin: 0;
 }

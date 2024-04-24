@@ -15,28 +15,30 @@ export default function Index() {
         clipboard.onChange((data: ClipData) => {
             const list = ref.current;
             const updated = list.filter((d) => d.id !== data.id);
-            updated.push(data);
+            updated.unshift(data);
             ref.current = updated;
             setClipDatas(ref.current);
         });
     }, []);
 
     return (
-        <table className="w-100">
-            <tbody>
-                {clipDatas.map((data, i) => (
-                    <tr
-                        key={i}
-                        className={classnames({
-                            "border-top": i > 0,
-                        })}
-                    >
-                        <th className="clip-number">{i + 1}</th>
-                        <td className="p-2">{renderData(data)}</td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
+        <div className="table-container">
+            <table>
+                <tbody>
+                    {clipDatas.map((data, i) => (
+                        <tr
+                            key={i}
+                            className={classnames({
+                                "border-top": i > 0,
+                            })}
+                        >
+                            <th className="clip-number">{i + 1}</th>
+                            <td className="clip-content">{renderData(data)}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
     );
 }
 
