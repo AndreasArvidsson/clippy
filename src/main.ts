@@ -1,10 +1,15 @@
 import { app, BrowserWindow, globalShortcut, Menu, nativeImage, Tray } from "electron";
 import * as path from "node:path";
+import { NAME } from "./constants";
+
+const iconPath = path.resolve(__dirname, "images/icon.png");
 
 function createWindow() {
     const win = new BrowserWindow({
+        icon: iconPath,
         width: 800,
         height: 1200,
+        title: NAME,
         // useContentSize: true,
         // alwaysOnTop: true,
         center: true,
@@ -32,23 +37,25 @@ function createWindow() {
         }
     });
 
-    const icon = nativeImage.createFromPath(path.resolve(__dirname, "images/tray.png"));
+    const icon = nativeImage.createFromPath(iconPath);
     const tray = new Tray(icon);
 
+    tray.setToolTip(NAME);
+    tray.setTitle(NAME);
+
     const contextMenu = Menu.buildFromTemplate([
-        { label: "Item1", type: "radio" },
-        { label: "Item2", type: "radio" },
-        { label: "Item3", type: "radio", checked: true },
-        { label: "Item4", type: "radio" },
+        { label: "Exit", type: "normal", click: () => app.quit() },
     ]);
 
     tray.setContextMenu(contextMenu);
 
-    tray.setToolTip("This is my application");
-    tray.setTitle("This is my title");
-
     tray.addListener("click", () => {
         console.log("Tray clicked");
+        if (win.isMinimized()) {
+            win.restore();
+        } else if (win.isVisible() && !win.isFocused()) {
+            win.focus();
+        }
     });
 
     win.webContents.openDevTools();
