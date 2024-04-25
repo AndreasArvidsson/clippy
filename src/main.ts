@@ -1,7 +1,7 @@
 import { app, BrowserWindow } from "electron";
 import * as path from "node:path";
 
-const createWindow = () => {
+function createWindow() {
     const win = new BrowserWindow({
         width: 800,
         height: 1200,
@@ -15,18 +15,18 @@ const createWindow = () => {
         },
     });
 
-    win.loadFile(path.resolve(__dirname, "index.html"));
+    void win.loadFile(path.resolve(__dirname, "index.html"));
 
     win.webContents.openDevTools();
-};
+}
 
-app.whenReady().then(() => {
+void app.whenReady().then(() => {
     createWindow();
 });
 
-app.on("activate", function () {
+app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
-        createWindow();
+        void createWindow();
     }
 });
 

@@ -18,8 +18,6 @@ export function initializeCommunicationDir(dirPath: string) {
         // On Windows, uid < 0, so we don't worry about it for simplicity
         (info.uid >= 0 && stats.uid !== info.uid)
     ) {
-        throw new Error(
-            `Refusing to proceed because of invalid communication dir ${dirPath}`
-        );
+        throw new Error(`Refusing to proceed because of invalid communication dir ${dirPath}`);
     }
 }

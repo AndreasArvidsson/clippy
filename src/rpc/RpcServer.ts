@@ -21,45 +21,45 @@ export default class RpcServer {
 
         initializeCommunicationDir(this.dirPath);
 
-        chokidar.watch(this.requestPath).on("add", async (path) => {
+        chokidar.watch(this.requestPath).on("add", (path) => {
             console.log(`File ${path} has been added`);
 
-            try {
-                this.executeRequest();
-            } catch (error) {
-                console.error(error);
-            }
+            void this.executeRequest();
         });
     }
 
-    private async executeRequest() {
-        const request = await readRequest(this.requestPath);
-
-        const { uuid, data, returnCommandOutput, waitForFinish } = request;
-
+    private async executeRequest(): Promise<void> {
         try {
-            const callbackPromise = this.callback!(data);
+            const { uuid, data, returnCommandOutput, waitForFinish } = await readRequest(
+                this.requestPath,
+            );
 
-            let returnValue: unknown = null;
+            try {
+                const callbackPromise = this.callback!(data);
 
-            if (returnCommandOutput) {
-                returnValue = await callbackPromise;
-            } else if (waitForFinish) {
-                await callbackPromise;
+                let returnValue: unknown = null;
+
+                if (returnCommandOutput) {
+                    returnValue = await callbackPromise;
+                } else if (waitForFinish) {
+                    await callbackPromise;
+                }
+
+                await writeResponse(this.responsePath, {
+                    uuid,
+                    returnValue,
+                    error: null,
+                    warnings: [],
+                });
+            } catch (error) {
+                await writeResponse(this.responsePath, {
+                    uuid,
+                    error: (error as Error).message,
+                    warnings: [],
+                });
             }
-
-            await writeResponse(this.responsePath, {
-                uuid: request.uuid,
-                returnValue,
-                error: null,
-                warnings: [],
-            });
         } catch (error) {
-            await writeResponse(this.responsePath, {
-                uuid: request.uuid,
-                error: (error as Error).message,
-                warnings: [],
-            });
+            console.error(error);
         }
     }
 }

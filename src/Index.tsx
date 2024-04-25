@@ -22,7 +22,8 @@ export default function Index(): JSX.Element {
 
         const rpc = new RpcServer("clipboard-manager");
 
-        rpc.init(async (data) => {
+        rpc.init((data) => {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
             return (data as any).value + 1;
         });
     }, []);

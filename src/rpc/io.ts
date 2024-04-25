@@ -1,4 +1,4 @@
-import { FileHandle, readFile, stat, open } from "fs/promises";
+import { readFile, stat, open } from "fs/promises";
 import type { Request, Response } from "./types";
 
 export const COMMAND_TIMEOUT_MS = 3000;
@@ -10,12 +10,10 @@ export const COMMAND_TIMEOUT_MS = 3000;
  */
 export async function readRequest(requestPath: string): Promise<Request> {
     const stats = await stat(requestPath);
-    const request = JSON.parse(await readFile(requestPath, "utf-8"));
+    const request = JSON.parse(await readFile(requestPath, "utf-8")) as Request;
 
     if (Math.abs(stats.mtimeMs - new Date().getTime()) > COMMAND_TIMEOUT_MS) {
-        throw new Error(
-            "Request file is older than timeout; refusing to execute command"
-        );
+        throw new Error("Request file is older than timeout; refusing to execute command");
     }
 
     return request;
