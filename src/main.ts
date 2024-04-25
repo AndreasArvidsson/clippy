@@ -1,4 +1,4 @@
-import { app, BrowserWindow, globalShortcut, Menu } from "electron";
+import { app, BrowserWindow, globalShortcut, Menu, nativeImage, Tray } from "electron";
 import * as path from "node:path";
 
 function createWindow() {
@@ -30,6 +30,25 @@ function createWindow() {
                 : win.webContents.openDevTools();
             e.preventDefault();
         }
+    });
+
+    const icon = nativeImage.createFromPath(path.resolve(__dirname, "images/tray.png"));
+    const tray = new Tray(icon);
+
+    const contextMenu = Menu.buildFromTemplate([
+        { label: "Item1", type: "radio" },
+        { label: "Item2", type: "radio" },
+        { label: "Item3", type: "radio", checked: true },
+        { label: "Item4", type: "radio" },
+    ]);
+
+    tray.setContextMenu(contextMenu);
+
+    tray.setToolTip("This is my application");
+    tray.setTitle("This is my title");
+
+    tray.addListener("click", () => {
+        console.log("Tray clicked");
     });
 
     win.webContents.openDevTools();

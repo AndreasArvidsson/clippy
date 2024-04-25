@@ -7,9 +7,9 @@
     "license": "MIT",
     "main": "out/main.js",
     "scripts": {
-        "build": "tsc -p . && npm run copyFiles",
+        "build": "tsc -p . && npm run copyAssets",
         "start": "npm run build && electron .",
-        "copyFiles": "cp src/index.html out/ && cp node_modules/bootstrap/dist/css/bootstrap.min.css out/ && cp src/styles.css out/",
+        "copyAssets": "sh copyAssets.sh",
         "test": "eslint src && prettier --check .",
         "fix": "prettier --write ."
     },
