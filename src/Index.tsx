@@ -1,7 +1,8 @@
 import classnames from "classnames";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ClipData } from "./clipboard";
 import * as clipboard from "./clipboard";
+import RpcServer from "./rpc/RpcServer";
 
 export default function Index(): JSX.Element {
     const [clipDatas, setClipDatas] = useState<ClipData[]>([]);
@@ -17,6 +18,12 @@ export default function Index(): JSX.Element {
             updated.unshift(data);
             ref.current = updated;
             setClipDatas(ref.current);
+        });
+
+        const rpc = new RpcServer("clipboard-manager");
+
+        rpc.init(async (data) => {
+            return (data as any).value + 1;
         });
     }, []);
 
