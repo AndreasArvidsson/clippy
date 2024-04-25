@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, globalShortcut, Menu } from "electron";
 import * as path from "node:path";
 
 function createWindow() {
@@ -15,12 +15,33 @@ function createWindow() {
         },
     });
 
-    void win.loadFile(path.resolve(__dirname, "index.html"));
+    Menu.setApplicationMenu(null);
+
+    win.webContents.on("before-input-event", (e, input) => {
+        if (
+            input.type === "keyDown" &&
+            input.key === "F12" &&
+            !input.control &&
+            !input.shift &&
+            !input.alt
+        ) {
+            win.webContents.isDevToolsOpened()
+                ? win.webContents.closeDevTools()
+                : win.webContents.openDevTools();
+            e.preventDefault();
+        }
+    });
 
     win.webContents.openDevTools();
+
+    void win.loadFile(path.resolve(__dirname, "index.html"));
 }
 
 void app.whenReady().then(() => {
+    globalShortcut.register("Control+Shift+Alt+O", () => {
+        console.log("Electron loves global shortcuts!");
+    });
+
     createWindow();
 });
 
