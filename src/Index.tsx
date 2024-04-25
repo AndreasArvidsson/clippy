@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import type { ClipData } from "./clipboard";
 import * as clipboard from "./clipboard";
 import RpcServer from "./rpc/RpcServer";
+import { ID } from "./constants";
 
 export default function Index(): JSX.Element {
     const [clipDatas, setClipDatas] = useState<ClipData[]>([]);
@@ -20,7 +21,7 @@ export default function Index(): JSX.Element {
             setClipDatas(ref.current);
         });
 
-        const rpc = new RpcServer("clipboard-manager");
+        const rpc = new RpcServer(ID);
 
         rpc.init((data) => {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
@@ -35,9 +36,10 @@ export default function Index(): JSX.Element {
                     {clipDatas.map((data, i) => (
                         <tr
                             key={i}
-                            className={classnames({
+                            className={classnames("clip-item", {
                                 "border-top": i > 0,
                             })}
+                            onClick={() => clipboard.write(data)}
                         >
                             <th className="clip-number">{i + 1}</th>
                             <td className="clip-content">{renderData(data)}</td>

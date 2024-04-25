@@ -47,6 +47,17 @@ export function read(): ClipData | null {
     return null;
 }
 
+export function write(data: ClipData) {
+    switch (data.type) {
+        case "image":
+            clipboard.writeImage(data.raw);
+            break;
+        case "text":
+            clipboard.writeText(data.text);
+            break;
+    }
+}
+
 export function onChange(callback: (data: ClipData) => void) {
     if (!listening) {
         listening = true;

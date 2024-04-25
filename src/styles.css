@@ -20,3 +20,7 @@
     overflow: hidden;
     margin: 0;
 }
+
+.clip-item:hover {
+    background-color: CadetBlue;
+}
