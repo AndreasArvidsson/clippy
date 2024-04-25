@@ -10,7 +10,8 @@ export const COMMAND_TIMEOUT_MS = 3000;
  */
 export async function readRequest(requestPath: string): Promise<Request> {
     const stats = await stat(requestPath);
-    const request = JSON.parse(await readFile(requestPath, "utf-8")) as Request;
+    const content = await readFile(requestPath, "utf-8");
+    const request = JSON.parse(content) as Request;
 
     if (Math.abs(stats.mtimeMs - new Date().getTime()) > COMMAND_TIMEOUT_MS) {
         throw new Error("Request file is older than timeout; refusing to execute command");
@@ -25,7 +26,7 @@ export async function readRequest(requestPath: string): Promise<Request> {
  * @param responsePath The file path to write to
  * @param response The response object to JSON-encode and write to disk
  */
-export async function writeResponse(responsePath: string, response: Response) {
+export async function writeResponse(responsePath: string, response: Response): Promise<void> {
     const file = await open(responsePath, "wx");
     await file.write(`${JSON.stringify(response)}\n`);
     await file.close();

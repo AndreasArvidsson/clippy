@@ -1,3 +1,4 @@
+import * as fs from "fs";
 import chokidar from "chokidar";
 import { join } from "node:path";
 import { getCommunicationDirPath } from "./getCommunicationDirPath";
@@ -9,6 +10,7 @@ export default class RpcServer {
     private requestPath: string;
     private responsePath: string;
     private callback?: (data: unknown) => Promise<unknown>;
+    private executing: boolean = false;
 
     constructor(private name: string) {
         this.dirPath = getCommunicationDirPath(name);
@@ -21,14 +23,28 @@ export default class RpcServer {
 
         initializeCommunicationDir(this.dirPath);
 
-        chokidar.watch(this.requestPath).on("add", (path) => {
-            console.log(`File ${path} has been added`);
+        chokidar
+            .watch(this.requestPath)
+            .on("add", (path) => {
+                console.log(`File ${path} has been added`, Date.now());
 
-            void this.executeRequest();
-        });
+                void this.executeRequest();
+            })
+            .on("change", (path) => {
+                console.log(`File ${path} has been changed`, Date.now());
+
+                void this.executeRequest();
+            });
     }
 
     private async executeRequest(): Promise<void> {
+        if (this.executing) {
+            console.log("Already executing!!!!!");
+            return;
+        }
+
+        this.executing = true;
+
         try {
             const { uuid, data, returnCommandOutput, waitForFinish } = await readRequest(
                 this.requestPath,
@@ -61,5 +77,7 @@ export default class RpcServer {
         } catch (error) {
             console.error(error);
         }
+
+        this.executing = false;
     }
 }
