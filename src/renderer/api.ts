@@ -1,5 +1,5 @@
-import { ipcRenderer } from "electron/renderer";
-import type { ClipItem } from "./types/ClipboardItem";
+import { ipcRenderer } from "electron";
+import type { ClipItem } from "../types/ClipboardItem";
 
 export default {
     onClipboardUpdate(callback: (items: ClipItem[]) => void) {

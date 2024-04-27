@@ -27,7 +27,7 @@ function createWindow(): BrowserWindow {
         // frame: false,
 
         // useContentSize: true,
-        // alwaysOnTop: true,
+        alwaysOnTop: true,
         // focusable: false,
         // center: true,
         // autoHideMenuBar: true,

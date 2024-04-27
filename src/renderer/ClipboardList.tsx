@@ -1,20 +1,17 @@
 import classnames from "classnames";
-import { useEffect, useState } from "react";
-import api from "./rendererApi";
-import type { ClipItem } from "./types/ClipboardItem";
+import type { ClipItem } from "../types/ClipboardItem";
+import api from "./api";
 
-export default function Index(): JSX.Element {
-    const [clipItems, setClipItems] = useState<ClipItem[]>([]);
+interface Props {
+    items: ClipItem[];
+}
 
-    useEffect(() => {
-        api.onClipboardUpdate(setClipItems);
-    }, []);
-
+export function ClipboardList({ items }: Props): JSX.Element {
     return (
         <div className="overflow-x-hidden">
             <table>
                 <tbody>
-                    {clipItems.map((item, i) => (
+                    {items.map((item, i) => (
                         <tr
                             key={item.id}
                             className={classnames("clip-item", {

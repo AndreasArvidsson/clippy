@@ -1,4 +1,4 @@
-import type { Command } from "src/types/Command";
+import type { Command } from "../types/Command";
 import { copyItem } from "./copyItem";
 import { showWindow } from "./showWindow";
 

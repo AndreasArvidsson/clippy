@@ -6,11 +6,17 @@
         "jsx": "react-jsx",
         "noImplicitAny": true,
         "sourceMap": true,
+        "rootDir": "src",
         "strict": true,
+        // "declaration": true,
+        // "declarationDir": "out/types",
+        // "emitDeclarationOnly": true,
+        // "noEmitOnError": true,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
-        "outDir": "out",
-        "baseUrl": "."
+        // "isolatedModules": true // <-- required
+        "outDir": "out"
+        // "baseUrl": "."
     },
-    "include": ["src/**/*"]
+    "include": ["src"]
 }
