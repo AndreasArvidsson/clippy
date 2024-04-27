@@ -1,24 +1,8 @@
-import clipboardListener from "clipboard-event";
-import { clipboard, type NativeImage } from "electron";
+import clipboardEvent from "clipboard-event";
+import { clipboard } from "electron";
+import type { ClipItem } from "./types/ClipboardItem";
 
-export interface ClipDataText {
-    type: "text";
-    id: string;
-    text: string;
-}
-
-interface ClipDataImage {
-    type: "image";
-    id: string;
-    raw: NativeImage;
-    dataUrl: string;
-}
-
-export type ClipData = ClipDataText | ClipDataImage;
-
-let listening = false;
-
-export function read(): ClipData | null {
+export function read(): ClipItem | null {
     const formats = clipboard.availableFormats();
 
     for (const format of formats) {
@@ -47,7 +31,7 @@ export function read(): ClipData | null {
     return null;
 }
 
-export function write(data: ClipData) {
+export function write(data: ClipItem) {
     switch (data.type) {
         case "image":
             clipboard.writeImage(data.raw);
@@ -58,16 +42,14 @@ export function write(data: ClipData) {
     }
 }
 
-export function onChange(callback: (data: ClipData) => void) {
-    if (!listening) {
-        listening = true;
-        clipboardListener.startListening();
-    }
+export function onChange(callback: (data: ClipItem) => void) {
+    clipboardEvent.startListening();
 
-    clipboardListener.on("change", () => {
-        const data = read();
-        if (data != null) {
-            callback(data);
+    clipboardEvent.on("change", () => {
+        const item = read();
+
+        if (item != null) {
+            callback(item);
         }
     });
 }

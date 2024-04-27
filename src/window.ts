@@ -4,6 +4,10 @@ import { NAME, iconPath } from "./constants";
 
 let _window: BrowserWindow | null = null;
 
+export function hasWindow() {
+    return _window != null;
+}
+
 export function getWindow(): BrowserWindow {
     if (_window == null) {
         _window = createWindow();

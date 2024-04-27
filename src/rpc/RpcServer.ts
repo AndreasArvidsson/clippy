@@ -1,47 +1,39 @@
+import { globalShortcut } from "electron";
 import * as fs from "fs";
-import chokidar from "chokidar";
 import { join } from "node:path";
 import { getCommunicationDirPath } from "./getCommunicationDirPath";
 import { initializeCommunicationDir } from "./initializeCommunicationDir";
 import { readRequest, writeResponse } from "./io";
 
-export default class RpcServer {
+export default class RpcServer<T> {
     private dirPath: string;
     private requestPath: string;
     private responsePath: string;
-    private callback?: (data: unknown) => Promise<unknown>;
+    private callback?: (data: T) => Promise<unknown>;
     private executing: boolean = false;
 
-    constructor(private name: string) {
+    constructor(
+        private name: string,
+        private accelerator: Electron.Accelerator,
+    ) {
         this.dirPath = getCommunicationDirPath(name);
         this.requestPath = join(this.dirPath, "request.json");
         this.responsePath = join(this.dirPath, "response.json");
     }
 
-    init(callback: (data: unknown) => Promise<unknown>) {
+    init(callback: (data: T) => Promise<unknown>) {
         this.callback = callback;
 
         initializeCommunicationDir(this.dirPath);
 
-        chokidar
-            .watch(this.requestPath)
-            .on("add", (path) => {
-                console.log(`File ${path} has been added`, Date.now());
-
-                void this.executeRequest();
-            })
-            .on("change", (path) => {
-                console.log(`File ${path} has been changed`, Date.now());
-
-                void this.executeRequest();
-            });
+        globalShortcut.register(this.accelerator, () => {
+            void this.executeRequest();
+        });
     }
 
     private async executeRequest(): Promise<void> {
-        console.log("executeRequest");
-
         if (this.executing) {
-            console.log("Already executing!!!!!");
+            console.error("Already executing!!!!!");
             return;
         }
 
@@ -53,7 +45,7 @@ export default class RpcServer {
             );
 
             try {
-                const callbackPromise = this.callback!(data);
+                const callbackPromise = this.callback!(data as T);
 
                 let returnValue: unknown = null;
 
@@ -63,18 +55,13 @@ export default class RpcServer {
                     await callbackPromise;
                 }
 
-                console.log("writeResponse");
                 await writeResponse(this.responsePath, {
                     uuid,
                     returnValue,
                     error: null,
                     warnings: [],
                 });
-                console.log("done");
-                console.log("existsSync", fs.existsSync(this.responsePath), this.responsePath);
-                console.log(fs.statfsSync(this.responsePath).bsize);
             } catch (error) {
-                console.error(error);
                 await writeResponse(this.responsePath, {
                     uuid,
                     error: (error as Error).message,

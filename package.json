@@ -7,6 +7,7 @@
     "license": "MIT",
     "main": "out/main.js",
     "scripts": {
+        "clean": "rm -rf out",
         "build": "tsc -p . && npm run copyAssets",
         "start": "npm run build && electron .",
         "copyAssets": "sh copyAssets.sh",
@@ -15,7 +16,6 @@
     },
     "dependencies": {
         "bootstrap": "5.3.3",
-        "chokidar": "^3.6.0",
         "classnames": "2.5.1",
         "clipboard-event": "1.6.0",
         "react-dom": "18.2.0",

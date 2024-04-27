@@ -1,6 +1,6 @@
 import { app, Menu, nativeImage, Tray } from "electron";
 import { iconPath, NAME } from "./constants";
-import { getWindow } from "./Window";
+import { showWindow } from "./commands/showWindow";
 
 export function createTray() {
     const icon = nativeImage.createFromPath(iconPath);
@@ -15,13 +15,5 @@ export function createTray() {
 
     tray.setContextMenu(contextMenu);
 
-    tray.addListener("click", () => {
-        const window = getWindow();
-
-        if (window.isMinimized()) {
-            window.restore();
-        } else if (window.isVisible() && !window.isFocused()) {
-            window.focus();
-        }
-    });
+    tray.addListener("click", showWindow);
 }

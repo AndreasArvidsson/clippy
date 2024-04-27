@@ -1,53 +1,29 @@
 import classnames from "classnames";
-import { useEffect, useRef, useState } from "react";
-import type { ClipData } from "./clipboard";
-import * as clipboard from "./clipboard";
-import RpcServer from "./rpc/RpcServer";
-import { ID } from "./constants";
-import { ipcRenderer } from "electron";
+import { useEffect, useState } from "react";
+import api from "./rendererApi";
+import type { ClipItem } from "./types/ClipboardItem";
 
 export default function Index(): JSX.Element {
-    const [clipDatas, setClipDatas] = useState<ClipData[]>([]);
-    const ref = useRef<ClipData[]>([]);
+    const [clipItems, setClipItems] = useState<ClipItem[]>([]);
 
     useEffect(() => {
-        const data = clipboard.read();
-        ref.current = data != null ? [data] : [];
-        setClipDatas(ref.current);
-
-        clipboard.onChange((data: ClipData) => {
-            const updated = ref.current.filter((d) => d.id !== data.id);
-            updated.unshift(data);
-            ref.current = updated;
-            setClipDatas(ref.current);
-        });
-
-        const rpc = new RpcServer(ID);
-
-        rpc.init((data) => {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-            return (data as any).value + 1;
-        });
+        api.onClipboardUpdate(setClipItems);
     }, []);
 
     return (
         <div className="overflow-x-hidden">
             <table>
                 <tbody>
-                    {clipDatas.map((data, i) => (
+                    {clipItems.map((item, i) => (
                         <tr
-                            key={i}
+                            key={item.id}
                             className={classnames("clip-item", {
                                 "border-top": i > 0,
                             })}
-                            // onClick={() => clipboard.write(data)}
-                            onClick={() => {
-                                console.log("click");
-                                ipcRenderer.send("click");
-                            }}
+                            onClick={() => api.clipItemClick(item)}
                         >
                             <th className="clip-number">{i + 1}</th>
-                            <td className="clip-content">{renderData(data)}</td>
+                            <td className="clip-content">{renderData(item)}</td>
                         </tr>
                     ))}
                 </tbody>
@@ -56,7 +32,7 @@ export default function Index(): JSX.Element {
     );
 }
 
-function renderData(data: ClipData): JSX.Element {
+function renderData(data: ClipItem): JSX.Element {
     switch (data.type) {
         case "image":
             return <img src={data.dataUrl} />;
