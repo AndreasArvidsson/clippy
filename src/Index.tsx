@@ -4,6 +4,7 @@ import type { ClipData } from "./clipboard";
 import * as clipboard from "./clipboard";
 import RpcServer from "./rpc/RpcServer";
 import { ID } from "./constants";
+import { ipcRenderer } from "electron";
 
 export default function Index(): JSX.Element {
     const [clipDatas, setClipDatas] = useState<ClipData[]>([]);
@@ -39,7 +40,11 @@ export default function Index(): JSX.Element {
                             className={classnames("clip-item", {
                                 "border-top": i > 0,
                             })}
-                            onClick={() => clipboard.write(data)}
+                            // onClick={() => clipboard.write(data)}
+                            onClick={() => {
+                                console.log("click");
+                                ipcRenderer.send("click");
+                            }}
                         >
                             <th className="clip-number">{i + 1}</th>
                             <td className="clip-content">{renderData(data)}</td>

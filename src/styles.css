@@ -1,3 +1,7 @@
+/* body {
+    -webkit-app-region: drag;
+} */
+
 .clip-number,
 .clip-content {
     vertical-align: middle;

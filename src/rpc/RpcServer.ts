@@ -38,6 +38,8 @@ export default class RpcServer {
     }
 
     private async executeRequest(): Promise<void> {
+        console.log("executeRequest");
+
         if (this.executing) {
             console.log("Already executing!!!!!");
             return;
@@ -61,13 +63,18 @@ export default class RpcServer {
                     await callbackPromise;
                 }
 
+                console.log("writeResponse");
                 await writeResponse(this.responsePath, {
                     uuid,
                     returnValue,
                     error: null,
                     warnings: [],
                 });
+                console.log("done");
+                console.log("existsSync", fs.existsSync(this.responsePath), this.responsePath);
+                console.log(fs.statfsSync(this.responsePath).bsize);
             } catch (error) {
+                console.error(error);
                 await writeResponse(this.responsePath, {
                     uuid,
                     error: (error as Error).message,
