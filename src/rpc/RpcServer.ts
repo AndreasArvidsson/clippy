@@ -1,5 +1,4 @@
 import { globalShortcut } from "electron";
-import * as fs from "fs";
 import { join } from "node:path";
 import { getCommunicationDirPath } from "./getCommunicationDirPath";
 import { initializeCommunicationDir } from "./initializeCommunicationDir";
