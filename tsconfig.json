@@ -8,15 +8,12 @@
         "sourceMap": true,
         "rootDir": "src",
         "strict": true,
-        // "declaration": true,
-        // "declarationDir": "out/types",
-        // "emitDeclarationOnly": true,
-        // "noEmitOnError": true,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         // "isolatedModules": true // <-- required
         "outDir": "out"
         // "baseUrl": "."
+        // "noEmit": true
     },
     "include": ["src"]
 }
