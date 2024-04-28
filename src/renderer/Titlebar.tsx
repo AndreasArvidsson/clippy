@@ -19,10 +19,10 @@ export function Titlebar({ itemsCount, totalCount, pinned }: Props): JSX.Element
     return (
         <header id="titlebar">
             <div id="titlebar-btns-left">
-                <button onClick={() => api.pin()}>
+                <button onClick={() => api.command({ id: "togglePinned" })}>
                     {pinned ? <PinAngleFill /> : <PinAngle />}
                 </button>
-                <button onClick={() => api.searchShow()}>
+                <button onClick={() => api.command({ id: "toggleSearch" })}>
                     <Search />
                 </button>
             </div>
@@ -32,9 +32,9 @@ export function Titlebar({ itemsCount, totalCount, pinned }: Props): JSX.Element
             </div>
 
             <div id="titlebar-btns-right">
-                <button onClick={() => api.windowMinimize()}>&#xE921;</button>
-                <button onClick={() => api.windowMaximize()}>&#xE922;</button>
-                <button id="close-btn" onClick={() => api.windowClose()}>
+                <button onClick={() => api.command({ id: "minimize" })}>&#xE921;</button>
+                <button onClick={() => api.command({ id: "maximize" })}>&#xE922;</button>
+                <button id="close-btn" onClick={() => api.command({ id: "showHide" })}>
                     &#xE8BB;
                 </button>
             </div>

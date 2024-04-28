@@ -1,6 +1,6 @@
-import { app, Menu, nativeImage, Tray } from "electron";
+import { Menu, nativeImage, Tray } from "electron";
+import { runCommand } from "./commands/runCommand";
 import { iconPath, NAME } from "./constants";
-import { showWindow } from "./commands/windowCommands";
 
 export function createTray() {
     const icon = nativeImage.createFromPath(iconPath);
@@ -10,10 +10,14 @@ export function createTray() {
     tray.setTitle(NAME);
 
     const contextMenu = Menu.buildFromTemplate([
-        { label: "Exit", type: "normal", click: () => app.quit() },
+        {
+            label: "Exit",
+            type: "normal",
+            click: () => runCommand({ id: "exit" }),
+        },
     ]);
 
     tray.setContextMenu(contextMenu);
 
-    tray.addListener("click", showWindow);
+    tray.addListener("click", () => runCommand({ id: "showHide" }));
 }

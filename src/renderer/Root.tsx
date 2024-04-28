@@ -8,14 +8,12 @@ import api from "./api";
 export function Root(): JSX.Element | null {
     const [clipData, setClipData] = useState<ClipData>();
     const [config, setConfig] = useState<Config>();
-    const [search, setSearch] = useState<string>();
 
     useEffect(() => {
         api.getInitialData()
             .then((data) => {
                 setClipData(data.clipData);
                 setConfig(data.config);
-                setSearch(data.search);
 
                 api.onClipboardUpdate(setClipData);
                 api.onConfigUpdate(setConfig);
@@ -23,7 +21,7 @@ export function Root(): JSX.Element | null {
             .catch(console.error);
     }, []);
 
-    if (clipData == null || config == null || search == null) {
+    if (clipData == null || config == null) {
         return null;
     }
 
@@ -36,7 +34,7 @@ export function Root(): JSX.Element | null {
             />
 
             <main>
-                {config.showSearch && <Search init={search} />}
+                {config.showSearch && <Search value={clipData.search} />}
 
                 <ClipboardList items={clipData.items} />
             </main>

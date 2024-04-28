@@ -1,10 +1,20 @@
-interface CommandShow {
-    id: "show";
+interface Simple {
+    id: "exit" | "showHide" | "toggleSearch" | "togglePinned" | "minimize" | "maximize" | "clear";
 }
 
-interface CommandCopyItem {
+interface CopyItem {
     id: "copyItem";
-    number: number;
+    hint: string;
 }
 
-export type Command = CommandShow | CommandCopyItem;
+interface RemoveItem {
+    id: "removeItem";
+    hint: string;
+}
+
+interface Search {
+    id: "search";
+    value: string;
+}
+
+export type Command = Simple | CopyItem | RemoveItem | Search;

@@ -3,6 +3,7 @@ import type { ClipItem } from "./ClipboardItem";
 export interface ClipData {
     totalCount: number;
     items: ClipItem[];
+    search: string;
 }
 
 export interface Config {
@@ -12,6 +13,5 @@ export interface Config {
 
 export interface InitialData {
     clipData: ClipData;
-    search: string;
     config: Config;
 }

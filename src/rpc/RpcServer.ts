@@ -20,7 +20,7 @@ export default class RpcServer<T> {
         this.responsePath = join(this.dirPath, "response.json");
     }
 
-    init(callback: (data: T) => Promise<unknown>) {
+    onCommand(callback: (data: T) => Promise<unknown>) {
         this.callback = callback;
 
         initializeCommunicationDir(this.dirPath);

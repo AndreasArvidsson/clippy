@@ -1,6 +1,6 @@
 import { getWindow, hasWindow } from "../window";
 
-export function showWindow() {
+export function showHideWindow() {
     if (hasWindow()) {
         const window = getWindow();
         if (window.isMinimized()) {
@@ -27,11 +27,5 @@ export function maximizeWindow() {
         } else {
             window.maximize();
         }
-    }
-}
-
-export function closeWindow() {
-    if (hasWindow()) {
-        getWindow().close();
     }
 }

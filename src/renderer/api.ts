@@ -1,5 +1,5 @@
 import { ipcRenderer } from "electron";
-import type { ClipItem } from "../types/ClipboardItem";
+import type { Command } from "../types/Command";
 import type { ClipData, Config, InitialData } from "../types/types";
 
 export default {
@@ -13,28 +13,7 @@ export default {
         ipcRenderer.on("configUpdate", (_event, config: Config) => callback(config));
     },
 
-    clipItemCopy(item: ClipItem) {
-        ipcRenderer.send("clipItemCopy", item);
-    },
-    clipItemRemove(item: ClipItem) {
-        ipcRenderer.send("clipItemRemove", item);
-    },
-    searchUpdated(search: string) {
-        ipcRenderer.send("searchUpdated", search);
-    },
-    searchShow() {
-        ipcRenderer.send("searchShow");
-    },
-    pin() {
-        ipcRenderer.send("pin");
-    },
-    windowMinimize() {
-        ipcRenderer.send("windowMinimize");
-    },
-    windowMaximize() {
-        ipcRenderer.send("windowMaximize");
-    },
-    windowClose() {
-        ipcRenderer.send("windowClose");
+    command(command: Command) {
+        ipcRenderer.send("command", command);
     },
 };

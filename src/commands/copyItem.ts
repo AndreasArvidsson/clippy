@@ -19,12 +19,7 @@ export function copyItem(item: ClipItem, pinned: boolean) {
     }
 }
 
-export function copyItemByNumber(number: number, pinned: boolean) {
-    const item = clipboardList.get(number);
-
-    if (item == null) {
-        throw Error(`Item ${number} not found`);
-    }
-
+export function copyItemByHint(hint: string, pinned: boolean) {
+    const item = clipboardList.get(hint);
     copyItem(item, pinned);
 }

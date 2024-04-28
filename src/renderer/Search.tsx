@@ -1,12 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import api from "./api";
 
 interface Props {
-    init: string;
+    value: string;
 }
 
-export function Search({ init }: Props): JSX.Element {
-    const [search, setSearch] = useState(init);
+export function Search({ value }: Props): JSX.Element {
+    const [search, setSearch] = useState("");
+
+    useEffect(() => {
+        setSearch(value);
+    }, [value]);
 
     return (
         <input
@@ -17,7 +21,7 @@ export function Search({ init }: Props): JSX.Element {
             placeholder="Search"
             onChange={(e) => {
                 setSearch(e.target.value);
-                api.searchUpdated(e.target.value);
+                api.command({ id: "search", value: e.target.value });
             }}
         />
     );

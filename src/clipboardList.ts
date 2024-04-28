@@ -2,6 +2,7 @@ import * as clipboard from "./clipboard";
 import * as storage from "./storage";
 import { getId, type ClipItem } from "./types/ClipboardItem";
 import type { ClipData } from "./types/types";
+import { hintToIndex } from "./util/hints";
 
 const limit = 1000;
 
@@ -30,6 +31,7 @@ export function getData(): ClipData {
     return {
         totalCount: _allItems.length,
         items: _filteredItems,
+        search: _search,
     };
 }
 
@@ -38,21 +40,25 @@ export function searchUpdated(search: string) {
     applyFilters();
 }
 
-export function getSearch() {
-    return _search;
-}
-
-export function get(number: number) {
-    const index = number - 1;
+export function get(hint: string): ClipItem {
+    const index = hintToIndex(hint);
     if (index < 0 || index >= _filteredItems.length) {
-        return null;
+        throw Error(`Item '${hint}' not found`);
     }
     return _filteredItems[index];
 }
 
-export function remove(item: ClipItem) {
+export function remove(hint: string) {
+    const item = get(hint);
     removeItem(item);
     applyFilters();
+    persist();
+}
+
+export function clear() {
+    _allItems = [];
+    _filteredItems = [];
+    _search = "";
     persist();
 }
 

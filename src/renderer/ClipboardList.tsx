@@ -1,6 +1,7 @@
 import React from "react";
 import { Trash } from "react-bootstrap-icons";
-import { getId, type ClipItem } from "../types/ClipboardItem";
+import { type ClipItem } from "../types/ClipboardItem";
+import { indexToHint } from "../util/hints";
 import api from "./api";
 
 interface Props {
@@ -10,28 +11,34 @@ interface Props {
 export function ClipboardList({ items }: Props): JSX.Element {
     return (
         <div className="container-fluid clip-list">
-            {items.map((item, i) => (
-                <React.Fragment key={getId(item)}>
-                    {i > 0 && <hr />}
-                    <div className="row clip-item" onClick={() => api.clipItemCopy(item)}>
-                        <div className="col-auto clip-number">{i + 1}</div>
-                        <div className="col clip-content">
-                            <hr />
-                            {renderData(item)}
+            {items.map((item, i) => {
+                const hint = indexToHint(i);
+                return (
+                    <React.Fragment key={hint}>
+                        {i > 0 && <hr />}
+                        <div
+                            className="row clip-item"
+                            onClick={() => api.command({ id: "copyItem", hint })}
+                        >
+                            <div className="col-auto clip-number">{hint}</div>
+                            <div className="col clip-content">
+                                <hr />
+                                {renderData(item)}
+                            </div>
+                            <div className="col-auto clip-trash">
+                                <button
+                                    onClick={(e) => {
+                                        api.command({ id: "removeItem", hint });
+                                        e.stopPropagation();
+                                    }}
+                                >
+                                    <Trash />
+                                </button>
+                            </div>
                         </div>
-                        <div className="col-auto clip-trash">
-                            <button
-                                onClick={(e) => {
-                                    api.clipItemRemove(item);
-                                    e.stopPropagation();
-                                }}
-                            >
-                                <Trash />
-                            </button>
-                        </div>
-                    </div>
-                </React.Fragment>
-            ))}
+                    </React.Fragment>
+                );
+            })}
         </div>
     );
 }
