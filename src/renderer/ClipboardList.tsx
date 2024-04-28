@@ -13,7 +13,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
             {items.map((item, i) => (
                 <React.Fragment key={getId(item)}>
                     {i > 0 && <hr />}
-                    <div className="row clip-item" onClick={() => api.clipItemClick(item)}>
+                    <div className="row clip-item" onClick={() => api.clipItemCopy(item)}>
                         <div className="col-auto clip-number">{i + 1}</div>
                         <div className="col clip-content">
                             <hr />

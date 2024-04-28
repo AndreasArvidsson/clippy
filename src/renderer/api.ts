@@ -13,8 +13,8 @@ export default {
         ipcRenderer.on("configUpdate", (_event, config: Config) => callback(config));
     },
 
-    clipItemClick(item: ClipItem) {
-        ipcRenderer.send("clipItemClick", item);
+    clipItemCopy(item: ClipItem) {
+        ipcRenderer.send("clipItemCopy", item);
     },
     clipItemRemove(item: ClipItem) {
         ipcRenderer.send("clipItemRemove", item);

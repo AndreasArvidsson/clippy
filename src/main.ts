@@ -1,8 +1,7 @@
 import { app, ipcMain } from "electron";
-import * as clipboard from "./clipboard";
 import * as clipboardList from "./clipboardList";
-import { runCommand } from "./commands/runCommand";
-import { closeWindow, maximizeWindow, minimizeWindow } from "./commands/windowCommands";
+import { copyItem, copyItemByNumber } from "./commands/copyItem";
+import { closeWindow, maximizeWindow, minimizeWindow, showWindow } from "./commands/windowCommands";
 import { NAME } from "./constants";
 import RpcServer from "./rpc/RpcServer";
 import * as storage from "./storage";
@@ -11,12 +10,6 @@ import type { ClipItem } from "./types/ClipboardItem";
 import type { Command } from "./types/Command";
 import type { InitialData } from "./types/types";
 import { getWindow, hasWindow } from "./window";
-
-// import electronReload from "electron-reload";
-// // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-// (electronReload as any)(__dirname, {
-//     electron: path.join(__dirname, "../node_modules", ".bin", "electron"),
-// });
 
 const config = storage.getConfig();
 
@@ -34,11 +27,11 @@ function updateConfig() {
     }
 }
 
-void app.whenReady().then(() => {
+function registerIpc() {
     clipboardList.onChange(updateClipboard);
 
-    ipcMain.on("clipItemClick", (_event, item: ClipItem) => {
-        clipboard.write(item);
+    ipcMain.on("clipItemCopy", (_event, item: ClipItem) => {
+        copyItem(item, config.pinned);
     });
 
     ipcMain.on("clipItemRemove", (_event, item: ClipItem) => {
@@ -72,10 +65,28 @@ void app.whenReady().then(() => {
             search: clipboardList.getSearch(),
         }),
     );
+}
 
+function registerRpc() {
     const rpc = new RpcServer<Command>(NAME, "Control+Shift+Alt+O");
-    rpc.init(runCommand);
 
+    rpc.init((command) => {
+        switch (command.id) {
+            case "show":
+                showWindow();
+                break;
+            case "copyItem":
+                copyItemByNumber(command.number, config.pinned);
+                break;
+        }
+
+        return Promise.resolve();
+    });
+}
+
+void app.whenReady().then(() => {
+    registerIpc();
+    registerRpc();
     createTray();
     getWindow();
 });
