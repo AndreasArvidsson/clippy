@@ -18,10 +18,10 @@ export function Titlebar({ itemsCount, totalCount }: Props): JSX.Element {
     return (
         <header id="titlebar">
             <div id="titlebar-btns-left">
-                <button onClick={() => console.log("pin")}>
+                <button onClick={() => api.pin()}>
                     <PinAngle />
                 </button>
-                <button onClick={() => console.log("search")}>
+                <button onClick={() => api.searchShow()}>
                     <Search />
                 </button>
             </div>

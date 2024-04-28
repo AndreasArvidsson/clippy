@@ -18,6 +18,12 @@ export default {
     searchUpdated(search: string) {
         ipcRenderer.send("searchUpdated", search);
     },
+    searchShow() {
+        ipcRenderer.send("searchShow");
+    },
+    pin() {
+        ipcRenderer.send("pin");
+    },
     windowMinimize() {
         ipcRenderer.send("windowMinimize");
     },

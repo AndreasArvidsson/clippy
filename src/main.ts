@@ -3,7 +3,7 @@ import * as clipboard from "./clipboard";
 import * as clipboardList from "./clipboardList";
 import { runCommand } from "./commands/runCommand";
 import { closeWindow, maximizeWindow, minimizeWindow } from "./commands/windowCommands";
-import { ID } from "./constants";
+import { NAME } from "./constants";
 import RpcServer from "./rpc/RpcServer";
 import { createTray } from "./tray";
 import type { ClipItem } from "./types/ClipboardItem";
@@ -40,6 +40,9 @@ void app.whenReady().then(() => {
         updateClipboard();
     });
 
+    ipcMain.on("searchShow", () => {});
+    ipcMain.on("pin", () => {});
+
     ipcMain.on("windowMinimize", minimizeWindow);
     ipcMain.on("windowMaximize", maximizeWindow);
     ipcMain.on("windowClose", closeWindow);
@@ -52,7 +55,7 @@ void app.whenReady().then(() => {
         }),
     );
 
-    const rpc = new RpcServer<Command>(ID, "Control+Shift+Alt+O");
+    const rpc = new RpcServer<Command>(NAME, "Control+Shift+Alt+O");
     rpc.init(runCommand);
 
     createTray();

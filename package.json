@@ -1,7 +1,7 @@
 {
-    "name": "clipboard-manager",
-    "displayName": "Clipboard manager",
-    "description": "Clipboard manager",
+    "name": "clippy",
+    "displayName": "Clippy",
+    "description": "Clipboard manager with RPC",
     "version": "1.0.0",
     "author": "AndreasArvidsson",
     "license": "MIT",

@@ -13,7 +13,7 @@ export default class RpcServer<T> {
 
     constructor(
         private name: string,
-        private accelerator: Electron.Accelerator,
+        private keybind: Electron.Accelerator,
     ) {
         this.dirPath = getCommunicationDirPath(name);
         this.requestPath = join(this.dirPath, "request.json");
@@ -25,7 +25,7 @@ export default class RpcServer<T> {
 
         initializeCommunicationDir(this.dirPath);
 
-        globalShortcut.register(this.accelerator, () => {
+        globalShortcut.register(this.keybind, () => {
             void this.executeRequest();
         });
     }
