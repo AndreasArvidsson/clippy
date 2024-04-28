@@ -19,6 +19,12 @@ export function Search({ value }: Props): JSX.Element {
             value={search}
             autoFocus
             placeholder="Search"
+            onKeyDown={(e) => {
+                if (e.key === "Escape") {
+                    e.currentTarget.blur();
+                }
+                e.stopPropagation();
+            }}
             onChange={(e) => {
                 setSearch(e.target.value);
                 api.command({ id: "search", value: e.target.value });

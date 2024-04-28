@@ -19,6 +19,8 @@ export function Root(): JSX.Element | null {
                 api.onConfigUpdate(setConfig);
             })
             .catch(console.error);
+
+        window.addEventListener("keydown", (e) => api.command({ id: "copyItem", hint: e.key }));
     }, []);
 
     if (clipData == null || config == null) {

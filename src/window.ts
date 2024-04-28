@@ -17,30 +17,31 @@ export function getWindow(): BrowserWindow {
     return _window;
 }
 
-function createWindow(): BrowserWindow {
+function getBounds(): Partial<Electron.Rectangle> {
+    if (_bounds != null) {
+        return _bounds;
+    }
     const { workAreaSize } = screen.getPrimaryDisplay();
+    return {
+        width: workAreaSize.width * 0.25,
+        height: workAreaSize.height * 0.75,
+    };
+}
+
+function createWindow(): BrowserWindow {
+    const bounds = getBounds();
 
     const win = new BrowserWindow({
         icon: iconPath,
         title: NAME,
 
+        frame: false,
         alwaysOnTop: true,
         center: true,
-        x: _bounds?.x,
-        y: _bounds?.y,
-        width: _bounds?.width ?? workAreaSize.width * 0.25,
-        height: _bounds?.height ?? workAreaSize.height * 0.75,
-
-        // titleBarStyle: "hidden",
-        // titleBarOverlay: true,
-        frame: false,
-        // focusable: false,
-        // autoHideMenuBar: true,
-
-        trafficLightPosition: {
-            x: 15,
-            y: 13, // macOS traffic lights seem to be 14px in diameter. If you want them vertically centered, set this to `titlebar_height / 2 - 7`.
-        },
+        x: bounds?.x,
+        y: bounds?.y,
+        width: bounds?.width,
+        height: bounds?.height,
 
         webPreferences: {
             nodeIntegration: true,
@@ -49,8 +50,6 @@ function createWindow(): BrowserWindow {
     });
 
     Menu.setApplicationMenu(null);
-
-    // win.setIgnoreMouseEvents(true);
 
     win.webContents.on("before-input-event", (e, input) => {
         if (
@@ -72,13 +71,18 @@ function createWindow(): BrowserWindow {
         _window = null;
     });
 
+    let timeout: NodeJS.Timeout;
+
     function updateBounds() {
-        _bounds = win.getBounds();
-        storage.setWindowBounds(_bounds);
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            _bounds = win.getBounds();
+            storage.setWindowBounds(_bounds);
+        }, 1000);
     }
 
-    win.on("moved", updateBounds);
-    win.on("resized", updateBounds);
+    win.on("move", updateBounds);
+    win.on("resize", updateBounds);
 
     win.webContents.openDevTools();
 
