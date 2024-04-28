@@ -11,9 +11,9 @@ export function copyItem(number: number) {
 
     clipboard.write(item);
 
-    getWindow().setFocusable(false);
+    const win = getWindow();
 
-    setTimeout(() => {
-        getWindow().setFocusable(true);
-    }, 100);
+    if (win.isFocused()) {
+        win.blur();
+    }
 }
