@@ -1,27 +1,26 @@
 import * as clipboard from "./clipboard";
 import type { ClipItem } from "./types/ClipboardItem";
+import * as storage from "./storage";
 
 const limit = 1000;
 
-const _allItems: ClipItem[] = [];
+let _allItems: ClipItem[] = [];
 let _filteredItems: ClipItem[] = [];
 let _search = "";
 
 (() => {
-    const initialItem = clipboard.read();
+    _allItems = storage.getClipboardItems();
+    _filteredItems = _allItems;
 
+    const initialItem = clipboard.read();
     if (initialItem != null) {
-        _allItems.push(initialItem);
-        _filteredItems.push(initialItem);
+        addNewItem(initialItem);
     }
 })();
 
 export function onChange(callback: () => void) {
     clipboard.onChange((item) => {
-        removeExistingItem(item.id);
         addNewItem(item);
-        applyItemsLimit();
-        applyFilters();
         callback();
     });
 }
@@ -53,20 +52,23 @@ function applyFilters() {
     }
 }
 
-function removeExistingItem(id: string) {
-    const index = _allItems.findIndex((item) => item.id === id);
-
+function addNewItem(item: ClipItem) {
+    // Remove existing item
+    const index = _allItems.findIndex((i) => i.id === item.id);
     if (index > -1) {
         _allItems.splice(index, 1);
     }
-}
 
-function addNewItem(item: ClipItem) {
+    // Add new item at start of list
     _allItems.unshift(item);
-}
 
-function applyItemsLimit() {
+    // Apply length limit
     if (_allItems.length > limit) {
         _allItems.pop();
     }
+
+    applyFilters();
+
+    // Persist clipboard list to storage
+    storage.setClipboardItems(_allItems);
 }

@@ -1,9 +1,10 @@
 import { BrowserWindow, Menu, screen } from "electron";
 import path from "node:path";
 import { NAME, iconPath } from "./constants";
+import * as storage from "./storage";
 
 let _window: BrowserWindow | null = null;
-let _bounds: Electron.Rectangle | undefined = undefined;
+let _bounds = storage.getWindowBounds();
 
 export function hasWindow() {
     return _window != null;
@@ -68,6 +69,7 @@ function createWindow(): BrowserWindow {
 
     function updateBounds() {
         _bounds = win.getBounds();
+        storage.setWindowBounds(_bounds);
     }
 
     win.on("moved", updateBounds);

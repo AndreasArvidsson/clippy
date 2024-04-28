@@ -4,6 +4,7 @@ import type { ClipItem } from "./types/ClipboardItem";
 
 export function read(): ClipItem | null {
     const image = clipboard.readImage();
+
     if (!image.isEmpty()) {
         const dataUrl = image.toDataURL();
         return {
