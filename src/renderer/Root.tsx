@@ -4,6 +4,7 @@ import { ClipboardList } from "./ClipboardList";
 import { Search } from "./Search";
 import { Titlebar } from "./Titlebar";
 import api from "./api";
+import "./keybinds";
 
 export function Root(): JSX.Element | null {
     const [clipData, setClipData] = useState<ClipData>();
@@ -19,8 +20,6 @@ export function Root(): JSX.Element | null {
                 api.onConfigUpdate(setConfig);
             })
             .catch(console.error);
-
-        window.addEventListener("keydown", (e) => api.command({ id: "copyItem", hint: e.key }));
     }, []);
 
     if (clipData == null || config == null) {
