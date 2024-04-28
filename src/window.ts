@@ -1,8 +1,9 @@
-import { BrowserWindow, Menu } from "electron";
+import { BrowserWindow, Menu, screen } from "electron";
 import path from "node:path";
 import { NAME, iconPath } from "./constants";
 
 let _window: BrowserWindow | null = null;
+let _bounds: Electron.Rectangle | undefined = undefined;
 
 export function hasWindow() {
     return _window != null;
@@ -16,21 +17,25 @@ export function getWindow(): BrowserWindow {
 }
 
 function createWindow(): BrowserWindow {
+    const { workAreaSize } = screen.getPrimaryDisplay();
+
     const win = new BrowserWindow({
         icon: iconPath,
-        width: 800,
-        height: 1200,
         title: NAME,
+
+        alwaysOnTop: true,
+        center: true,
+        x: _bounds?.x,
+        y: _bounds?.y,
+        width: _bounds?.width ?? workAreaSize.width * 0.25,
+        height: _bounds?.height ?? workAreaSize.height * 0.75,
 
         // titleBarStyle: "hidden",
         // titleBarOverlay: true,
         // frame: false,
-
-        // useContentSize: true,
-        alwaysOnTop: true,
         // focusable: false,
-        // center: true,
         // autoHideMenuBar: true,
+
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
@@ -56,9 +61,17 @@ function createWindow(): BrowserWindow {
         }
     });
 
-    win.on("close", () => {
+    win.on("closed", () => {
+        win.removeAllListeners();
         _window = null;
     });
+
+    function updateBounds() {
+        _bounds = win.getBounds();
+    }
+
+    win.on("moved", updateBounds);
+    win.on("resized", updateBounds);
 
     win.webContents.openDevTools();
 
