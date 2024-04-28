@@ -1,7 +1,7 @@
-import { Trash } from "react-bootstrap-icons";
-import type { ClipItem } from "../types/ClipboardItem";
-import api from "./api";
 import React from "react";
+import { Trash } from "react-bootstrap-icons";
+import { getId, type ClipItem } from "../types/ClipboardItem";
+import api from "./api";
 
 interface Props {
     items: ClipItem[];
@@ -11,7 +11,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
     return (
         <div className="container-fluid clip-list">
             {items.map((item, i) => (
-                <React.Fragment key={item.id}>
+                <React.Fragment key={getId(item)}>
                     {i > 0 && <hr />}
                     <div className="row clip-item" onClick={() => api.clipItemClick(item)}>
                         <div className="col-auto clip-number">{i + 1}</div>

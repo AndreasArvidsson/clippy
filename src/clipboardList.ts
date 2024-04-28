@@ -1,6 +1,6 @@
 import * as clipboard from "./clipboard";
 import * as storage from "./storage";
-import type { ClipItem } from "./types/ClipboardItem";
+import { getId, type ClipItem } from "./types/ClipboardItem";
 import type { ClipData } from "./types/types";
 
 const limit = 1000;
@@ -51,7 +51,7 @@ export function get(number: number) {
 }
 
 export function remove(item: ClipItem) {
-    removeItem(item.id);
+    removeItem(item);
     applyFilters();
     persist();
 }
@@ -68,7 +68,7 @@ function applyFilters() {
 
 function addNewItem(item: ClipItem) {
     // Remove existing item
-    removeItem(item.id);
+    removeItem(item);
 
     // Add new item at start of list
     _allItems.unshift(item);
@@ -82,8 +82,9 @@ function addNewItem(item: ClipItem) {
     persist();
 }
 
-function removeItem(id: string) {
-    const index = _allItems.findIndex((i) => i.id === id);
+function removeItem(item: ClipItem) {
+    const id = getId(item);
+    const index = _allItems.findIndex((i) => i.type === item.type && getId(i) === id);
     if (index > -1) {
         _allItems.splice(index, 1);
     }

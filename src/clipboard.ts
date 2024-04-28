@@ -1,6 +1,8 @@
 import clipboardEvent from "clipboard-event";
 import { clipboard } from "electron";
-import type { ClipItem } from "./types/ClipboardItem";
+import { getId, type ClipItem } from "./types/ClipboardItem";
+
+let _lastId = "";
 
 export function read(): ClipItem | null {
     const image = clipboard.readImage();
@@ -9,7 +11,6 @@ export function read(): ClipItem | null {
         const dataUrl = image.toDataURL();
         return {
             type: "image",
-            id: dataUrl,
             raw: image,
             dataUrl,
         };
@@ -19,7 +20,6 @@ export function read(): ClipItem | null {
     if (text) {
         return {
             type: "text",
-            id: text,
             text,
         };
     }
@@ -47,7 +47,12 @@ export function onChange(callback: (item: ClipItem) => void) {
         const item = read();
 
         if (item != null) {
-            callback(item);
+            const id = getId(item);
+
+            if (_lastId !== id) {
+                _lastId = id;
+                callback(item);
+            }
         }
     });
 }
