@@ -1,29 +1,36 @@
 import { useEffect, useState } from "react";
-import type { InitialData } from "../types/types";
+import type { ClipData, InitialData } from "../types/types";
 import { ClipboardList } from "./ClipboardList";
 import { Search } from "./Search";
 import { Titlebar } from "./Titlebar";
 import api from "./api";
 
-export function Root(): JSX.Element {
-    const [data, setData] = useState<InitialData>();
+export function Root(): JSX.Element | null {
+    const [clipData, setClipData] = useState<ClipData>();
+    const [initData, setInitData] = useState<InitialData>();
 
     useEffect(() => {
-        api.getInitialData().then(setData).catch(console.error);
+        api.getInitialData()
+            .then((data) => {
+                setInitData(data);
+                setClipData(data.clipData);
+            })
+            .catch(console.error);
+        api.onClipboardUpdate(setClipData);
     }, []);
 
-    if (data == null) {
-        return <Titlebar />;
+    if (clipData == null || initData == null) {
+        return null;
     }
 
     return (
         <>
-            <Titlebar />
+            <Titlebar itemsCount={clipData.items.length} totalCount={clipData.totalCount} />
 
             <main>
-                <Search init={data.search} />
+                <Search init={initData.search} />
 
-                <ClipboardList init={data.items} />
+                <ClipboardList items={clipData.items} />
             </main>
         </>
     );

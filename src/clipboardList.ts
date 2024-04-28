@@ -1,6 +1,7 @@
 import * as clipboard from "./clipboard";
-import type { ClipItem } from "./types/ClipboardItem";
 import * as storage from "./storage";
+import type { ClipItem } from "./types/ClipboardItem";
+import type { ClipData } from "./types/types";
 
 const limit = 1000;
 
@@ -25,8 +26,11 @@ export function onChange(callback: () => void) {
     });
 }
 
-export function getItems() {
-    return _filteredItems;
+export function getData(): ClipData {
+    return {
+        totalCount: _allItems.length,
+        items: _filteredItems,
+    };
 }
 
 export function searchUpdated(search: string) {
@@ -46,6 +50,12 @@ export function get(number: number) {
     return _filteredItems[index];
 }
 
+export function remove(item: ClipItem) {
+    removeItem(item.id);
+    applyFilters();
+    persist();
+}
+
 function applyFilters() {
     if (_search) {
         _filteredItems = _allItems.filter(
@@ -58,10 +68,7 @@ function applyFilters() {
 
 function addNewItem(item: ClipItem) {
     // Remove existing item
-    const index = _allItems.findIndex((i) => i.id === item.id);
-    if (index > -1) {
-        _allItems.splice(index, 1);
-    }
+    removeItem(item.id);
 
     // Add new item at start of list
     _allItems.unshift(item);
@@ -72,7 +79,16 @@ function addNewItem(item: ClipItem) {
     }
 
     applyFilters();
+    persist();
+}
 
-    // Persist clipboard list to storage
+function removeItem(id: string) {
+    const index = _allItems.findIndex((i) => i.id === id);
+    if (index > -1) {
+        _allItems.splice(index, 1);
+    }
+}
+
+function persist() {
     storage.setClipboardItems(_allItems);
 }

@@ -1,15 +1,3 @@
-html,
-body,
-#root {
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-}
-
-#root {
-    min-height: 100%;
-}
-
 main {
     position: fixed;
     top: 2rem;
@@ -19,32 +7,56 @@ main {
 
 .clip-list {
     overflow: auto;
+    width: 100%;
     height: 100%;
 }
 
-.clip-number,
-.clip-content {
-    vertical-align: middle;
+.clip-list > hr {
+    border: 1px inset;
     margin: 0;
 }
 
-.clip-number {
-    width: 1%;
-    padding: 0.25rem;
-    padding-right: 1rem;
-}
-
-.clip-content {
-    padding: 0.5rem;
-}
-
-.clip-content > * {
-    max-width: 100%;
-    max-height: 10rem;
-    overflow: hidden;
-    margin: 0;
+.clip-item {
+    border: 0.25rem solid transparent;
 }
 
 .clip-item:hover {
-    background-color: CadetBlue;
+    border: 0.25rem solid #86b7fe !important;
+    border-radius: 0.5rem;
+}
+
+.clip-item > div {
+    padding: 0.25rem 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.clip-number {
+    font-weight: bold;
+}
+
+.clip-content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.clip-content > * {
+    max-height: 10rem;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.clip-item .clip-trash {
+    display: none;
+}
+
+.clip-item:hover .clip-trash {
+    display: flex;
+}
+
+.clip-trash > button {
+    border: 0;
+    background-color: transparent;
+    color: red;
 }

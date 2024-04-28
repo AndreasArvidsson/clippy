@@ -1,37 +1,37 @@
-import classnames from "classnames";
-import { useEffect, useState } from "react";
+import { Trash } from "react-bootstrap-icons";
 import type { ClipItem } from "../types/ClipboardItem";
 import api from "./api";
+import React from "react";
 
 interface Props {
-    init: ClipItem[];
+    items: ClipItem[];
 }
 
-export function ClipboardList({ init }: Props): JSX.Element {
-    const [items, setItems] = useState(init);
-
-    useEffect(() => {
-        api.onClipboardUpdate(setItems);
-    }, []);
-
+export function ClipboardList({ items }: Props): JSX.Element {
     return (
-        <div className="overflow-x-hidden clip-list">
-            <table>
-                <tbody>
-                    {items.map((item, i) => (
-                        <tr
-                            key={item.id}
-                            className={classnames("clip-item", {
-                                "border-top": i > 0,
-                            })}
-                            onClick={() => api.clipItemClick(item)}
-                        >
-                            <th className="clip-number">{i + 1}</th>
-                            <td className="clip-content">{renderData(item)}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+        <div className="container-fluid clip-list">
+            {items.map((item, i) => (
+                <React.Fragment key={item.id}>
+                    {i > 0 && <hr />}
+                    <div className="row clip-item" onClick={() => api.clipItemClick(item)}>
+                        <div className="col-auto clip-number">{i + 1}</div>
+                        <div className="col clip-content">
+                            <hr />
+                            {renderData(item)}
+                        </div>
+                        <div className="col-auto clip-trash">
+                            <button
+                                onClick={(e) => {
+                                    api.clipItemRemove(item);
+                                    e.stopPropagation();
+                                }}
+                            >
+                                <Trash />
+                            </button>
+                        </div>
+                    </div>
+                </React.Fragment>
+            ))}
         </div>
     );
 }
@@ -41,6 +41,9 @@ function renderData(data: ClipItem): JSX.Element {
         case "image":
             return <img src={data.dataUrl} />;
         case "text":
-            return <pre title={data.text}>{data.text}</pre>;
+            if (data.text.includes("\n")) {
+                return <pre title={data.text}>{data.text}</pre>;
+            }
+            return <span title={data.text}>{data.text}</span>;
     }
 }

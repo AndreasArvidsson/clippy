@@ -1,13 +1,19 @@
 import { ipcRenderer } from "electron";
 import type { ClipItem } from "../types/ClipboardItem";
-import type { InitialData } from "../types/types";
+import type { ClipData, InitialData } from "../types/types";
 
 export default {
-    onClipboardUpdate(callback: (items: ClipItem[]) => void) {
-        ipcRenderer.on("updateClipboard", (_event, items: ClipItem[]) => callback(items));
+    getInitialData(): Promise<InitialData> {
+        return ipcRenderer.invoke("getInitialData") as Promise<InitialData>;
+    },
+    onClipboardUpdate(callback: (data: ClipData) => void) {
+        ipcRenderer.on("updateClipboard", (_event, data: ClipData) => callback(data));
     },
     clipItemClick(item: ClipItem) {
         ipcRenderer.send("clipItemClick", item);
+    },
+    clipItemRemove(item: ClipItem) {
+        ipcRenderer.send("clipItemRemove", item);
     },
     searchUpdated(search: string) {
         ipcRenderer.send("searchUpdated", search);
@@ -20,8 +26,5 @@ export default {
     },
     windowClose() {
         ipcRenderer.send("windowClose");
-    },
-    getInitialData(): Promise<InitialData> {
-        return ipcRenderer.invoke("getInitialData") as Promise<InitialData>;
     },
 };

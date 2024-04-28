@@ -19,7 +19,7 @@ import { getWindow, hasWindow } from "./window";
 
 function updateClipboard() {
     if (hasWindow()) {
-        getWindow().webContents.send("updateClipboard", clipboardList.getItems());
+        getWindow().webContents.send("updateClipboard", clipboardList.getData());
     }
 }
 
@@ -28,6 +28,11 @@ void app.whenReady().then(() => {
 
     ipcMain.on("clipItemClick", (_event, item: ClipItem) => {
         clipboard.write(item);
+    });
+
+    ipcMain.on("clipItemRemove", (_event, item: ClipItem) => {
+        clipboardList.remove(item);
+        updateClipboard();
     });
 
     ipcMain.on("searchUpdated", (_event, search: string) => {
@@ -42,7 +47,7 @@ void app.whenReady().then(() => {
     ipcMain.handle(
         "getInitialData",
         (): InitialData => ({
-            items: clipboardList.getItems(),
+            clipData: clipboardList.getData(),
             search: clipboardList.getSearch(),
         }),
     );
