@@ -34,6 +34,10 @@ export function searchUpdated(search: string) {
     applyFilters();
 }
 
+export function getSearch() {
+    return _search;
+}
+
 export function get(number: number) {
     const index = number - 1;
     if (index < 0 || index >= _filteredItems.length) {

@@ -2,11 +2,13 @@ import { app, ipcMain } from "electron";
 import * as clipboard from "./clipboard";
 import * as clipboardList from "./clipboardList";
 import { runCommand } from "./commands/runCommand";
+import { closeWindow, maximizeWindow, minimizeWindow } from "./commands/windowCommands";
 import { ID } from "./constants";
 import RpcServer from "./rpc/RpcServer";
 import { createTray } from "./tray";
 import type { ClipItem } from "./types/ClipboardItem";
 import type { Command } from "./types/Command";
+import type { InitialData } from "./types/types";
 import { getWindow, hasWindow } from "./window";
 
 // import electronReload from "electron-reload";
@@ -28,12 +30,22 @@ void app.whenReady().then(() => {
         clipboard.write(item);
     });
 
-    ipcMain.on("requestClipboardUpdate", (_event) => updateClipboard());
-
     ipcMain.on("searchUpdated", (_event, search: string) => {
         clipboardList.searchUpdated(search);
         updateClipboard();
     });
+
+    ipcMain.on("windowMinimize", minimizeWindow);
+    ipcMain.on("windowMaximize", maximizeWindow);
+    ipcMain.on("windowClose", closeWindow);
+
+    ipcMain.handle(
+        "getInitialData",
+        (): InitialData => ({
+            items: clipboardList.getItems(),
+            search: clipboardList.getSearch(),
+        }),
+    );
 
     const rpc = new RpcServer<Command>(ID, "Control+Shift+Alt+O");
     rpc.init(runCommand);

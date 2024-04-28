@@ -1,6 +1,6 @@
 import type { Command } from "../types/Command";
 import { copyItem } from "./copyItem";
-import { showWindow } from "./showWindow";
+import { showWindow } from "./windowCommands";
 
 export function runCommand(command: Command): Promise<void> {
     switch (command.id) {

@@ -1,30 +1,30 @@
 import { useEffect, useState } from "react";
-import type { ClipItem } from "../types/ClipboardItem";
+import type { InitialData } from "../types/types";
 import { ClipboardList } from "./ClipboardList";
+import { Search } from "./Search";
+import { Titlebar } from "./Titlebar";
 import api from "./api";
 
 export function Root(): JSX.Element {
-    const [items, setItems] = useState<ClipItem[]>([]);
-    const [search, setSearch] = useState("");
+    const [data, setData] = useState<InitialData>();
 
     useEffect(() => {
-        api.onClipboardUpdate(setItems);
+        api.getInitialData().then(setData).catch(console.error);
     }, []);
+
+    if (data == null) {
+        return <Titlebar />;
+    }
 
     return (
         <>
-            <input
-                type="text"
-                className="form-control"
-                value={search}
-                onChange={(e) => {
-                    setSearch(e.target.value);
-                    api.searchUpdated(e.target.value);
-                }}
-                placeholder="Search"
-            />
+            <Titlebar />
 
-            <ClipboardList items={items} />
+            <main>
+                <Search init={data.search} />
+
+                <ClipboardList init={data.items} />
+            </main>
         </>
     );
 }

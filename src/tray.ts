@@ -1,6 +1,6 @@
 import { app, Menu, nativeImage, Tray } from "electron";
 import { iconPath, NAME } from "./constants";
-import { showWindow } from "./commands/showWindow";
+import { showWindow } from "./commands/windowCommands";
 
 export function createTray() {
     const icon = nativeImage.createFromPath(iconPath);

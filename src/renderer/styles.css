@@ -1,6 +1,26 @@
-/* body {
-    -webkit-app-region: drag;
-} */
+html,
+body,
+#root {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#root {
+    min-height: 100%;
+}
+
+main {
+    position: fixed;
+    top: 2rem;
+    width: 100%;
+    height: 100%;
+}
+
+.clip-list {
+    overflow: auto;
+    height: 100%;
+}
 
 .clip-number,
 .clip-content {
