@@ -1,4 +1,4 @@
-import { app, ipcMain } from "electron";
+import { app, ipcMain, Notification } from "electron";
 import * as clipboardList from "./clipboardList";
 import { getInitialData, runCommand, updateClipboard } from "./commands/runCommand";
 import { NAME } from "./constants";
@@ -11,7 +11,13 @@ void app.whenReady().then(() => {
     clipboardList.onChange(updateClipboard);
 
     ipcMain.handle("getInitialData", getInitialData);
-    ipcMain.on("command", (_, command: Command) => runCommand(command));
+    ipcMain.on("command", (_, command: Command) => {
+        try {
+            return runCommand(command);
+        } catch (error) {
+            new Notification({ title: "Error", body: (error as Error).message }).show();
+        }
+    });
 
     const rpc = new RpcServer<Command>(NAME, "Control+Shift+Alt+O");
     rpc.onCommand((command) => {
