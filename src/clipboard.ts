@@ -1,5 +1,5 @@
 import clipboardEvent from "clipboard-event";
-import { clipboard } from "electron";
+import { clipboard, nativeImage } from "electron";
 import { getId, type ClipItem } from "./types/ClipboardItem";
 
 let _lastId = "";
@@ -11,7 +11,6 @@ export function read(): ClipItem | null {
         const dataUrl = image.toDataURL();
         return {
             type: "image",
-            raw: image,
             dataUrl,
         };
     }
@@ -31,9 +30,11 @@ export function read(): ClipItem | null {
 
 export function write(item: ClipItem) {
     switch (item.type) {
-        case "image":
-            clipboard.writeImage(item.raw);
+        case "image": {
+            const image = nativeImage.createFromDataURL(item.dataUrl);
+            clipboard.writeImage(image);
             break;
+        }
         case "text":
             clipboard.writeText(item.text);
             break;

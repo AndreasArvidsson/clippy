@@ -1,5 +1,3 @@
-import type { NativeImage } from "electron";
-
 interface ClipItemText {
     type: "text";
     text: string;
@@ -7,7 +5,6 @@ interface ClipItemText {
 
 interface ClipItemImage {
     type: "image";
-    raw: NativeImage;
     dataUrl: string;
 }
 
