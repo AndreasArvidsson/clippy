@@ -3,51 +3,70 @@ import type { ClipItem } from "./types/ClipboardItem";
 
 const limit = 1000;
 
-const clipboardItems: ClipItem[] = [];
+const _allItems: ClipItem[] = [];
+let _filteredItems: ClipItem[] = [];
+let _search = "";
 
 (() => {
     const initialItem = clipboard.read();
 
     if (initialItem != null) {
-        clipboardItems.push(initialItem);
+        _allItems.push(initialItem);
+        _filteredItems.push(initialItem);
     }
 })();
-
-function removeExistingItem(id: string) {
-    const index = clipboardItems.findIndex((item) => item.id === id);
-
-    if (index > -1) {
-        clipboardItems.splice(index, 1);
-    }
-}
-
-function addNewItem(item: ClipItem) {
-    clipboardItems.unshift(item);
-}
-
-function applyItemsLimit() {
-    if (clipboardItems.length > limit) {
-        clipboardItems.pop();
-    }
-}
 
 export function onChange(callback: () => void) {
     clipboard.onChange((item) => {
         removeExistingItem(item.id);
         addNewItem(item);
         applyItemsLimit();
+        applyFilters();
         callback();
     });
 }
 
 export function getItems() {
-    return clipboardItems;
+    return _filteredItems;
+}
+
+export function searchUpdated(search: string) {
+    _search = search.trim().toLowerCase();
+    applyFilters();
 }
 
 export function get(number: number) {
     const index = number - 1;
-    if (index < 0 || index >= clipboardItems.length) {
+    if (index < 0 || index >= _filteredItems.length) {
         return null;
     }
-    return clipboardItems[index];
+    return _filteredItems[index];
+}
+
+function applyFilters() {
+    if (_search) {
+        _filteredItems = _allItems.filter(
+            (item) => item.type === "text" && item.text.toLowerCase().includes(_search),
+        );
+    } else {
+        _filteredItems = _allItems;
+    }
+}
+
+function removeExistingItem(id: string) {
+    const index = _allItems.findIndex((item) => item.id === id);
+
+    if (index > -1) {
+        _allItems.splice(index, 1);
+    }
+}
+
+function addNewItem(item: ClipItem) {
+    _allItems.unshift(item);
+}
+
+function applyItemsLimit() {
+    if (_allItems.length > limit) {
+        _allItems.pop();
+    }
 }

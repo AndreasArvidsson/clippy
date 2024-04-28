@@ -30,6 +30,11 @@ void app.whenReady().then(() => {
 
     ipcMain.on("requestClipboardUpdate", (_event) => updateClipboard());
 
+    ipcMain.on("searchUpdated", (_event, search: string) => {
+        clipboardList.searchUpdated(search);
+        updateClipboard();
+    });
+
     const rpc = new RpcServer<Command>(ID, "Control+Shift+Alt+O");
     rpc.init(runCommand);
 

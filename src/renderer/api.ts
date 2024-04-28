@@ -9,4 +9,7 @@ export default {
     clipItemClick(item: ClipItem) {
         ipcRenderer.send("clipItemClick", item);
     },
+    searchUpdated(search: string) {
+        ipcRenderer.send("searchUpdated", search);
+    },
 };
