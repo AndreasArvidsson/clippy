@@ -1,13 +1,14 @@
-import { PinAngle, Search } from "react-bootstrap-icons";
+import { PinAngle, PinAngleFill, Search } from "react-bootstrap-icons";
 import { NAME } from "../constants";
 import api from "./api";
 
 interface Props {
     itemsCount: number;
     totalCount: number;
+    pinned: boolean;
 }
 
-export function Titlebar({ itemsCount, totalCount }: Props): JSX.Element {
+export function Titlebar({ itemsCount, totalCount, pinned }: Props): JSX.Element {
     const count = (() => {
         if (itemsCount === totalCount) {
             return `${itemsCount}`;
@@ -19,7 +20,7 @@ export function Titlebar({ itemsCount, totalCount }: Props): JSX.Element {
         <header id="titlebar">
             <div id="titlebar-btns-left">
                 <button onClick={() => api.pin()}>
-                    <PinAngle />
+                    {pinned ? <PinAngleFill /> : <PinAngle />}
                 </button>
                 <button onClick={() => api.searchShow()}>
                     <Search />

@@ -5,6 +5,7 @@ import { runCommand } from "./commands/runCommand";
 import { closeWindow, maximizeWindow, minimizeWindow } from "./commands/windowCommands";
 import { NAME } from "./constants";
 import RpcServer from "./rpc/RpcServer";
+import * as storage from "./storage";
 import { createTray } from "./tray";
 import type { ClipItem } from "./types/ClipboardItem";
 import type { Command } from "./types/Command";
@@ -17,9 +18,19 @@ import { getWindow, hasWindow } from "./window";
 //     electron: path.join(__dirname, "../node_modules", ".bin", "electron"),
 // });
 
+const config = storage.getConfig();
+
 function updateClipboard() {
     if (hasWindow()) {
-        getWindow().webContents.send("updateClipboard", clipboardList.getData());
+        getWindow().webContents.send("clipboardUpdate", clipboardList.getData());
+    }
+}
+
+function updateConfig() {
+    storage.setConfig(config);
+
+    if (hasWindow()) {
+        getWindow().webContents.send("configUpdate", config);
     }
 }
 
@@ -40,8 +51,14 @@ void app.whenReady().then(() => {
         updateClipboard();
     });
 
-    ipcMain.on("searchShow", () => {});
-    ipcMain.on("pin", () => {});
+    ipcMain.on("searchShow", () => {
+        config.showSearch = !config.showSearch;
+        updateConfig();
+    });
+    ipcMain.on("pin", () => {
+        config.pinned = !config.pinned;
+        updateConfig();
+    });
 
     ipcMain.on("windowMinimize", minimizeWindow);
     ipcMain.on("windowMaximize", maximizeWindow);
@@ -50,6 +67,7 @@ void app.whenReady().then(() => {
     ipcMain.handle(
         "getInitialData",
         (): InitialData => ({
+            config,
             clipData: clipboardList.getData(),
             search: clipboardList.getSearch(),
         }),

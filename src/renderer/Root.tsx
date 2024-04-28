@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { ClipData, InitialData } from "../types/types";
+import type { ClipData, Config } from "../types/types";
 import { ClipboardList } from "./ClipboardList";
 import { Search } from "./Search";
 import { Titlebar } from "./Titlebar";
@@ -7,28 +7,36 @@ import api from "./api";
 
 export function Root(): JSX.Element | null {
     const [clipData, setClipData] = useState<ClipData>();
-    const [initData, setInitData] = useState<InitialData>();
+    const [config, setConfig] = useState<Config>();
+    const [search, setSearch] = useState<string>();
 
     useEffect(() => {
         api.getInitialData()
             .then((data) => {
-                setInitData(data);
                 setClipData(data.clipData);
+                setConfig(data.config);
+                setSearch(data.search);
+
+                api.onClipboardUpdate(setClipData);
+                api.onConfigUpdate(setConfig);
             })
             .catch(console.error);
-        api.onClipboardUpdate(setClipData);
     }, []);
 
-    if (clipData == null || initData == null) {
+    if (clipData == null || config == null || search == null) {
         return null;
     }
 
     return (
         <>
-            <Titlebar itemsCount={clipData.items.length} totalCount={clipData.totalCount} />
+            <Titlebar
+                itemsCount={clipData.items.length}
+                totalCount={clipData.totalCount}
+                pinned={config.pinned}
+            />
 
             <main>
-                <Search init={initData.search} />
+                {config.showSearch && <Search init={search} />}
 
                 <ClipboardList items={clipData.items} />
             </main>

@@ -5,7 +5,13 @@ export interface ClipData {
     items: ClipItem[];
 }
 
+export interface Config {
+    pinned: boolean;
+    showSearch: boolean;
+}
+
 export interface InitialData {
     clipData: ClipData;
     search: string;
+    config: Config;
 }

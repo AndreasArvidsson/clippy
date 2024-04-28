@@ -1,8 +1,10 @@
 import Store from "electron-store";
 import type { ClipItem } from "./types/ClipboardItem";
+import type { Config } from "./types/types";
 
 interface Storage {
     windowBounds: Electron.Rectangle;
+    config: Config;
     clipboardItems: ClipItem[];
 }
 
@@ -14,6 +16,17 @@ export function getWindowBounds(): Electron.Rectangle | undefined {
 
 export function setWindowBounds(bounds: Electron.Rectangle) {
     store.set("windowBounds", bounds);
+}
+
+export function getConfig(): Config {
+    return store.get("config", {
+        pinned: false,
+        showSearch: false,
+    });
+}
+
+export function setConfig(config: Config) {
+    store.set("config", config);
 }
 
 export function getClipboardItems(): ClipItem[] {
