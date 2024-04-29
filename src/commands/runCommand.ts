@@ -31,6 +31,8 @@ function updateConfig() {
 }
 
 export function runCommand(command: Command) {
+    console.debug(command);
+
     switch (command.id) {
         case "exit":
             app.exit();

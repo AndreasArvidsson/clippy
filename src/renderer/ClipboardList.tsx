@@ -1,24 +1,56 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Trash } from "react-bootstrap-icons";
 import { type ClipItem } from "../types/ClipboardItem";
 import { indexToHint } from "../util/hints";
 import api from "./api";
+import { isNormal } from "./keybinds";
 
 interface Props {
     items: ClipItem[];
 }
 
 export function ClipboardList({ items }: Props): JSX.Element {
+    const ref = useRef<string[]>([]);
+    const [selected, setSelected] = useState<string[]>(ref.current);
+
+    useEffect(() => {
+        function onKeyDown(e: KeyboardEvent) {
+            if (isNormal(e) && e.key === "Enter") {
+                const hints = [...ref.current];
+                hints.sort();
+                api.command({ id: "copyItems", hints });
+            }
+        }
+
+        window.addEventListener("keydown", onKeyDown);
+
+        return () => window.removeEventListener("keydown", onKeyDown);
+    }, []);
+
     return (
         <div className="container-fluid clip-list">
             {items.map((item, i) => {
                 const hint = indexToHint(i);
+                const isSelected = selected.includes(hint);
+
                 return (
                     <React.Fragment key={hint}>
                         {i > 0 && <hr />}
                         <div
-                            className="row clip-item"
-                            onClick={() => api.command({ id: "copyItems", hints: [hint] })}
+                            className={"row clip-item" + (isSelected ? " selected" : "")}
+                            onClick={(e) => {
+                                if (e.ctrlKey) {
+                                    if (isSelected) {
+                                        selected.splice(selected.indexOf(hint), 1);
+                                    } else {
+                                        selected.push(hint);
+                                    }
+                                    ref.current = [...selected];
+                                    setSelected(ref.current);
+                                } else {
+                                    api.command({ id: "copyItems", hints: [hint] });
+                                }
+                            }}
                         >
                             <div className="col-auto clip-number">{hint}</div>
                             <div className="col clip-content">

@@ -18,11 +18,15 @@ main {
 
 .clip-item {
     border: 0.25rem solid transparent;
+    border-radius: 0.5rem;
 }
 
 .clip-item:hover {
     border: 0.25rem solid #86b7fe !important;
-    border-radius: 0.5rem;
+}
+
+.clip-item.selected {
+    border: 0.25rem solid #86b7fe !important;
 }
 
 .clip-item > div {
