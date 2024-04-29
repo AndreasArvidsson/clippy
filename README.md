@@ -22,12 +22,12 @@ $ npm start
 ```
 rpc = RpcClient("Clippy", "ctrl-shift-alt-o")
 
-def clipboard_manager_show_hide():
-    data = {"id": "showHide"}
-    rpc.send(data, wait_for_finish=True)
+def clippy_show_hide():
+    command = {"id": "showHide"}
+    rpc.send(command, wait_for_finish=True)
 
-def clipboard_manager_paste(hint: str):
-    data = {"id": "copyItems", "hints": [str]}
-    rpc.send(data, wait_for_finish=True)
+def clippy_paste(hint: str):
+    command = {"id": "copyItems", "hints": [str]}
+    rpc.send(command, wait_for_finish=True)
     actions.edit.paste()
 ```
