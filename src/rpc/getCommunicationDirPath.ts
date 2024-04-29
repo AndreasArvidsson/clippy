@@ -12,5 +12,5 @@ export function getCommunicationDirPath(name: string): string {
 }
 
 function cleanName(name: string): string {
-    return name.replace(/[^a-zA-Z0-9_]/g, "-");
+    return name.replace(/[^a-zA-Z0-9_]/g, "-").toLowerCase();
 }
