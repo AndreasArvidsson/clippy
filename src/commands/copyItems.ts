@@ -1,9 +1,10 @@
 import * as clipboard from "../clipboard";
 import * as clipboardList from "../clipboardList";
+import type { Target } from "../types/Command";
 import { getWindow, hasWindow } from "../window";
 
-export function copyItems(hints: string[], pinned: boolean) {
-    const items = clipboardList.get(hints);
+export function copyItems(targets: Target[], pinned: boolean) {
+    const items = clipboardList.get(targets);
 
     clipboard.write(items);
 

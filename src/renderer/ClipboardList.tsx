@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Trash } from "react-bootstrap-icons";
 import { type ClipItem } from "../types/ClipboardItem";
+import { getCommandForHints } from "../util/getCommandForHints";
 import { indexToHint } from "../util/hints";
 import api from "./api";
 import { isNormal } from "./keybinds";
@@ -18,7 +19,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
             if (isNormal(e) && e.key === "Enter") {
                 const hints = [...ref.current];
                 hints.sort();
-                api.command({ id: "copyItems", hints });
+                api.command(getCommandForHints("copyItems", hints));
             }
         }
 
@@ -48,7 +49,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
                                     ref.current = [...selected];
                                     setSelected(ref.current);
                                 } else {
-                                    api.command({ id: "copyItems", hints: [hint] });
+                                    api.command(getCommandForHints("copyItems", [hint]));
                                 }
                             }}
                         >
@@ -60,7 +61,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
                             <div className="col-auto clip-trash">
                                 <button
                                     onClick={(e) => {
-                                        api.command({ id: "removeItems", hints: [hint] });
+                                        api.command(getCommandForHints("removeItems", [hint]));
                                         e.stopPropagation();
                                     }}
                                 >

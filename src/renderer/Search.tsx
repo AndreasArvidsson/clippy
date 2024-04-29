@@ -27,7 +27,7 @@ export function Search({ value }: Props): JSX.Element {
             }}
             onChange={(e) => {
                 setSearch(e.target.value);
-                api.command({ id: "search", value: e.target.value });
+                api.command({ id: "search", text: e.target.value });
             }}
         />
     );

@@ -1,20 +1,29 @@
-interface Simple {
+interface PrimitiveTarget {
+    type: "primitive";
+    hint: string;
+    count: number;
+}
+
+interface RangeTarget {
+    type: "range";
+    start: string;
+    end: string;
+}
+
+export type Target = PrimitiveTarget | RangeTarget;
+
+interface SimpleCommand {
     id: "exit" | "showHide" | "toggleSearch" | "togglePinned" | "minimize" | "maximize" | "clear";
 }
 
-interface CopyItems {
-    id: "copyItems";
-    hints: string[];
-}
-
-interface RemoveItems {
-    id: "removeItems";
-    hints: string[];
+export interface TargetCommand {
+    id: "copyItems" | "removeItems";
+    targets: Target[];
 }
 
 interface Search {
     id: "search";
-    value: string;
+    text: string;
 }
 
-export type Command = Simple | CopyItems | RemoveItems | Search;
+export type Command = SimpleCommand | TargetCommand | Search;

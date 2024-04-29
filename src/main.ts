@@ -1,16 +1,17 @@
 import { app, ipcMain, Notification } from "electron";
 import * as clipboardList from "./clipboardList";
-import { getInitialData, runCommand, updateClipboard } from "./commands/runCommand";
+import { runCommand, updateRenderer } from "./commands/runCommand";
 import { NAME } from "./constants";
 import RpcServer from "./rpc/RpcServer";
 import { createTray } from "./tray";
 import type { Command } from "./types/Command";
 import { getWindow } from "./window";
+import { getRendererData } from "./clipboardList";
 
 void app.whenReady().then(() => {
-    clipboardList.onChange(updateClipboard);
+    clipboardList.onChange(updateRenderer);
 
-    ipcMain.handle("getInitialData", getInitialData);
+    ipcMain.handle("getInitialData", getRendererData);
     ipcMain.on("command", (_, command: Command) => {
         try {
             return runCommand(command);

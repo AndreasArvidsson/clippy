@@ -1,7 +1,8 @@
 import * as clipboard from "./clipboard";
 import * as storage from "./storage";
 import { getId, type ClipItem } from "./types/ClipboardItem";
-import type { ClipData } from "./types/types";
+import type { Target } from "./types/Command";
+import type { Config, RendererData } from "./types/types";
 import { hintToIndex } from "./util/hints";
 
 const limit = 1000;
@@ -9,6 +10,7 @@ const limit = 1000;
 let _allItems: ClipItem[] = [];
 let _filteredItems: ClipItem[] = [];
 let _search = "";
+let _config = storage.getConfig();
 
 (() => {
     _allItems = storage.getClipboardItems();
@@ -20,6 +22,16 @@ let _search = "";
     }
 })();
 
+export function getConfig() {
+    return _config;
+}
+
+export function setConfig(config: Config) {
+    _config = config;
+    storage.setConfig(_config);
+    applyFilters();
+}
+
 export function onChange(callback: () => void) {
     clipboard.onChange((item) => {
         addNewItem(item);
@@ -27,33 +39,62 @@ export function onChange(callback: () => void) {
     });
 }
 
-export function getData(): ClipData {
+export function getRendererData(): RendererData {
     return {
         totalCount: _allItems.length,
         items: _filteredItems,
         search: _search,
+        config: _config,
     };
 }
 
 export function searchUpdated(search: string) {
     _search = search.trim().toLowerCase();
+    if (!_config.showSearch) {
+        _config.showSearch = true;
+        storage.setConfig(_config);
+    }
     applyFilters();
 }
 
-export function get(hints: string[]): ClipItem[] {
+export function get(targets: Target[]): ClipItem[] {
     const results: ClipItem[] = [];
-    for (const hint of hints) {
-        const index = hintToIndex(hint);
-        if (index < 0 || index >= _filteredItems.length) {
-            throw Error(`Item '${hint}' not found`);
+    for (const target of targets) {
+        if (target.type === "range") {
+            const start = hintToIndex(target.start);
+            const end = hintToIndex(target.end);
+            if (
+                start < 0 ||
+                start >= _filteredItems.length ||
+                end < 0 ||
+                end >= _filteredItems.length
+            ) {
+                throw Error(`Invalid range: ${target.start}-${target.end}`);
+            }
+            results.push(..._filteredItems.slice(start, end + 1));
+        } else {
+            const index = hintToIndex(target.hint);
+
+            if (index < 0 || index >= _filteredItems.length) {
+                throw Error(`Item '${target.hint}' not found`);
+            }
+
+            if (target.count === 1) {
+                results.push(_filteredItems[index]);
+            } else {
+                const end = index + target.count - 1;
+                if (end < 0 || end >= _filteredItems.length) {
+                    throw Error(`Invalid range: ${target.hint} + ${target.count}`);
+                }
+                results.push(..._filteredItems.slice(index, end + 1));
+            }
         }
-        results.push(_filteredItems[index]);
     }
     return results;
 }
 
-export function remove(hints: string[]) {
-    const items = get(hints);
+export function remove(targets: Target[]) {
+    const items = get(targets);
     for (const item of items) {
         removeItem(item);
     }
@@ -69,7 +110,7 @@ export function clear() {
 }
 
 function applyFilters() {
-    if (_search) {
+    if (_config.showSearch && _search) {
         _filteredItems = _allItems.filter(
             (item) => item.type === "text" && item.text.toLowerCase().includes(_search),
         );

@@ -1,33 +1,21 @@
 import { app } from "electron";
 import * as clipboardList from "../clipboardList";
-import * as storage from "../storage";
 import type { Command } from "../types/Command";
-import type { InitialData } from "../types/types";
+import type { Config } from "../types/types";
 import { getWindow, hasWindow } from "../window";
 import { copyItems } from "./copyItems";
 import { maximizeWindow, minimizeWindow, showHideWindow } from "./windowCommands";
 
-const config = storage.getConfig();
-
-export function updateClipboard() {
+export function updateRenderer() {
+    console.log(clipboardList.getRendererData());
     if (hasWindow()) {
-        getWindow().webContents.send("clipboardUpdate", clipboardList.getData());
+        getWindow().webContents.send("update", clipboardList.getRendererData());
     }
 }
 
-export function getInitialData(): InitialData {
-    return {
-        config,
-        clipData: clipboardList.getData(),
-    };
-}
-
-function updateConfig() {
-    storage.setConfig(config);
-
-    if (hasWindow()) {
-        getWindow().webContents.send("configUpdate", config);
-    }
+function updateConfig(config: Config) {
+    clipboardList.setConfig(config);
+    updateRenderer();
 }
 
 export function runCommand(command: Command) {
@@ -46,29 +34,33 @@ export function runCommand(command: Command) {
         case "maximize":
             maximizeWindow();
             break;
-        case "togglePinned":
+        case "togglePinned": {
+            const config = clipboardList.getConfig();
             config.pinned = !config.pinned;
-            updateConfig();
+            updateConfig(config);
             break;
-        case "toggleSearch":
+        }
+        case "toggleSearch": {
+            const config = clipboardList.getConfig();
             config.showSearch = !config.showSearch;
-            updateConfig();
+            updateConfig(config);
             break;
+        }
         case "search":
-            clipboardList.searchUpdated(command.value);
-            updateClipboard();
+            clipboardList.searchUpdated(command.text);
+            updateRenderer();
             break;
 
         case "copyItems":
-            copyItems(command.hints, config.pinned);
+            copyItems(command.targets, clipboardList.getConfig().pinned);
             break;
         case "removeItems":
-            clipboardList.remove(command.hints);
-            updateClipboard();
+            clipboardList.remove(command.targets);
+            updateRenderer();
             break;
         case "clear":
             clipboardList.clear();
-            updateClipboard();
+            updateRenderer();
             break;
 
         default: {

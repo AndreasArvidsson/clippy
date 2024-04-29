@@ -1,8 +1,9 @@
+import { getCommandForHints } from "../util/getCommandForHints";
 import api from "./api";
 
 window.addEventListener("keydown", (e) => {
     if (isNormal(e) && isHint(e.key)) {
-        api.command({ id: "copyItems", hints: [e.key] });
+        api.command(getCommandForHints("copyItems", [e.key]));
     }
     e.preventDefault();
 });
