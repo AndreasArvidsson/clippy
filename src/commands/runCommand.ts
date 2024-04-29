@@ -7,7 +7,6 @@ import { copyItems } from "./copyItems";
 import { maximizeWindow, minimizeWindow, showHideWindow } from "./windowCommands";
 
 export function updateRenderer() {
-    console.log(clipboardList.getRendererData());
     if (hasWindow()) {
         getWindow().webContents.send("update", clipboardList.getRendererData());
     }
