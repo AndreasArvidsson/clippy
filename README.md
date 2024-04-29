@@ -1,6 +1,6 @@
 # Clippy
 
-Clipboard manager with RPC
+Clipboard manager with RPC. Support keyboard, mouse and excellent Talon Voice integration.
 
 ## Running
 
@@ -9,11 +9,10 @@ $ npm install
 $ npm start
 ```
 
-## Talon side
+## Talon user scripts
 
-### Download RPC client
-
-`https://github.com/AndreasArvidsson/andreas-talon/blob/master/core/rpc_client`
+-   [Talon RPC client](https://github.com/AndreasArvidsson/andreas-talon/blob/master/core/rpc_client)
+-   [Clippy Talon](https://github.com/AndreasArvidsson/andreas-talon/tree/master/plugins/clippy)
 
 ### Usage example
 
@@ -25,9 +24,4 @@ rpc = RpcClient("Clippy", "ctrl-shift-alt-o")
 def clippy_show_hide():
     command = {"id": "showHide"}
     rpc.send(command, wait_for_finish=True)
-
-def clippy_paste(hint: str):
-    command = {"id": "copyItems", "hints": [str]}
-    rpc.send(command, wait_for_finish=True)
-    actions.edit.paste()
 ```
