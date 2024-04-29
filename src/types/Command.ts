@@ -1,7 +1,7 @@
 interface PrimitiveTarget {
     type: "primitive";
     hint: string;
-    count: number;
+    count?: number;
 }
 
 interface RangeTarget {

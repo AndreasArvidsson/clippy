@@ -79,12 +79,13 @@ export function get(targets: Target[]): ClipItem[] {
                 throw Error(`Item '${target.hint}' not found`);
             }
 
-            if (target.count === 1) {
+            const count = target.count ?? 1;
+            if (count === 1) {
                 results.push(_filteredItems[index]);
             } else {
-                const end = index + target.count - 1;
+                const end = index + count - 1;
                 if (end < 0 || end >= _filteredItems.length) {
-                    throw Error(`Invalid range: ${target.hint} + ${target.count}`);
+                    throw Error(`Invalid range: ${target.hint} + ${count}`);
                 }
                 results.push(..._filteredItems.slice(index, end + 1));
             }
