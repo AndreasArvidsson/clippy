@@ -28,17 +28,27 @@ export function read(): ClipItem | null {
     return null;
 }
 
-export function write(item: ClipItem) {
-    switch (item.type) {
-        case "image": {
-            const image = nativeImage.createFromDataURL(item.dataUrl);
-            clipboard.writeImage(image);
-            break;
+export function write(items: ClipItem[]) {
+    const texts: string[] = [];
+
+    for (const item of items) {
+        switch (item.type) {
+            case "image": {
+                if (items.length > 1) {
+                    throw Error("Cannot copy multiple items when one of them is an image");
+                }
+                const image = nativeImage.createFromDataURL(item.dataUrl);
+                clipboard.writeImage(image);
+                return;
+            }
+
+            case "text":
+                texts.push(item.text);
+                break;
         }
-        case "text":
-            clipboard.writeText(item.text);
-            break;
     }
+
+    clipboard.writeText(texts.join("\n"));
 }
 
 export function onChange(callback: (item: ClipItem) => void) {

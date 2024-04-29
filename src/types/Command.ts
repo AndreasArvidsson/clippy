@@ -2,14 +2,14 @@ interface Simple {
     id: "exit" | "showHide" | "toggleSearch" | "togglePinned" | "minimize" | "maximize" | "clear";
 }
 
-interface CopyItem {
-    id: "copyItem";
-    hint: string;
+interface CopyItems {
+    id: "copyItems";
+    hints: string[];
 }
 
-interface RemoveItem {
-    id: "removeItem";
-    hint: string;
+interface RemoveItems {
+    id: "removeItems";
+    hints: string[];
 }
 
 interface Search {
@@ -17,4 +17,4 @@ interface Search {
     value: string;
 }
 
-export type Command = Simple | CopyItem | RemoveItem | Search;
+export type Command = Simple | CopyItems | RemoveItems | Search;

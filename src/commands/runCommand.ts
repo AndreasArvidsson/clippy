@@ -4,7 +4,7 @@ import * as storage from "../storage";
 import type { Command } from "../types/Command";
 import type { InitialData } from "../types/types";
 import { getWindow, hasWindow } from "../window";
-import { copyItem } from "./copyItem";
+import { copyItems } from "./copyItems";
 import { maximizeWindow, minimizeWindow, showHideWindow } from "./windowCommands";
 
 const config = storage.getConfig();
@@ -57,11 +57,11 @@ export function runCommand(command: Command) {
             updateClipboard();
             break;
 
-        case "copyItem":
-            copyItem(command.hint, config.pinned);
+        case "copyItems":
+            copyItems(command.hints, config.pinned);
             break;
-        case "removeItem":
-            clipboardList.remove(command.hint);
+        case "removeItems":
+            clipboardList.remove(command.hints);
             updateClipboard();
             break;
         case "clear":

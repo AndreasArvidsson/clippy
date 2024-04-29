@@ -2,7 +2,7 @@ import api from "./api";
 
 window.addEventListener("keydown", (e) => {
     if (isNormal(e) && isHint(e.key)) {
-        api.command({ id: "copyItem", hint: e.key });
+        api.command({ id: "copyItems", hints: [e.key] });
     }
     e.preventDefault();
 });

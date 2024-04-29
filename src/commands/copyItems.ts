@@ -2,10 +2,10 @@ import * as clipboard from "../clipboard";
 import * as clipboardList from "../clipboardList";
 import { getWindow, hasWindow } from "../window";
 
-export function copyItem(hint: string, pinned: boolean) {
-    const item = clipboardList.get(hint);
+export function copyItems(hints: string[], pinned: boolean) {
+    const items = clipboardList.get(hints);
 
-    clipboard.write(item);
+    clipboard.write(items);
 
     if (hasWindow()) {
         const win = getWindow();

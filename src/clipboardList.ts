@@ -40,17 +40,23 @@ export function searchUpdated(search: string) {
     applyFilters();
 }
 
-export function get(hint: string): ClipItem {
-    const index = hintToIndex(hint);
-    if (index < 0 || index >= _filteredItems.length) {
-        throw Error(`Item '${hint}' not found`);
+export function get(hints: string[]): ClipItem[] {
+    const results: ClipItem[] = [];
+    for (const hint of hints) {
+        const index = hintToIndex(hint);
+        if (index < 0 || index >= _filteredItems.length) {
+            throw Error(`Item '${hint}' not found`);
+        }
+        results.push(_filteredItems[index]);
     }
-    return _filteredItems[index];
+    return results;
 }
 
-export function remove(hint: string) {
-    const item = get(hint);
-    removeItem(item);
+export function remove(hints: string[]) {
+    const items = get(hints);
+    for (const item of items) {
+        removeItem(item);
+    }
     applyFilters();
     persist();
 }

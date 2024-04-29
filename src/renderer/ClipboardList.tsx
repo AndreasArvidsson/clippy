@@ -18,7 +18,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
                         {i > 0 && <hr />}
                         <div
                             className="row clip-item"
-                            onClick={() => api.command({ id: "copyItem", hint })}
+                            onClick={() => api.command({ id: "copyItems", hints: [hint] })}
                         >
                             <div className="col-auto clip-number">{hint}</div>
                             <div className="col clip-content">
@@ -28,7 +28,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
                             <div className="col-auto clip-trash">
                                 <button
                                     onClick={(e) => {
-                                        api.command({ id: "removeItem", hint });
+                                        api.command({ id: "removeItems", hints: [hint] });
                                         e.stopPropagation();
                                     }}
                                 >
