@@ -25,9 +25,13 @@ export default class RpcServer<T> {
 
         initializeCommunicationDir(this.dirPath);
 
-        globalShortcut.register(this.keybind, () => {
+        const success = globalShortcut.register(this.keybind, () => {
+            console.log("Executing request");
             void this.executeRequest();
         });
+        if (!success) {
+            throw Error(`Failed to bind global shortcut ${this.keybind}`);
+        }
     }
 
     private async executeRequest(): Promise<void> {
