@@ -1,4 +1,4 @@
-import type { ClipItemType } from "./ClipboardItem";
+import type { ClipItemType } from "./types";
 
 interface PrimitiveTarget {
     type: "primitive";

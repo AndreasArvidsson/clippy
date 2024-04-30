@@ -1,56 +1,78 @@
 import clipboardEvent from "clipboard-event";
 import * as electron from "electron";
-import { getId, type ClipItem } from "./types/ClipboardItem";
+import type { ClipItem, ClipItemType } from "./types/types";
 
 let _lastId = "";
 
 function read(): ClipItem | null {
-    const image = electron.clipboard.readImage();
+    const text = electron.clipboard.readText() || undefined;
+    const rtf = electron.clipboard.readRTF() || undefined;
+    const html = electron.clipboard.readHTML() || undefined;
+    const bookmark = (() => {
+        const bookmark = electron.clipboard.readBookmark();
+        return bookmark.title || bookmark.url ? bookmark : undefined;
+    })();
+    const image = (() => {
+        const nativeImage = electron.clipboard.readImage();
+        return nativeImage.isEmpty() ? undefined : nativeImage.toDataURL();
+    })();
+    const type: ClipItemType = image ? "image" : "text";
 
-    if (!image.isEmpty()) {
-        const dataUrl = image.toDataURL();
-        return {
-            type: "image",
-            dataUrl,
-        };
+    const id = (() => {
+        if (image && html) {
+            const src = /<img.*?src=(?:"(.+?)"|'(.+?)').*?>/g.exec(html)?.[1];
+            if (src) {
+                return src;
+            }
+            return image;
+        }
+        return text;
+    })();
+
+    const item = {
+        type,
+        text,
+        rtf,
+        html,
+        bookmark,
+        image,
+    };
+
+    if (id == null) {
+        console.error("Missing id", electron.clipboard.availableFormats(), item);
+        return null;
     }
 
-    const text = electron.clipboard.readText();
-    if (text) {
-        return {
-            type: "text",
-            text,
-        };
-    }
-
-    console.warn(
-        `Unsupported clipboard formats: [${electron.clipboard.availableFormats().join(", ")}]`,
-    );
-
-    return null;
+    return { id, ...item };
 }
 
 function write(items: ClipItem[]) {
+    if (items.length === 1) {
+        writeItem(items[0]);
+    } else {
+        writeItems(items);
+    }
+}
+
+function writeItems(items: ClipItem[]) {
     const texts: string[] = [];
-
     for (const item of items) {
-        switch (item.type) {
-            case "image": {
-                if (items.length > 1) {
-                    throw Error("Cannot copy multiple items when one of them is an image");
-                }
-                const image = electron.nativeImage.createFromDataURL(item.dataUrl);
-                electron.clipboard.writeImage(image);
-                return;
-            }
-
-            case "text":
-                texts.push(item.text);
-                break;
+        if (item.text != null) {
+            texts.push(item.text);
         }
     }
-
     electron.clipboard.writeText(texts.join("\n"));
+}
+
+function writeItem(item: ClipItem) {
+    const { text, rtf, html, image, bookmark } = item;
+    electron.clipboard.write({
+        text,
+        rtf,
+        html,
+        bookmark: bookmark?.title,
+        image: image != null ? electron.nativeImage.createFromDataURL(image) : undefined,
+    });
 }
 
 function onChange(callback: (item: ClipItem) => void) {
@@ -59,13 +81,9 @@ function onChange(callback: (item: ClipItem) => void) {
     clipboardEvent.on("change", () => {
         const item = read();
 
-        if (item != null) {
-            const id = getId(item);
-
-            if (_lastId !== id) {
-                _lastId = id;
-                callback(item);
-            }
+        if (item != null && item.id !== _lastId) {
+            _lastId = item.id;
+            callback(item);
         }
     });
 }

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
+import type { ClipItemType, Search } from "../types/types";
 import api from "./api";
-import type { Search } from "../types/types";
-import type { ClipItemType } from "../types/ClipboardItem";
 
 interface Props {
     value: Search;

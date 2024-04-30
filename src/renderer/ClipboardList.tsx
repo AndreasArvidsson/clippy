@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Trash } from "react-bootstrap-icons";
-import { type ClipItem } from "../types/ClipboardItem";
+import type { ClipItem } from "../types/types";
 import { getCommandForHints } from "../util/getCommandForHints";
 import { indexToHint } from "../util/hints";
 import api from "./api";
@@ -35,7 +35,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
                 const isSelected = selected.includes(hint);
 
                 return (
-                    <React.Fragment key={hint}>
+                    <React.Fragment key={item.id}>
                         {i > 0 && <hr />}
                         <div
                             className={"row clip-item" + (isSelected ? " selected" : "")}
@@ -56,7 +56,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
                             <div className="col-auto clip-number">{hint}</div>
                             <div className="col clip-content">
                                 <hr />
-                                {renderData(item)}
+                                {renderClipItem(item)}
                             </div>
                             <div className="col-auto clip-trash">
                                 <button
@@ -76,14 +76,13 @@ export function ClipboardList({ items }: Props): JSX.Element {
     );
 }
 
-function renderData(data: ClipItem): JSX.Element {
-    switch (data.type) {
-        case "image":
-            return <img src={data.dataUrl} />;
-        case "text":
-            if (data.text.includes("\n")) {
-                return <pre title={data.text}>{data.text}</pre>;
-            }
-            return <span title={data.text}>{data.text}</span>;
+function renderClipItem(item: ClipItem): JSX.Element {
+    if (item.image != null) {
+        return <img src={item.image} />;
     }
+    const text = item.text ?? item.rtf;
+    if (text != null) {
+        return <span title={text}>{text}</span>;
+    }
+    return <span>[FAILED TO RENDER]</span>;
 }

@@ -1,8 +1,7 @@
 import { clipboard } from "./clipboard";
 import { storage } from "./storage";
-import { getId, type ClipItem } from "./types/ClipboardItem";
 import type { Target } from "./types/Command";
-import type { Config, RendererData, Search } from "./types/types";
+import type { ClipItem, Config, RendererData, Search } from "./types/types";
 import { hintToIndex } from "./util/hints";
 import { getWindow } from "./window";
 
@@ -108,10 +107,13 @@ function filterItems(isVisible: boolean) {
             items = items.filter((item) => item.type === _search.type);
         }
 
-        const text = _search.text?.trim().toLowerCase();
-        if (text) {
+        const searchText = _search.text?.trim().toLowerCase();
+        if (searchText) {
             items = items.filter(
-                (item) => item.type === "text" && item.text.toLowerCase().includes(text),
+                (item) =>
+                    (item.text ?? item.rtf)?.toLowerCase().includes(searchText) ||
+                    item.html?.toLowerCase().includes(searchText) ||
+                    item.bookmark?.title?.toLowerCase().includes(searchText),
             );
         }
     }
@@ -134,8 +136,7 @@ function addNewItem(item: ClipItem) {
 }
 
 function removeItem(item: ClipItem) {
-    const id = getId(item);
-    const index = _allItems.findIndex((i) => i.type === item.type && getId(i) === id);
+    const index = _allItems.findIndex((i) => i.id === item.id);
     if (index > -1) {
         _allItems.splice(index, 1);
     }

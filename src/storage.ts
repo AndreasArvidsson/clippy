@@ -1,6 +1,5 @@
 import Store from "electron-store";
-import type { ClipItem } from "./types/ClipboardItem";
-import type { Config } from "./types/types";
+import type { ClipItem, Config } from "./types/types";
 
 interface Storage {
     windowBounds: Electron.Rectangle;
