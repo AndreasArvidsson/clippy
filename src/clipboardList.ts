@@ -4,17 +4,16 @@ import { getId, type ClipItem } from "./types/ClipboardItem";
 import type { Target } from "./types/Command";
 import type { Config, RendererData, Search } from "./types/types";
 import { hintToIndex } from "./util/hints";
+import { getWindow } from "./window";
 
 const limit = 1000;
 
 let _allItems: ClipItem[] = [];
-let _filteredItems: ClipItem[] = [];
 let _search: Search = {};
 let _config = storage.getConfig();
 
 (() => {
     _allItems = storage.getClipboardItems();
-    _filteredItems = _allItems;
 
     const initialItem = clipboard.read();
     if (initialItem != null) {
@@ -29,7 +28,6 @@ export function getConfig() {
 export function setConfig(config: Config) {
     _config = config;
     storage.setConfig(_config);
-    applyFilters();
 }
 
 export function onChange(callback: () => void) {
@@ -42,7 +40,7 @@ export function onChange(callback: () => void) {
 export function getRendererData(): RendererData {
     return {
         totalCount: _allItems.length,
-        items: _filteredItems,
+        items: filterItems(),
         search: _search,
         config: _config,
     };
@@ -54,40 +52,35 @@ export function searchUpdated(search: Search) {
         _config.showSearch = true;
         storage.setConfig(_config);
     }
-    applyFilters();
 }
 
 export function get(targets: Target[]): ClipItem[] {
+    const items = filterItems();
     const results: ClipItem[] = [];
     for (const target of targets) {
         if (target.type === "range") {
             const start = hintToIndex(target.start);
             const end = hintToIndex(target.end);
-            if (
-                start < 0 ||
-                start >= _filteredItems.length ||
-                end < 0 ||
-                end >= _filteredItems.length
-            ) {
+            if (start < 0 || start >= items.length || end < 0 || end >= items.length) {
                 throw Error(`Invalid range: ${target.start}-${target.end}`);
             }
-            results.push(..._filteredItems.slice(start, end + 1));
+            results.push(...items.slice(start, end + 1));
         } else {
             const index = hintToIndex(target.hint);
 
-            if (index < 0 || index >= _filteredItems.length) {
+            if (index < 0 || index >= items.length) {
                 throw Error(`Item '${target.hint}' not found`);
             }
 
             const count = target.count ?? 1;
             if (count === 1) {
-                results.push(_filteredItems[index]);
+                results.push(items[index]);
             } else {
                 const end = index + count - 1;
-                if (end < 0 || end >= _filteredItems.length) {
+                if (end < 0 || end >= items.length) {
                     throw Error(`Invalid range: ${target.hint} + ${count}`);
                 }
-                results.push(..._filteredItems.slice(index, end + 1));
+                results.push(...items.slice(index, end + 1));
             }
         }
     }
@@ -99,20 +92,18 @@ export function remove(targets: Target[]) {
     for (const item of items) {
         removeItem(item);
     }
-    applyFilters();
     persist();
 }
 
 export function clear() {
     _allItems = [];
-    _filteredItems = [];
     _search = {};
     persist();
 }
 
-function applyFilters() {
+function filterItems() {
     let items = _allItems;
-    if (_config.showSearch) {
+    if (_config.showSearch && getWindow().isVisible()) {
         if (_search.type) {
             items = items.filter((item) => item.type === _search.type);
         }
@@ -124,7 +115,7 @@ function applyFilters() {
             );
         }
     }
-    _filteredItems = items;
+    return items;
 }
 
 function addNewItem(item: ClipItem) {
@@ -139,7 +130,6 @@ function addNewItem(item: ClipItem) {
         _allItems.pop();
     }
 
-    applyFilters();
     persist();
 }
 

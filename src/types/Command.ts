@@ -23,7 +23,7 @@ export interface TargetCommand {
     targets: Target[];
 }
 
-interface SearchCommand {
+export interface SearchCommand {
     id: "search";
     text?: string;
     type?: ClipItemType;
