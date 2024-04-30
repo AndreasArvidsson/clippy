@@ -1,7 +1,7 @@
 import { BrowserWindow, screen } from "electron";
 import path from "node:path";
 import { NAME, iconPath } from "./constants";
-import * as storage from "./storage";
+import { storage } from "./storage";
 
 let _window: BrowserWindow | null = null;
 let _bounds = storage.getWindowBounds();

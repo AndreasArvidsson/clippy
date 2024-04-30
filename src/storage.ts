@@ -10,29 +10,38 @@ interface Storage {
 
 const store = new Store<Partial<Storage>>();
 
-export function getWindowBounds(): Electron.Rectangle | undefined {
+function getWindowBounds(): Electron.Rectangle | undefined {
     return store.get("windowBounds");
 }
 
-export function setWindowBounds(bounds: Electron.Rectangle) {
+function setWindowBounds(bounds: Electron.Rectangle) {
     store.set("windowBounds", bounds);
 }
 
-export function getConfig(): Config {
+function getConfig(): Config {
     return store.get("config", {
         pinned: false,
         showSearch: false,
     });
 }
 
-export function setConfig(config: Config) {
+function setConfig(config: Config) {
     store.set("config", config);
 }
 
-export function getClipboardItems(): ClipItem[] {
+function getClipboardItems(): ClipItem[] {
     return store.get("clipboardItems", []);
 }
 
-export function setClipboardItems(items: ClipItem[]) {
+function setClipboardItems(items: ClipItem[]) {
     store.set("clipboardItems", items);
 }
+
+export const storage = {
+    getWindowBounds,
+    setWindowBounds,
+    getConfig,
+    setConfig,
+    getClipboardItems,
+    setClipboardItems,
+};

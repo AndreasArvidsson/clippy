@@ -1,11 +1,11 @@
 import clipboardEvent from "clipboard-event";
-import { clipboard, nativeImage } from "electron";
+import * as electron from "electron";
 import { getId, type ClipItem } from "./types/ClipboardItem";
 
 let _lastId = "";
 
-export function read(): ClipItem | null {
-    const image = clipboard.readImage();
+function read(): ClipItem | null {
+    const image = electron.clipboard.readImage();
 
     if (!image.isEmpty()) {
         const dataUrl = image.toDataURL();
@@ -15,7 +15,7 @@ export function read(): ClipItem | null {
         };
     }
 
-    const text = clipboard.readText();
+    const text = electron.clipboard.readText();
     if (text) {
         return {
             type: "text",
@@ -23,12 +23,14 @@ export function read(): ClipItem | null {
         };
     }
 
-    console.warn(`Unsupported clipboard formats: [${clipboard.availableFormats().join(", ")}]`);
+    console.warn(
+        `Unsupported clipboard formats: [${electron.clipboard.availableFormats().join(", ")}]`,
+    );
 
     return null;
 }
 
-export function write(items: ClipItem[]) {
+function write(items: ClipItem[]) {
     const texts: string[] = [];
 
     for (const item of items) {
@@ -37,8 +39,8 @@ export function write(items: ClipItem[]) {
                 if (items.length > 1) {
                     throw Error("Cannot copy multiple items when one of them is an image");
                 }
-                const image = nativeImage.createFromDataURL(item.dataUrl);
-                clipboard.writeImage(image);
+                const image = electron.nativeImage.createFromDataURL(item.dataUrl);
+                electron.clipboard.writeImage(image);
                 return;
             }
 
@@ -48,10 +50,10 @@ export function write(items: ClipItem[]) {
         }
     }
 
-    clipboard.writeText(texts.join("\n"));
+    electron.clipboard.writeText(texts.join("\n"));
 }
 
-export function onChange(callback: (item: ClipItem) => void) {
+function onChange(callback: (item: ClipItem) => void) {
     clipboardEvent.startListening();
 
     clipboardEvent.on("change", () => {
@@ -67,3 +69,9 @@ export function onChange(callback: (item: ClipItem) => void) {
         }
     });
 }
+
+export const clipboard = {
+    read,
+    write,
+    onChange,
+};

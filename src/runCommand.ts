@@ -3,7 +3,7 @@ import * as clipboardList from "./clipboardList";
 import type { Command, SearchCommand, Target } from "./types/Command";
 import type { Config } from "./types/types";
 import { getWindow } from "./window";
-import * as clipboard from "./clipboard";
+import { clipboard } from "./clipboard";
 
 export function updateRenderer(force = false) {
     const window = getWindow();

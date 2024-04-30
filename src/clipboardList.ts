@@ -1,5 +1,5 @@
-import * as clipboard from "./clipboard";
-import * as storage from "./storage";
+import { clipboard } from "./clipboard";
+import { storage } from "./storage";
 import { getId, type ClipItem } from "./types/ClipboardItem";
 import type { Target } from "./types/Command";
 import type { Config, RendererData, Search } from "./types/types";
