@@ -40,7 +40,7 @@ export function onChange(callback: () => void) {
 export function getRendererData(): RendererData {
     return {
         totalCount: _allItems.length,
-        items: filterItems(),
+        items: filterItems(true),
         search: _search,
         config: _config,
     };
@@ -55,7 +55,7 @@ export function searchUpdated(search: Search) {
 }
 
 export function get(targets: Target[]): ClipItem[] {
-    const items = filterItems();
+    const items = filterItems(getWindow().isVisible());
     const results: ClipItem[] = [];
     for (const target of targets) {
         if (target.type === "range") {
@@ -101,9 +101,9 @@ export function clear() {
     persist();
 }
 
-function filterItems() {
+function filterItems(isVisible: boolean) {
     let items = _allItems;
-    if (_config.showSearch && getWindow().isVisible()) {
+    if (_config.showSearch && isVisible) {
         if (_search.type) {
             items = items.filter((item) => item.type === _search.type);
         }
