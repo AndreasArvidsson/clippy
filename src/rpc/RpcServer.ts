@@ -26,7 +26,6 @@ export default class RpcServer<T> {
         initializeCommunicationDir(this.dirPath);
 
         const success = globalShortcut.register(this.keybind, () => {
-            console.log("Executing request");
             void this.executeRequest();
         });
         if (!success) {
