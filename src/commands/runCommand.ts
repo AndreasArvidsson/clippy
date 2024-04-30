@@ -2,13 +2,13 @@ import { app } from "electron";
 import * as clipboardList from "../clipboardList";
 import type { Command } from "../types/Command";
 import type { Config } from "../types/types";
-import { getWindow, hasWindow } from "../window";
+import { getWindow } from "../window";
 import { copyItems } from "./copyItems";
-import { maximizeWindow, minimizeWindow, showHideWindow } from "./windowCommands";
 
-export function updateRenderer() {
-    if (hasWindow()) {
-        getWindow().webContents.send("update", clipboardList.getRendererData());
+export function updateRenderer(force = false) {
+    const window = getWindow();
+    if (window.isVisible() || force) {
+        window.webContents.send("update", clipboardList.getRendererData());
     }
 }
 
@@ -24,14 +24,19 @@ export function runCommand(command: Command) {
         case "exit":
             app.exit();
             break;
-        case "showHide":
-            showHideWindow();
+        case "showHide": {
+            const window = getWindow();
+            if (window.isVisible()) {
+                window.hide();
+            } else {
+                // Update render even while window is hidden to make sure it's up to date when shown
+                updateRenderer(true);
+                window.show();
+            }
             break;
-        case "minimize":
-            minimizeWindow();
-            break;
-        case "maximize":
-            maximizeWindow();
+        }
+        case "toggleDevTools":
+            getWindow().webContents.toggleDevTools();
             break;
         case "togglePinned": {
             const config = clipboardList.getConfig();

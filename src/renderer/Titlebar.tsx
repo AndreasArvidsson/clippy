@@ -32,8 +32,6 @@ export function Titlebar({ itemsCount, totalCount, pinned }: Props): JSX.Element
             </div>
 
             <div id="titlebar-btns-right">
-                <button onClick={() => api.command({ id: "minimize" })}>&#xE921;</button>
-                <button onClick={() => api.command({ id: "maximize" })}>&#xE922;</button>
                 <button id="close-btn" onClick={() => api.command({ id: "showHide" })}>
                     &#xE8BB;
                 </button>

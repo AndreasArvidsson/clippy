@@ -13,7 +13,7 @@ interface RangeTarget {
 export type Target = PrimitiveTarget | RangeTarget;
 
 interface SimpleCommand {
-    id: "exit" | "showHide" | "toggleSearch" | "togglePinned" | "minimize" | "maximize" | "clear";
+    id: "exit" | "showHide" | "toggleSearch" | "togglePinned" | "clear" | "toggleDevTools";
 }
 
 export interface TargetCommand {

@@ -1,4 +1,4 @@
-import { BrowserWindow, Menu, screen } from "electron";
+import { BrowserWindow, screen } from "electron";
 import path from "node:path";
 import { NAME, iconPath } from "./constants";
 import * as storage from "./storage";
@@ -6,13 +6,13 @@ import * as storage from "./storage";
 let _window: BrowserWindow | null = null;
 let _bounds = storage.getWindowBounds();
 
-export function hasWindow() {
-    return _window != null;
+export function createWindow() {
+    _window = _createWindow();
 }
 
 export function getWindow(): BrowserWindow {
     if (_window == null) {
-        _window = createWindow();
+        throw new Error("Window not created");
     }
     return _window;
 }
@@ -28,13 +28,14 @@ function getBounds(): Partial<Electron.Rectangle> {
     };
 }
 
-function createWindow(): BrowserWindow {
+function _createWindow(): BrowserWindow {
     const bounds = getBounds();
 
     const win = new BrowserWindow({
         icon: iconPath,
         title: NAME,
 
+        show: false,
         frame: false,
         alwaysOnTop: true,
         center: true,
@@ -48,8 +49,6 @@ function createWindow(): BrowserWindow {
             contextIsolation: false,
         },
     });
-
-    Menu.setApplicationMenu(null);
 
     win.webContents.on("before-input-event", (e, input) => {
         if (
@@ -66,11 +65,6 @@ function createWindow(): BrowserWindow {
         }
     });
 
-    win.on("closed", () => {
-        win.removeAllListeners();
-        _window = null;
-    });
-
     let timeout: NodeJS.Timeout;
 
     function updateBounds() {
@@ -84,9 +78,10 @@ function createWindow(): BrowserWindow {
     win.on("move", updateBounds);
     win.on("resize", updateBounds);
 
-    win.webContents.openDevTools();
-
     void win.loadFile(path.resolve(__dirname, "index.html"));
+
+    // win.webContents.openDevTools();
+    // win.once("ready-to-show", () => win.show());
 
     return win;
 }

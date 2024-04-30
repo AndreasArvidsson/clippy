@@ -1,12 +1,14 @@
-import { app, ipcMain, Notification } from "electron";
+import { app, ipcMain, Menu, Notification } from "electron";
 import * as clipboardList from "./clipboardList";
+import { getRendererData } from "./clipboardList";
 import { runCommand, updateRenderer } from "./commands/runCommand";
 import { NAME } from "./constants";
 import RpcServer from "./rpc/RpcServer";
 import { createTray } from "./tray";
 import type { Command } from "./types/Command";
-import { getWindow } from "./window";
-import { getRendererData } from "./clipboardList";
+import { createWindow } from "./window";
+
+Menu.setApplicationMenu(null);
 
 void app.whenReady().then(() => {
     clipboardList.onChange(updateRenderer);
@@ -27,8 +29,5 @@ void app.whenReady().then(() => {
     });
 
     createTray();
-    getWindow();
+    createWindow();
 });
-
-// Do nothing
-app.on("window-all-closed", () => {});
