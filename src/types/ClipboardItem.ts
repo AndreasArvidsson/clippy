@@ -9,6 +9,7 @@ interface ClipItemImage {
 }
 
 export type ClipItem = ClipItemText | ClipItemImage;
+export type ClipItemType = ClipItem["type"];
 
 export function getId(item: ClipItem): string {
     return item.type === "text" ? item.text : item.dataUrl;

@@ -51,7 +51,7 @@ export function runCommand(command: Command) {
             break;
         }
         case "search":
-            clipboardList.searchUpdated(command.text);
+            clipboardList.searchUpdated({ text: command.text, type: command.type });
             updateRenderer();
             break;
 

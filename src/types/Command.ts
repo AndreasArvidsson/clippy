@@ -1,3 +1,5 @@
+import type { ClipItemType } from "./ClipboardItem";
+
 interface PrimitiveTarget {
     type: "primitive";
     hint: string;
@@ -21,9 +23,10 @@ export interface TargetCommand {
     targets: Target[];
 }
 
-interface Search {
+interface SearchCommand {
     id: "search";
-    text: string;
+    text?: string;
+    type?: ClipItemType;
 }
 
-export type Command = SimpleCommand | TargetCommand | Search;
+export type Command = SimpleCommand | TargetCommand | SearchCommand;

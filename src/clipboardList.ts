@@ -2,14 +2,14 @@ import * as clipboard from "./clipboard";
 import * as storage from "./storage";
 import { getId, type ClipItem } from "./types/ClipboardItem";
 import type { Target } from "./types/Command";
-import type { Config, RendererData } from "./types/types";
+import type { Config, RendererData, Search } from "./types/types";
 import { hintToIndex } from "./util/hints";
 
 const limit = 1000;
 
 let _allItems: ClipItem[] = [];
 let _filteredItems: ClipItem[] = [];
-let _search = "";
+let _search: Search = {};
 let _config = storage.getConfig();
 
 (() => {
@@ -48,8 +48,8 @@ export function getRendererData(): RendererData {
     };
 }
 
-export function searchUpdated(search: string) {
-    _search = search.trim().toLowerCase();
+export function searchUpdated(search: Search) {
+    _search = search;
     if (!_config.showSearch) {
         _config.showSearch = true;
         storage.setConfig(_config);
@@ -106,18 +106,25 @@ export function remove(targets: Target[]) {
 export function clear() {
     _allItems = [];
     _filteredItems = [];
-    _search = "";
+    _search = {};
     persist();
 }
 
 function applyFilters() {
-    if (_config.showSearch && _search) {
-        _filteredItems = _allItems.filter(
-            (item) => item.type === "text" && item.text.toLowerCase().includes(_search),
-        );
-    } else {
-        _filteredItems = _allItems;
+    let items = _allItems;
+    if (_config.showSearch) {
+        if (_search.type) {
+            items = items.filter((item) => item.type === _search.type);
+        }
+
+        const text = _search.text?.trim().toLowerCase();
+        if (text) {
+            items = items.filter(
+                (item) => item.type === "text" && item.text.toLowerCase().includes(text),
+            );
+        }
     }
+    _filteredItems = items;
 }
 
 function addNewItem(item: ClipItem) {
