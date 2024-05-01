@@ -31,8 +31,9 @@ export function setConfig(config: Config) {
 
 export function onChange(callback: () => void) {
     clipboard.onChange((item) => {
-        addNewItem(item);
-        callback();
+        if (addNewItem(item)) {
+            callback();
+        }
     });
 }
 
@@ -119,12 +120,16 @@ function filterItems(isVisible: boolean) {
     return items;
 }
 
-function addNewItem(item: ClipItem) {
+function addNewItem(item: ClipItem): boolean {
+    if (item.id === _allItems[0]?.id) {
+        return false;
+    }
+
     // Remove existing item
-    removeItem(item);
+    const existing = removeItem(item);
 
     // Add new item at start of list
-    _allItems.unshift(item);
+    _allItems.unshift(existing ?? item);
 
     // Apply length limit
     if (_allItems.length > limit) {
@@ -132,15 +137,18 @@ function addNewItem(item: ClipItem) {
     }
 
     persist();
+
+    return true;
 }
 
-function removeItem(item: ClipItem) {
+function removeItem(item: ClipItem): ClipItem | undefined {
     const index = _allItems.findIndex((i) => i.id === item.id);
     if (index > -1) {
-        _allItems.splice(index, 1);
+        return _allItems.splice(index, 1)[0];
     }
+    return undefined;
 }
 
-function persist() {
+export function persist() {
     storage.setClipboardItems(_allItems);
 }

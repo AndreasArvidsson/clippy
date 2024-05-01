@@ -1,14 +1,20 @@
 import { app } from "electron";
+import { clipboard } from "./clipboard";
 import * as clipboardList from "./clipboardList";
-import type { Command, SearchCommand, Target } from "./types/Command";
+import type { Command, RenameCommand, SearchCommand, Target } from "./types/Command";
 import type { Config } from "./types/types";
 import { getWindow } from "./window";
-import { clipboard } from "./clipboard";
 
 export function updateRenderer(force = false) {
     const window = getWindow();
     if (window.isVisible() || force) {
         window.webContents.send("update", clipboardList.getRendererData());
+    }
+}
+
+function assertSingleTarget(command: { targets: Target[] }) {
+    if (command.targets.length !== 1) {
+        throw new Error("Expected exactly one target");
     }
 }
 
@@ -45,7 +51,7 @@ function search(command: SearchCommand) {
     updateRenderer();
 }
 
-function copyItems(targets: Target[], pinned: boolean) {
+function copyItems(targets: Target[]) {
     const items = clipboardList.get(targets);
 
     clipboard.write(items);
@@ -53,7 +59,7 @@ function copyItems(targets: Target[], pinned: boolean) {
     const window = getWindow();
 
     if (window.isVisible()) {
-        if (pinned) {
+        if (clipboardList.getConfig().pinned) {
             if (window.isFocused()) {
                 window.blur();
             }
@@ -71,6 +77,19 @@ function removeItems(targets: Target[]) {
 function removeAllItems() {
     clipboardList.removeAllItems();
     updateRenderer();
+}
+
+function renameItem(command: RenameCommand) {
+    if (command.text != null) {
+        const items = clipboardList.get(command.targets);
+        for (const item of items) {
+            item.name = command.text || undefined;
+        }
+        clipboardList.persist();
+        updateRenderer();
+    } else {
+        assertSingleTarget(command);
+    }
 }
 
 export function runCommand(command: Command) {
@@ -96,13 +115,16 @@ export function runCommand(command: Command) {
             search(command);
             break;
         case "copyItems":
-            copyItems(command.targets, clipboardList.getConfig().pinned);
+            copyItems(command.targets);
             break;
         case "removeItems":
             removeItems(command.targets);
             break;
         case "removeAllItems":
             removeAllItems();
+            break;
+        case "renameItems":
+            renameItem(command);
             break;
         default: {
             const _exhaustiveCheck: never = command;

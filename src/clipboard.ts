@@ -64,8 +64,19 @@ function write(items: ClipItem[]) {
 function writeItems(items: ClipItem[]) {
     const texts: string[] = [];
     for (const item of items) {
-        if (item.text != null) {
-            texts.push(item.text);
+        switch (item.type) {
+            case "text":
+                texts.push(item.text ?? "[TEXT]");
+                break;
+            case "image": {
+                const name = item.name ?? item.meta?.alt ?? "[IMAGE]";
+                if (item.meta?.src) {
+                    texts.push(`[${name}](${item.meta.src})`);
+                } else {
+                    texts.push(name);
+                }
+                break;
+            }
         }
     }
     electron.clipboard.writeText(texts.join("\n"));

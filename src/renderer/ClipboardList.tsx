@@ -28,6 +28,13 @@ export function ClipboardList({ items }: Props): JSX.Element {
         return () => window.removeEventListener("keydown", onKeyDown);
     }, []);
 
+    const renderName = (item: ClipItem) => {
+        if (item.name == null) {
+            return undefined;
+        }
+        return <div className="clip-name">{item.name}</div>;
+    };
+
     return (
         <main className="container-fluid clip-list">
             {items.map((item, i) => {
@@ -58,7 +65,10 @@ export function ClipboardList({ items }: Props): JSX.Element {
                             }}
                         >
                             <div className="col-auto clip-number">{hint}</div>
-                            <div className="col clip-content">{renderClipItem(item)}</div>
+                            <div className="col clip-content">
+                                {renderName(item)}
+                                {renderClipItem(item)}
+                            </div>
                             <div className="col-auto clip-trash">
                                 <button
                                     onClick={(e) => {
@@ -83,6 +93,9 @@ function renderClipItem(item: ClipItem): JSX.Element {
     }
     const text = item.text ?? item.rtf;
     if (text != null) {
+        if (text.includes("\n")) {
+            return <pre title={text}>{text}</pre>;
+        }
         return <span title={text}>{text}</span>;
     }
     return <span>[FAILED TO RENDER]</span>;

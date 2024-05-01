@@ -10,6 +10,7 @@ export interface ClipItemMeta {
 export interface ClipItem {
     id: string;
     type: ClipItemType;
+    name?: string;
     text?: string;
     rtf?: string;
     html?: string;

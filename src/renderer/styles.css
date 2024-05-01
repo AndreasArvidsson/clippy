@@ -39,7 +39,6 @@ main {
 
 .clip-item > div {
     padding: 0.25rem 0.5rem;
-    display: flex;
     align-items: center;
 }
 
@@ -52,11 +51,20 @@ main {
     text-overflow: ellipsis;
 }
 
-.clip-content > * {
+.clip-content > pre,
+.clip-content > span,
+.clip-content > img {
     max-height: 10rem;
     margin: 0;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.clip-name {
+    text-align: center;
+    background-color: #f0f0f0;
+    color: #000000;
+    font-weight: 600;
 }
 
 .clip-item .clip-trash {

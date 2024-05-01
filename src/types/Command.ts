@@ -18,15 +18,21 @@ interface SimpleCommand {
     id: "exit" | "showHide" | "toggleSearch" | "togglePinned" | "toggleDevTools" | "removeAllItems";
 }
 
-export interface TargetCommand {
-    id: "copyItems" | "removeItems";
-    targets: Target[];
-}
-
 export interface SearchCommand {
     id: "search";
     text?: string;
     type?: ClipItemType;
 }
 
-export type Command = SimpleCommand | TargetCommand | SearchCommand;
+export interface TargetCommand {
+    id: "copyItems" | "removeItems";
+    targets: Target[];
+}
+
+export interface RenameCommand {
+    id: "renameItems";
+    targets: Target[];
+    text?: string;
+}
+
+export type Command = SimpleCommand | SearchCommand | TargetCommand | RenameCommand;
