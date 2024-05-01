@@ -5,6 +5,12 @@ import type { ClipItem, ClipItemMeta, ClipItemType } from "./types/types";
 let _lastId = "";
 
 function read(): ClipItem | null {
+    const formats = electron.clipboard.availableFormats();
+
+    if (formats.length === 0) {
+        return null;
+    }
+
     const text = electron.clipboard.readText() || undefined;
     const rtf = electron.clipboard.readRTF() || undefined;
     const html = electron.clipboard.readHTML() || undefined;
@@ -40,7 +46,7 @@ function read(): ClipItem | null {
     };
 
     if (id == null) {
-        console.error("Missing id", electron.clipboard.availableFormats(), item);
+        console.error("Missing id", formats, item);
         return null;
     }
 

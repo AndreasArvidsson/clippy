@@ -20,7 +20,7 @@ export function Search({ value }: Props): JSX.Element {
     }
 
     return (
-        <div className="input-group">
+        <div className="search input-group">
             <input
                 type="text"
                 className="form-control form-control-sm"

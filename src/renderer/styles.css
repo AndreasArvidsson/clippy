@@ -10,6 +10,10 @@ main {
     overflow: auto;
 }
 
+.search select {
+    border-radius: 0;
+}
+
 .clip-list > hr {
     border: 1px inset;
     margin: 0;
