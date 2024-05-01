@@ -4,23 +4,19 @@ import api from "./api";
 export function Footer(): JSX.Element {
     return (
         <footer>
-            <div className="buttons">
-                <button onClick={() => console.log("TODO")}>
-                    <GearFill />
-                </button>
-                <button onClick={() => console.log("TODO")}>
-                    <PauseFill />
-                </button>
-                <button onClick={() => console.log("TODO")}>
-                    <StarFill />
-                </button>
-            </div>
-            <div className="title"></div>
-            <div className="buttons">
-                <button onClick={() => api.menu({ type: "remove" })}>
-                    <TrashFill />
-                </button>
-            </div>
+            <button className="icon-btn" onClick={() => console.log("TODO")}>
+                <GearFill />
+            </button>
+            <button className="icon-btn" onClick={() => console.log("TODO")}>
+                <PauseFill />
+            </button>
+            <button className="icon-btn" onClick={() => console.log("TODO")}>
+                <StarFill />
+            </button>
+            <div className="title" />
+            <button className="icon-btn" onClick={() => api.menu({ type: "remove" })}>
+                <TrashFill />
+            </button>
         </footer>
     );
 }

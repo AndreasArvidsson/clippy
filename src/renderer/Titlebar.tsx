@@ -16,7 +16,7 @@ export function Titlebar({ itemsCount, totalCount, pinned, showSearch }: Props):
     function renderPinned() {
         return (
             <button
-                className={pinned ? "active" : undefined}
+                className={"icon-btn" + (pinned ? " active" : "")}
                 onClick={() => api.command({ id: "togglePinned" })}
             >
                 <PinAngleFill />
@@ -27,7 +27,7 @@ export function Titlebar({ itemsCount, totalCount, pinned, showSearch }: Props):
     function renderSearch() {
         return (
             <button
-                className={showSearch ? "active" : undefined}
+                className={"icon-btn" + (showSearch ? " active" : "")}
                 onClick={() => api.command({ id: "toggleSearch" })}
             >
                 <Search />
@@ -37,7 +37,11 @@ export function Titlebar({ itemsCount, totalCount, pinned, showSearch }: Props):
 
     function renderClose() {
         return (
-            <button id="close-btn" onClick={() => api.command({ id: "showHide" })}>
+            <button
+                className="icon-btn"
+                id="close-btn"
+                onClick={() => api.command({ id: "showHide" })}
+            >
                 {isMac ? <XCircleFill /> : <XLg />}
             </button>
         );
@@ -50,10 +54,9 @@ export function Titlebar({ itemsCount, totalCount, pinned, showSearch }: Props):
             }
             return `${itemsCount} / ${totalCount}`;
         })();
-        const className = isMac ? "padding-left" : "padding-right";
         return (
-            <div className={"title " + className}>
-                <button onClick={() => api.menu({ type: "lists" })}>
+            <div className={"title " + (isMac ? "padding-left" : "padding-right")}>
+                <button className="icon-btn" onClick={() => api.menu({ type: "lists" })}>
                     {NAME} ({count}) <CaretDownFill />
                 </button>
             </div>

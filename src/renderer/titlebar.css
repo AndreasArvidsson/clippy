@@ -31,7 +31,7 @@ header {
     text-align: center;
 }
 
-.title > button {
+.title > button.icon-btn {
     pointer-events: auto;
     font-size: 1rem;
 }
@@ -45,17 +45,6 @@ header {
 }
 .title.padding-right {
     padding-right: 2.75rem;
-}
-
-header button,
-footer button {
-    font-size: 0.75rem;
-    -webkit-app-region: no-drag;
-    border: 0;
-    height: 2rem;
-    background-color: transparent;
-    color: #171717;
-    padding: 0 1rem;
 }
 
 header button:hover,

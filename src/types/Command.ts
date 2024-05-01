@@ -40,9 +40,16 @@ export interface SwitchListCommand {
     list: string;
 }
 
+export interface AssignItemsToListCommand {
+    id: "assignItemsToList";
+    targets: Target[];
+    list: string | undefined;
+}
+
 export type Command =
     | SimpleCommand
     | SearchCommand
     | TargetCommand
     | RenameCommand
-    | SwitchListCommand;
+    | SwitchListCommand
+    | AssignItemsToListCommand;

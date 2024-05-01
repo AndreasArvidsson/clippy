@@ -1,8 +1,14 @@
 import { Menu, type MenuItemConstructorOptions } from "electron";
 import { runCommand } from "./runCommand";
-import { defaultLists, type MenuType } from "./types/types";
-import { getCommandForHints } from "./util/getCommandForHints";
 import { storage } from "./storage";
+import {
+    AllList,
+    MyFavoritesList,
+    UnstarredList,
+    defaultLists,
+    type MenuType,
+} from "./types/types";
+import { getCommandForHints } from "./util/getCommandForHints";
 
 Menu.setApplicationMenu(null);
 
@@ -34,42 +40,40 @@ function clipItemContextMenu(hint: string) {
 }
 
 function listsMenu() {
-    const lists = defaultLists.concat(storage.getLists());
     const config = storage.getConfig();
+    const lists = defaultLists.concat(storage.getLists());
     const activeIsDefault = defaultLists.includes(config.activeList);
-    const menu = Menu.buildFromTemplate(
-        lists
-            .map(
-                (label): MenuItemConstructorOptions => ({
-                    label,
-                    type: "radio",
-                    checked: label === config.activeList,
-                    click: () => runCommand({ id: "switchList", list: label }),
-                }),
-            )
-            .concat([
-                {
-                    type: "separator",
-                },
-                {
-                    label: "Create new list",
-                    type: "normal",
-                    click: () => console.log("TODO"),
-                },
-                {
-                    label: "Edit current list",
-                    type: "normal",
-                    click: () => console.log("TODO"),
-                    enabled: !activeIsDefault,
-                },
-                {
-                    label: "Delete current list",
-                    type: "normal",
-                    click: () => console.log("TODO"),
-                    enabled: !activeIsDefault,
-                },
-            ]),
-    );
+
+    const getOptions = (label: string): MenuItemConstructorOptions => ({
+        label,
+        type: "radio",
+        checked: label === config.activeList,
+        click: () => runCommand({ id: "switchList", list: label }),
+    });
+
+    const menu = Menu.buildFromTemplate([
+        ...lists.map(getOptions),
+        {
+            type: "separator",
+        },
+        {
+            label: "Create new list",
+            type: "normal",
+            click: () => console.log("TODO"),
+        },
+        {
+            label: "Edit current list",
+            type: "normal",
+            click: () => console.log("TODO"),
+            enabled: !activeIsDefault,
+        },
+        {
+            label: "Delete current list",
+            type: "normal",
+            click: () => console.log("TODO"),
+            enabled: !activeIsDefault,
+        },
+    ]);
     menu.popup();
 }
 

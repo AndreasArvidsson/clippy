@@ -49,4 +49,7 @@ interface SimpleMenu {
 
 export type MenuType = ClipItemContextMenu | SimpleMenu;
 
-export const defaultLists = ["All", "My favorites", "Unstarred"];
+export const AllList = "All";
+export const MyFavoritesList = "My favorites";
+export const UnstarredList = "Unstarred";
+export const defaultLists = [AllList, MyFavoritesList, UnstarredList];

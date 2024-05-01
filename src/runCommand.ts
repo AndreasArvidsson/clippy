@@ -3,13 +3,21 @@ import { clipboard } from "./clipboard";
 import * as clipboardList from "./clipboardList";
 import { storage } from "./storage";
 import type {
+    AssignItemsToListCommand,
     Command,
     RenameCommand,
     SearchCommand,
     SwitchListCommand,
     Target,
 } from "./types/Command";
-import { defaultLists, type ClipItem, type Config, type RendererData } from "./types/types";
+import {
+    AllList,
+    MyFavoritesList,
+    UnstarredList,
+    type ClipItem,
+    type Config,
+    type RendererData,
+} from "./types/types";
 import { getFilteredItems } from "./util/filterItems";
 import { processTargets } from "./util/processTargets";
 import { getWindow } from "./window";
@@ -131,12 +139,35 @@ function toggleDevTools() {
 }
 
 function switchList(command: SwitchListCommand) {
-    if (!defaultLists.includes(command.list) && !storage.getLists().includes(command.list)) {
-        throw Error(`Can't switch to unknown list '${command.list}'`);
+    switch (command.list) {
+        case AllList:
+        case MyFavoritesList:
+        case UnstarredList:
+            break;
+        default:
+            if (!storage.getLists().includes(command.list)) {
+                throw Error(`Can't switch to unknown list '${command.list}'`);
+            }
     }
+
     const config = storage.getConfig();
     config.activeList = command.list;
     storage.setConfig(config);
+    updateRenderer();
+}
+
+function assignItemsToList(command: AssignItemsToListCommand) {
+    if (command.list != null) {
+        if (command.list !== MyFavoritesList && !storage.getLists().includes(command.list)) {
+            throw Error(`Can't assign item to unknown list '${command.list}'`);
+        }
+    }
+
+    const items = processTargets(command.targets);
+    for (const item of items) {
+        item.list = command.list;
+    }
+    storage.setClipboardItems(storage.getClipboardItems());
     updateRenderer();
 }
 
@@ -176,6 +207,9 @@ export function runCommand(command: Command) {
             break;
         case "switchList":
             switchList(command);
+            break;
+        case "assignItemsToList":
+            assignItemsToList(command);
             break;
         default: {
             const _exhaustiveCheck: never = command;

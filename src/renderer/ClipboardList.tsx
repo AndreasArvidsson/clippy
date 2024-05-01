@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Trash } from "react-bootstrap-icons";
-import type { ClipItem } from "../types/types";
+import { StarFill, Trash } from "react-bootstrap-icons";
+import { MyFavoritesList, type ClipItem } from "../types/types";
 import { getCommandForHints, hintsToPrimitiveTargets } from "../util/getCommandForHints";
 import { indexToHint } from "../util/hints";
 import api from "./api";
@@ -102,6 +102,21 @@ export function ClipboardList({ items }: Props): JSX.Element {
                             <div className="col clip-content">
                                 {renderName(item, hint)}
                                 {renderClipItem(item)}
+                            </div>
+                            <div className="col-auto">
+                                <button
+                                    className={"icon-btn" + (item.list != null ? " starred" : "")}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        api.command({
+                                            id: "assignItemsToList",
+                                            targets: hintsToPrimitiveTargets([hint]),
+                                            list: item.list != null ? undefined : MyFavoritesList,
+                                        });
+                                    }}
+                                >
+                                    <StarFill />
+                                </button>
                             </div>
                             <div className="col-auto clip-trash">
                                 <button
