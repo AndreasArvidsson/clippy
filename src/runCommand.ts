@@ -81,6 +81,12 @@ function togglePaused() {
     updateConfig(config);
 }
 
+function toggleAutoStar() {
+    const config = storage.getConfig();
+    config.autoStar = !config.autoStar;
+    updateConfig(config);
+}
+
 function search(command: SearchCommand) {
     storage.setSearch({ text: command.text, type: command.type });
     const config = storage.getConfig();
@@ -236,6 +242,9 @@ export function runCommand(command: Command) {
             break;
         case "togglePaused":
             togglePaused();
+            break;
+        case "toggleAutoStar":
+            toggleAutoStar();
             break;
         case "search":
             search(command);

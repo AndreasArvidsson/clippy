@@ -22,6 +22,7 @@ interface SimpleCommand {
         | "togglePinned"
         | "toggleDevTools"
         | "togglePaused"
+        | "toggleAutoStar"
         | "removeAllItems"
         | "removeList";
 }

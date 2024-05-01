@@ -4,8 +4,6 @@ import type { ClipItem, ClipItemMeta, ClipItemType } from "./types/types";
 import { toMarkdownImageLink } from "./util/transformations";
 import { storage } from "./storage";
 
-let _lastId = "";
-
 function read(): ClipItem | null {
     const formats = electron.clipboard.availableFormats();
 
@@ -105,8 +103,7 @@ function onChange(callback: (item: ClipItem) => void) {
 
         const item = read();
 
-        if (item != null && item.id !== _lastId) {
-            _lastId = item.id;
+        if (item != null) {
             callback(item);
         }
     });

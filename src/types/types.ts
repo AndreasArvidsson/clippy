@@ -24,6 +24,7 @@ export interface Config {
     pinned: boolean;
     showSearch: boolean;
     paused: boolean;
+    autoStar: boolean;
     activeList: string;
 }
 

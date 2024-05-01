@@ -1,13 +1,7 @@
 import { Menu, type MenuItemConstructorOptions } from "electron";
 import { runCommand } from "./runCommand";
 import { storage } from "./storage";
-import {
-    AllList,
-    MyFavoritesList,
-    UnstarredList,
-    defaultLists,
-    type MenuType,
-} from "./types/types";
+import { defaultLists, type MenuType } from "./types/types";
 import { getCommandForHints } from "./util/getCommandForHints";
 
 Menu.setApplicationMenu(null);

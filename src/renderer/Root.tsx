@@ -36,7 +36,7 @@ export function Root(): JSX.Element | null {
 
             <ClipboardList items={data.items} />
 
-            <Footer paused={data.config.paused} />
+            <Footer paused={data.config.paused} autoStar={data.config.autoStar} />
         </>
     );
 }

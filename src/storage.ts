@@ -14,6 +14,7 @@ const defaults: Storage = {
         pinned: false,
         showSearch: false,
         paused: false,
+        autoStar: false,
         activeList: "All",
     },
     lists: [],

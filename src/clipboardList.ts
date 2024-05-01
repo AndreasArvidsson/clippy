@@ -1,7 +1,7 @@
 import { clipboard } from "./clipboard";
 import { storage } from "./storage";
 import type { Target } from "./types/Command";
-import { AllList, UnstarredList, type ClipItem } from "./types/types";
+import { AllList, MyFavoritesList, UnstarredList, type ClipItem } from "./types/types";
 import { processTargets } from "./util/processTargets";
 
 const limit = 1000;
@@ -52,8 +52,24 @@ function addNewItem(item: ClipItem) {
     // Remove existing item
     const existing = removeItem(items, item);
 
+    const itemToAdd = existing ?? item;
+
+    const { autoStar, activeList } = storage.getConfig();
+    if (autoStar) {
+        switch (activeList) {
+            case AllList:
+            case UnstarredList:
+                itemToAdd.list = MyFavoritesList;
+                break;
+            default:
+                itemToAdd.list = activeList;
+        }
+    }
+
+    console.log(itemToAdd);
+
     // Add new item at start of list
-    items.unshift(existing ?? item);
+    items.unshift(itemToAdd);
 
     // Apply length limit
     // TODO: How do we handle starred items?
