@@ -1,7 +1,7 @@
 import { clipboard } from "./clipboard";
 import { storage } from "./storage";
 import type { Target } from "./types/Command";
-import type { ClipItem } from "./types/types";
+import { AllList, UnstarredList, type ClipItem } from "./types/types";
 import { processTargets } from "./util/processTargets";
 
 const limit = 1000;
@@ -46,10 +46,6 @@ export function remove(targets: Target[]) {
     storage.setClipboardItems(allItems);
 }
 
-export function removeAllItems() {
-    storage.setClipboardItems([]);
-}
-
 function addNewItem(item: ClipItem) {
     const items = storage.getClipboardItems();
 
@@ -60,6 +56,7 @@ function addNewItem(item: ClipItem) {
     items.unshift(existing ?? item);
 
     // Apply length limit
+    // TODO: How do we handle starred items?
     if (items.length > limit) {
         items.pop();
     }

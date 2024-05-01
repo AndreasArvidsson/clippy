@@ -14,6 +14,7 @@ import {
     AllList,
     MyFavoritesList,
     UnstarredList,
+    defaultLists,
     type ClipItem,
     type Config,
     type RendererData,
@@ -107,8 +108,45 @@ function removeItems(targets: Target[]) {
     updateRenderer();
 }
 
-function removeAllItems() {
-    clipboardList.removeAllItems();
+function removeAllItems(render = true) {
+    const { activeList } = storage.getConfig();
+    let items = storage.getClipboardItems();
+
+    switch (activeList) {
+        case AllList:
+            items = [];
+            break;
+        case UnstarredList:
+            items = items.filter((item) => item.list != null);
+            break;
+        default:
+            items = items.filter((item) => item.list !== activeList);
+    }
+
+    storage.setClipboardItems(items);
+
+    if (render) {
+        updateRenderer();
+    }
+}
+
+function removeList() {
+    const config = storage.getConfig();
+    const lists = storage.getLists();
+    const { activeList } = config;
+
+    if (defaultLists.includes(activeList)) {
+        throw Error(`Can't remove default list '${activeList}'`);
+    }
+    if (!lists.includes(activeList)) {
+        throw Error(`Can't remove unknown list '${activeList}'`);
+    }
+
+    removeAllItems(false);
+
+    storage.setLists(lists.filter((list) => list !== activeList));
+    storage.setConfig({ ...config, activeList: AllList });
+
     updateRenderer();
 }
 
@@ -199,9 +237,7 @@ export function runCommand(command: Command) {
         case "removeItems":
             removeItems(command.targets);
             break;
-        case "removeAllItems":
-            removeAllItems();
-            break;
+
         case "renameItems":
             renameItem(command);
             break;
@@ -210,6 +246,12 @@ export function runCommand(command: Command) {
             break;
         case "assignItemsToList":
             assignItemsToList(command);
+            break;
+        case "removeAllItems":
+            removeAllItems();
+            break;
+        case "removeList":
+            removeList();
             break;
         default: {
             const _exhaustiveCheck: never = command;

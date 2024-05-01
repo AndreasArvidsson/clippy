@@ -62,16 +62,30 @@ function listsMenu() {
             click: () => console.log("TODO"),
         },
         {
-            label: "Edit current list",
+            label: "Rename list",
             type: "normal",
             click: () => console.log("TODO"),
             enabled: !activeIsDefault,
         },
         {
-            label: "Delete current list",
-            type: "normal",
-            click: () => console.log("TODO"),
-            enabled: !activeIsDefault,
+            type: "separator",
+        },
+        {
+            label: "Delete list",
+            type: "submenu",
+            submenu: [
+                {
+                    label: "Delete all items",
+                    type: "normal",
+                    click: () => runCommand({ id: "removeAllItems" }),
+                },
+                {
+                    label: "Delete list and all items",
+                    type: "normal",
+                    click: () => runCommand({ id: "removeList" }),
+                    enabled: !activeIsDefault,
+                },
+            ],
         },
     ]);
     menu.popup();

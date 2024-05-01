@@ -67,19 +67,20 @@ main {
     font-weight: 600;
 }
 
-.clip-item .clip-trash {
+/* TODO: Remove if not needed */
+/* .clip-item .clip-trash {
     display: none;
-}
+} */
 
-.clip-item:hover .clip-trash {
+/* .clip-item:hover .clip-trash {
     display: flex;
-}
+} */
 
-.clip-trash > button {
+/* .clip-trash > button {
     border: 0;
     background-color: transparent;
     color: red;
-}
+} */
 
 button.icon-btn {
     font-size: 0.75rem;

@@ -15,7 +15,14 @@ export interface RangeTarget {
 export type Target = PrimitiveTarget | RangeTarget;
 
 interface SimpleCommand {
-    id: "exit" | "showHide" | "toggleSearch" | "togglePinned" | "toggleDevTools" | "removeAllItems";
+    id:
+        | "exit"
+        | "showHide"
+        | "toggleSearch"
+        | "togglePinned"
+        | "toggleDevTools"
+        | "removeAllItems"
+        | "removeList";
 }
 
 export interface SearchCommand {

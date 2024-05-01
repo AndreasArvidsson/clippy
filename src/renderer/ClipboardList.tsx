@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { StarFill, Trash } from "react-bootstrap-icons";
+import { StarFill } from "react-bootstrap-icons";
 import { MyFavoritesList, type ClipItem } from "../types/types";
 import { getCommandForHints, hintsToPrimitiveTargets } from "../util/getCommandForHints";
 import { indexToHint } from "../util/hints";
@@ -120,7 +120,8 @@ export function ClipboardList({ items }: Props): JSX.Element {
                                     <StarFill />
                                 </button>
                             </div>
-                            <div className="col-auto clip-trash">
+                            {/* TODO: Do we really need this?  */}
+                            {/* <div className="col-auto clip-trash">
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation();
@@ -129,7 +130,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
                                 >
                                     <Trash />
                                 </button>
-                            </div>
+                            </div> */}
                         </div>
                     </React.Fragment>
                 );
