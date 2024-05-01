@@ -1,4 +1,4 @@
-import { PinAngle, PinAngleFill, Search } from "react-bootstrap-icons";
+import { PinAngle, PinAngleFill, Search, XLg } from "react-bootstrap-icons";
 import { NAME } from "../constants";
 import api from "./api";
 
@@ -17,8 +17,8 @@ export function Titlebar({ itemsCount, totalCount, pinned }: Props): JSX.Element
     })();
 
     return (
-        <header id="titlebar">
-            <div id="titlebar-btns-left">
+        <header>
+            <div className="buttons">
                 <button onClick={() => api.command({ id: "togglePinned" })}>
                     {pinned ? <PinAngleFill /> : <PinAngle />}
                 </button>
@@ -27,13 +27,13 @@ export function Titlebar({ itemsCount, totalCount, pinned }: Props): JSX.Element
                 </button>
             </div>
 
-            <div id="title">
+            <div className="title">
                 {NAME} ({count})
             </div>
 
-            <div id="titlebar-btns-right">
+            <div className="buttons">
                 <button id="close-btn" onClick={() => api.command({ id: "showHide" })}>
-                    &#xE8BB;
+                    <XLg />
                 </button>
             </div>
         </header>

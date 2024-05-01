@@ -1,64 +1,60 @@
-#titlebar {
-    position: fixed;
-    top: 0;
-    width: 100%;
+header,
+footer {
+    display: flex;
     background-color: #f0f0f0;
-    height: 2rem;
-    border-bottom: 1px solid #d0d0d0;
+    border-width: 1px;
+    border-color: #d0d0d0;
+}
+
+header {
+    border-bottom-style: solid;
+}
+
+footer {
+    border-top-style: solid;
+}
+
+header > .buttons,
+footer > .buttons {
+    font-size: 0.75rem;
+    -webkit-app-region: no-drag;
+}
+
+header {
     -webkit-app-region: drag;
     -webkit-user-select: none;
     user-select: none;
-    padding: 0;
-    margin: 0;
 }
 
-#title {
-    position: relative;
+.title {
+    flex: 1;
     pointer-events: none;
-    height: 100%;
     text-align: center;
     padding-top: 0.25rem;
 }
 
-#titlebar-btns-left,
-#titlebar-btns-right {
-    position: fixed;
-    top: 0;
-    height: 100%;
-    -webkit-app-region: no-drag;
-}
-
-#titlebar-btns-left {
-    left: 0;
-    font-size: 0.75rem;
-}
-
-#titlebar-btns-right {
-    right: 0;
-    font-family: "Segoe MDL2 Assets";
-    font-size: 0.6rem;
-}
-
-#titlebar button {
+header button,
+footer button {
     border: 0;
     height: 2rem;
-    vertical-align: middle;
     background-color: transparent;
     color: #171717;
     padding: 0 1rem;
 }
 
-#titlebar button:hover {
+header button:hover,
+footer button:hover {
     background-color: #dddddd;
 }
-#titlebar button:active {
+header button:active,
+footer button:active {
     background-color: #c0c0c0;
 }
 
-#titlebar #close-btn:hover {
+#close-btn:hover {
     background-color: #e81123;
     color: #ffffff;
 }
-#titlebar #close-btn:active {
+#close-btn:active {
     background-color: #f1707a;
 }

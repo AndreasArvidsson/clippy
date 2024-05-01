@@ -1,9 +1,9 @@
 import { app, ipcMain, Menu, Notification } from "electron";
 import * as clipboardList from "./clipboardList";
 import { getRendererData } from "./clipboardList";
-import { runCommand, updateRenderer } from "./runCommand";
 import { NAME } from "./constants";
 import RpcServer from "./rpc/RpcServer";
+import { runCommand, updateRenderer } from "./runCommand";
 import { createTray } from "./tray";
 import type { Command } from "./types/Command";
 import { createWindow } from "./window";

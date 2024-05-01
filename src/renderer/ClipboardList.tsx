@@ -29,7 +29,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
     }, []);
 
     return (
-        <div className="container-fluid clip-list">
+        <main className="container-fluid clip-list">
             {items.map((item, i) => {
                 const hint = indexToHint(i);
                 const isSelected = selected.includes(hint);
@@ -72,7 +72,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
                     </React.Fragment>
                 );
             })}
-        </div>
+        </main>
     );
 }
 

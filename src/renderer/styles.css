@@ -1,14 +1,13 @@
-main {
-    position: fixed;
-    top: 2rem;
-    width: 100%;
-    height: calc(100% - 2rem);
+#root {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
-.clip-list {
+main {
+    flex: 1;
+    flex-grow: 1;
     overflow: auto;
-    width: 100%;
-    height: calc(100% - 2rem);
 }
 
 .clip-list > hr {

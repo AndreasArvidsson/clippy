@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { RendererData } from "../types/types";
 import { ClipboardList } from "./ClipboardList";
+import { Footer } from "./Footer";
 import { Search } from "./Search";
 import { Titlebar } from "./Titlebar";
 import api from "./api";
@@ -30,11 +31,11 @@ export function Root(): JSX.Element | null {
                 pinned={data.config.pinned}
             />
 
-            <main>
-                {data.config.showSearch && <Search value={data.search} />}
+            {data.config.showSearch && <Search value={data.search} />}
 
-                <ClipboardList items={data.items} />
-            </main>
+            <ClipboardList items={data.items} />
+
+            <Footer />
         </>
     );
 }
