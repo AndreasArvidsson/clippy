@@ -4,20 +4,20 @@ export function Footer(): JSX.Element {
     return (
         <footer>
             <div className="buttons">
-                <button>
+                <button onClick={() => console.log("TODO")}>
                     <GearFill />
                 </button>
-                <button>
+                <button onClick={() => console.log("TODO")}>
                     <PauseFill />
                 </button>
-                <button>
+                <button onClick={() => console.log("TODO")}>
                     <StarFill />
                 </button>
             </div>
             <div className="title"></div>
             <div className="buttons">
                 <button>
-                    <TrashFill />
+                    <TrashFill onClick={() => console.log("TODO")} />
                 </button>
             </div>
         </footer>
