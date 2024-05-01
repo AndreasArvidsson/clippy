@@ -52,17 +52,18 @@ export function ClipboardList({ items }: Props): JSX.Element {
                                     api.command(getCommandForHints("copyItems", [hint]));
                                 }
                             }}
+                            onContextMenu={(e) => {
+                                e.preventDefault();
+                                api.menu({ type: "clipItemContext", hint });
+                            }}
                         >
                             <div className="col-auto clip-number">{hint}</div>
-                            <div className="col clip-content">
-                                <hr />
-                                {renderClipItem(item)}
-                            </div>
+                            <div className="col clip-content">{renderClipItem(item)}</div>
                             <div className="col-auto clip-trash">
                                 <button
                                     onClick={(e) => {
-                                        api.command(getCommandForHints("removeItems", [hint]));
                                         e.stopPropagation();
+                                        api.command(getCommandForHints("removeItems", [hint]));
                                     }}
                                 >
                                     <Trash />

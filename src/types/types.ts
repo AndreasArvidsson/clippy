@@ -34,3 +34,14 @@ export interface RendererData {
     search: Search;
     config: Config;
 }
+
+interface ClipItemContextMenu {
+    type: "clipItemContext";
+    hint: string;
+}
+
+interface RemoveMenu {
+    type: "remove";
+}
+
+export type MenuType = ClipItemContextMenu | RemoveMenu;

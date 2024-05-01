@@ -68,8 +68,8 @@ function removeItems(targets: Target[]) {
     updateRenderer();
 }
 
-function clear() {
-    clipboardList.clear();
+function removeAllItems() {
+    clipboardList.removeAllItems();
     updateRenderer();
 }
 
@@ -101,8 +101,8 @@ export function runCommand(command: Command) {
         case "removeItems":
             removeItems(command.targets);
             break;
-        case "clear":
-            clear();
+        case "removeAllItems":
+            removeAllItems();
             break;
         default: {
             const _exhaustiveCheck: never = command;

@@ -1,4 +1,5 @@
 import { GearFill, PauseFill, StarFill, TrashFill } from "react-bootstrap-icons";
+import api from "./api";
 
 export function Footer(): JSX.Element {
     return (
@@ -16,8 +17,8 @@ export function Footer(): JSX.Element {
             </div>
             <div className="title"></div>
             <div className="buttons">
-                <button>
-                    <TrashFill onClick={() => console.log("TODO")} />
+                <button onClick={() => api.menu({ type: "remove" })}>
+                    <TrashFill />
                 </button>
             </div>
         </footer>

@@ -94,9 +94,8 @@ export function remove(targets: Target[]) {
     persist();
 }
 
-export function clear() {
+export function removeAllItems() {
     _allItems = [];
-    _search = {};
     persist();
 }
 

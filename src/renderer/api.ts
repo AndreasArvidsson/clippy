@@ -1,6 +1,6 @@
 import { ipcRenderer } from "electron";
 import type { Command } from "../types/Command";
-import type { RendererData } from "../types/types";
+import type { MenuType, RendererData } from "../types/types";
 
 export default {
     getInitialData(): Promise<RendererData> {
@@ -11,5 +11,8 @@ export default {
     },
     command(command: Command) {
         ipcRenderer.send("command", command);
+    },
+    menu(menu: MenuType) {
+        ipcRenderer.send("menu", menu);
     },
 };
