@@ -16,6 +16,14 @@ const removeMenu = Menu.buildFromTemplate([
 function clipItemContextMenu(hint: string) {
     const menu = Menu.buildFromTemplate([
         {
+            label: "Rename item",
+            type: "normal",
+            click: () => runCommand(getCommandForHints("renameItems", [hint])),
+        },
+        {
+            type: "separator",
+        },
+        {
             label: "Remove item",
             type: "normal",
             click: () => runCommand(getCommandForHints("removeItems", [hint])),

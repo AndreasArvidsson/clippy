@@ -1,12 +1,12 @@
 import type { ClipItemType } from "./types";
 
-interface PrimitiveTarget {
+export interface PrimitiveTarget {
     type: "primitive";
     hint: string;
     count?: number;
 }
 
-interface RangeTarget {
+export interface RangeTarget {
     type: "range";
     start: string;
     end: string;

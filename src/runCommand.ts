@@ -2,7 +2,7 @@ import { app } from "electron";
 import { clipboard } from "./clipboard";
 import * as clipboardList from "./clipboardList";
 import type { Command, RenameCommand, SearchCommand, Target } from "./types/Command";
-import type { Config } from "./types/types";
+import type { ClipItem, Config } from "./types/types";
 import { getWindow } from "./window";
 
 export function updateRenderer(force = false) {
@@ -12,10 +12,11 @@ export function updateRenderer(force = false) {
     }
 }
 
-function assertSingleTarget(command: { targets: Target[] }) {
-    if (command.targets.length !== 1) {
-        throw new Error("Expected exactly one target");
+function assertSingleItem(items: ClipItem[]): ClipItem {
+    if (items.length !== 1) {
+        throw new Error("Expected exactly one clipboard item");
     }
+    return items[0];
 }
 
 function updateConfig(config: Config) {
@@ -80,15 +81,28 @@ function removeAllItems() {
 }
 
 function renameItem(command: RenameCommand) {
+    const items = clipboardList.get(command.targets);
+
     if (command.text != null) {
-        const items = clipboardList.get(command.targets);
         for (const item of items) {
             item.name = command.text || undefined;
         }
         clipboardList.persist();
         updateRenderer();
     } else {
-        assertSingleTarget(command);
+        const item = assertSingleItem(items);
+        const window = getWindow();
+
+        if (window.isVisible()) {
+            window.webContents.send("rename", item.id);
+        }
+    }
+}
+
+function toggleDevTools() {
+    const window = getWindow();
+    if (window.isVisible()) {
+        window.webContents.toggleDevTools();
     }
 }
 
@@ -103,7 +117,7 @@ export function runCommand(command: Command) {
             showHide();
             break;
         case "toggleDevTools":
-            getWindow().webContents.toggleDevTools();
+            toggleDevTools();
             break;
         case "togglePinned":
             togglePinned();

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Trash } from "react-bootstrap-icons";
 import type { ClipItem } from "../types/types";
-import { getCommandForHints } from "../util/getCommandForHints";
+import { getCommandForHints, hintsToPrimitiveTargets } from "../util/getCommandForHints";
 import { indexToHint } from "../util/hints";
 import api from "./api";
 import { isNormal } from "./keybinds";
@@ -13,8 +13,11 @@ interface Props {
 export function ClipboardList({ items }: Props): JSX.Element {
     const ref = useRef<string[]>([]);
     const [selected, setSelected] = useState<string[]>(ref.current);
+    const [renameItemId, setRenameItemId] = useState<string>();
 
     useEffect(() => {
+        api.onRename(setRenameItemId);
+
         function onKeyDown(e: KeyboardEvent) {
             if (isNormal(e) && e.key === "Enter") {
                 const hints = [...ref.current];
@@ -28,7 +31,36 @@ export function ClipboardList({ items }: Props): JSX.Element {
         return () => window.removeEventListener("keydown", onKeyDown);
     }, []);
 
-    const renderName = (item: ClipItem) => {
+    function renderRenameName(item: ClipItem, hint: string) {
+        return (
+            <div className="clip-name">
+                <input
+                    autoFocus
+                    className="form-control form-control-sm"
+                    type="search"
+                    defaultValue={item.name}
+                    onClick={(e) => e.stopPropagation()}
+                    onKeyDown={(e) => {
+                        e.stopPropagation();
+                        if (e.key === "Enter") {
+                            const text = e.currentTarget.value;
+                            setRenameItemId(undefined);
+                            api.command({
+                                id: "renameItems",
+                                targets: hintsToPrimitiveTargets([hint]),
+                                text,
+                            });
+                        }
+                    }}
+                />
+            </div>
+        );
+    }
+
+    const renderName = (item: ClipItem, hint: string) => {
+        if (item.id === renameItemId) {
+            return renderRenameName(item, hint);
+        }
         if (item.name == null) {
             return undefined;
         }
@@ -66,7 +98,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
                         >
                             <div className="col-auto clip-number">{hint}</div>
                             <div className="col clip-content">
-                                {renderName(item)}
+                                {renderName(item, hint)}
                                 {renderClipItem(item)}
                             </div>
                             <div className="col-auto clip-trash">

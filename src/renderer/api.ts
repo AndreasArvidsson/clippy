@@ -9,6 +9,9 @@ export default {
     onUpdate(callback: (data: RendererData) => void) {
         ipcRenderer.on("update", (_, data: RendererData) => callback(data));
     },
+    onRename(callback: (id: string) => void) {
+        ipcRenderer.on("rename", (_, id: string) => callback(id));
+    },
     command(command: Command) {
         ipcRenderer.send("command", command);
     },
