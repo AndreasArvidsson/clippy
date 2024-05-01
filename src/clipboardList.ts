@@ -1,33 +1,17 @@
 import { clipboard } from "./clipboard";
 import { storage } from "./storage";
 import type { Target } from "./types/Command";
-import type { ClipItem, Config, RendererData, Search } from "./types/types";
-import { hintToIndex } from "./util/hints";
-import { getWindow } from "./window";
+import type { ClipItem } from "./types/types";
+import { processTargets } from "./util/processTargets";
 
 const limit = 1000;
 
-let _allItems: ClipItem[] = [];
-let _search: Search = {};
-let _config = storage.getConfig();
-
 (() => {
-    _allItems = storage.getClipboardItems();
-
     const initialItem = clipboard.read();
     if (initialItem != null) {
         addNewItem(initialItem);
     }
 })();
-
-export function getConfig() {
-    return _config;
-}
-
-export function setConfig(config: Config) {
-    _config = config;
-    storage.setConfig(_config);
-}
 
 let t1 = 0;
 
@@ -35,11 +19,14 @@ export function onChange(callback: () => void) {
     clipboard.onChange((item) => {
         const t2 = Date.now();
 
-        if (item.id !== _allItems[0]?.id) {
+        const items = storage.getClipboardItems();
+
+        if (item.id !== items[0]?.id) {
             // TODO: Try to detect quick changes that are then reverted.
             // Remove this once we have proper transient formats from Talon side.
-            if (item.id === _allItems[1]?.id && t2 - t1 < 300) {
-                removeItem(_allItems[0]);
+            if (item.id === items[1]?.id && t2 - t1 < 300) {
+                removeItem(items, items[0]);
+                storage.setClipboardItems(items);
             } else {
                 addNewItem(item);
             }
@@ -50,112 +37,40 @@ export function onChange(callback: () => void) {
     });
 }
 
-export function getRendererData(): RendererData {
-    return {
-        totalCount: _allItems.length,
-        items: filterItems(true),
-        search: _search,
-        config: _config,
-    };
-}
-
-export function searchUpdated(search: Search) {
-    _search = search;
-    if (!_config.showSearch) {
-        _config.showSearch = true;
-        storage.setConfig(_config);
-    }
-}
-
-export function get(targets: Target[]): ClipItem[] {
-    const items = filterItems(getWindow().isVisible());
-    const results: ClipItem[] = [];
-    for (const target of targets) {
-        if (target.type === "range") {
-            const start = hintToIndex(target.start);
-            const end = hintToIndex(target.end);
-            if (start < 0 || start >= items.length || end < 0 || end >= items.length) {
-                throw Error(`Invalid range: ${target.start}-${target.end}`);
-            }
-            results.push(...items.slice(start, end + 1));
-        } else {
-            const index = hintToIndex(target.hint);
-
-            if (index < 0 || index >= items.length) {
-                throw Error(`Item '${target.hint}' not found`);
-            }
-
-            const count = target.count ?? 1;
-            if (count === 1) {
-                results.push(items[index]);
-            } else {
-                const end = index + count - 1;
-                if (end < 0 || end >= items.length) {
-                    throw Error(`Invalid range: ${target.hint} + ${count}`);
-                }
-                results.push(...items.slice(index, end + 1));
-            }
-        }
-    }
-    return results;
-}
-
 export function remove(targets: Target[]) {
-    const items = get(targets);
-    for (const item of items) {
-        removeItem(item);
+    const allItems = storage.getClipboardItems();
+    const targetItems = processTargets(targets);
+    for (const item of targetItems) {
+        removeItem(allItems, item);
     }
-    persist();
+    storage.setClipboardItems(allItems);
 }
 
 export function removeAllItems() {
-    _allItems = [];
-    persist();
-}
-
-function filterItems(isVisible: boolean) {
-    let items = _allItems;
-    if (_config.showSearch && isVisible) {
-        if (_search.type) {
-            items = items.filter((item) => item.type === _search.type);
-        }
-
-        const searchText = _search.text?.trim().toLowerCase();
-        if (searchText) {
-            items = items.filter(
-                (item) =>
-                    (item.text ?? item.rtf)?.toLowerCase().includes(searchText) ||
-                    item.html?.toLowerCase().includes(searchText) ||
-                    item.bookmark?.title?.toLowerCase().includes(searchText),
-            );
-        }
-    }
-    return items;
+    storage.setClipboardItems([]);
 }
 
 function addNewItem(item: ClipItem) {
+    const items = storage.getClipboardItems();
+
     // Remove existing item
-    const existing = removeItem(item);
+    const existing = removeItem(items, item);
 
     // Add new item at start of list
-    _allItems.unshift(existing ?? item);
+    items.unshift(existing ?? item);
 
     // Apply length limit
-    if (_allItems.length > limit) {
-        _allItems.pop();
+    if (items.length > limit) {
+        items.pop();
     }
 
-    persist();
+    storage.setClipboardItems(items);
 }
 
-function removeItem(item: ClipItem): ClipItem | undefined {
-    const index = _allItems.findIndex((i) => i.id === item.id);
+function removeItem(items: ClipItem[], item: ClipItem): ClipItem | undefined {
+    const index = items.findIndex((i) => i.id === item.id);
     if (index > -1) {
-        return _allItems.splice(index, 1)[0];
+        return items.splice(index, 1)[0];
     }
     return undefined;
-}
-
-export function persist() {
-    storage.setClipboardItems(_allItems);
 }

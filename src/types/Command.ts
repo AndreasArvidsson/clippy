@@ -35,4 +35,14 @@ export interface RenameCommand {
     text?: string;
 }
 
-export type Command = SimpleCommand | SearchCommand | TargetCommand | RenameCommand;
+export interface SwitchListCommand {
+    id: "switchList";
+    list: string;
+}
+
+export type Command =
+    | SimpleCommand
+    | SearchCommand
+    | TargetCommand
+    | RenameCommand
+    | SwitchListCommand;

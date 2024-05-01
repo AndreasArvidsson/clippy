@@ -11,6 +11,7 @@ export interface ClipItem {
     id: string;
     type: ClipItemType;
     name?: string;
+    list?: string;
     text?: string;
     rtf?: string;
     html?: string;
@@ -22,6 +23,7 @@ export interface ClipItem {
 export interface Config {
     pinned: boolean;
     showSearch: boolean;
+    activeList: string;
 }
 
 export interface Search {
@@ -31,9 +33,9 @@ export interface Search {
 
 export interface RendererData {
     totalCount: number;
-    items: ClipItem[];
-    search: Search;
     config: Config;
+    search: Search;
+    items: ClipItem[];
 }
 
 interface ClipItemContextMenu {
@@ -46,3 +48,5 @@ interface SimpleMenu {
 }
 
 export type MenuType = ClipItemContextMenu | SimpleMenu;
+
+export const defaultLists = ["All", "My favorites", "Unstarred"];

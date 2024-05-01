@@ -1,7 +1,8 @@
-import { Menu } from "electron";
+import { Menu, type MenuItemConstructorOptions } from "electron";
 import { runCommand } from "./runCommand";
-import type { MenuType } from "./types/types";
+import { defaultLists, type MenuType } from "./types/types";
 import { getCommandForHints } from "./util/getCommandForHints";
+import { storage } from "./storage";
 
 Menu.setApplicationMenu(null);
 
@@ -33,41 +34,42 @@ function clipItemContextMenu(hint: string) {
 }
 
 function listsMenu() {
-    const menu = Menu.buildFromTemplate([
-        {
-            label: "All",
-            type: "normal",
-            click: () => console.log("TODO"),
-        },
-        {
-            label: "My favorites",
-            type: "normal",
-            click: () => console.log("TODO"),
-        },
-        {
-            label: "Unstarred",
-            type: "normal",
-            click: () => console.log("TODO"),
-        },
-        {
-            type: "separator",
-        },
-        {
-            label: "Create new list",
-            type: "normal",
-            click: () => console.log("TODO"),
-        },
-        {
-            label: "Edit current list",
-            type: "normal",
-            click: () => console.log("TODO"),
-        },
-        {
-            label: "Delete current list",
-            type: "normal",
-            click: () => console.log("TODO"),
-        },
-    ]);
+    const lists = defaultLists.concat(storage.getLists());
+    const config = storage.getConfig();
+    const activeIsDefault = defaultLists.includes(config.activeList);
+    const menu = Menu.buildFromTemplate(
+        lists
+            .map(
+                (label): MenuItemConstructorOptions => ({
+                    label,
+                    type: "radio",
+                    checked: label === config.activeList,
+                    click: () => runCommand({ id: "switchList", list: label }),
+                }),
+            )
+            .concat([
+                {
+                    type: "separator",
+                },
+                {
+                    label: "Create new list",
+                    type: "normal",
+                    click: () => console.log("TODO"),
+                },
+                {
+                    label: "Edit current list",
+                    type: "normal",
+                    click: () => console.log("TODO"),
+                    enabled: !activeIsDefault,
+                },
+                {
+                    label: "Delete current list",
+                    type: "normal",
+                    click: () => console.log("TODO"),
+                    enabled: !activeIsDefault,
+                },
+            ]),
+    );
     menu.popup();
 }
 

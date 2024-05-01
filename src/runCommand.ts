@@ -1,14 +1,33 @@
 import { app } from "electron";
 import { clipboard } from "./clipboard";
 import * as clipboardList from "./clipboardList";
-import type { Command, RenameCommand, SearchCommand, Target } from "./types/Command";
-import type { ClipItem, Config } from "./types/types";
+import { storage } from "./storage";
+import type {
+    Command,
+    RenameCommand,
+    SearchCommand,
+    SwitchListCommand,
+    Target,
+} from "./types/Command";
+import { defaultLists, type ClipItem, type Config, type RendererData } from "./types/types";
+import { getFilteredItems } from "./util/filterItems";
+import { processTargets } from "./util/processTargets";
 import { getWindow } from "./window";
+
+export function getRendererData(): RendererData {
+    const items = storage.getClipboardItems();
+    return {
+        totalCount: items.length,
+        config: storage.getConfig(),
+        search: storage.getSearch(),
+        items: getFilteredItems(true),
+    };
+}
 
 export function updateRenderer(force = false) {
     const window = getWindow();
     if (window.isVisible() || force) {
-        window.webContents.send("update", clipboardList.getRendererData());
+        window.webContents.send("update", getRendererData());
     }
 }
 
@@ -20,7 +39,7 @@ function assertSingleItem(items: ClipItem[]): ClipItem {
 }
 
 function updateConfig(config: Config) {
-    clipboardList.setConfig(config);
+    storage.setConfig(config);
     updateRenderer();
 }
 
@@ -36,31 +55,36 @@ function showHide() {
 }
 
 function togglePinned() {
-    const config = clipboardList.getConfig();
+    const config = storage.getConfig();
     config.pinned = !config.pinned;
     updateConfig(config);
 }
 
 function toggleSearch() {
-    const config = clipboardList.getConfig();
+    const config = storage.getConfig();
     config.showSearch = !config.showSearch;
     updateConfig(config);
 }
 
 function search(command: SearchCommand) {
-    clipboardList.searchUpdated({ text: command.text, type: command.type });
+    storage.setSearch({ text: command.text, type: command.type });
+    const config = storage.getConfig();
+    if (!config.showSearch) {
+        config.showSearch = true;
+        storage.setConfig(config);
+    }
     updateRenderer();
 }
 
 function copyItems(targets: Target[]) {
-    const items = clipboardList.get(targets);
+    const items = processTargets(targets);
 
     clipboard.write(items);
 
     const window = getWindow();
 
     if (window.isVisible()) {
-        if (clipboardList.getConfig().pinned) {
+        if (storage.getConfig().pinned) {
             if (window.isFocused()) {
                 window.blur();
             }
@@ -81,13 +105,13 @@ function removeAllItems() {
 }
 
 function renameItem(command: RenameCommand) {
-    const items = clipboardList.get(command.targets);
+    const items = processTargets(command.targets);
 
     if (command.text != null) {
         for (const item of items) {
             item.name = command.text || undefined;
         }
-        clipboardList.persist();
+        storage.setClipboardItems(storage.getClipboardItems());
         updateRenderer();
     } else {
         const item = assertSingleItem(items);
@@ -104,6 +128,16 @@ function toggleDevTools() {
     if (window.isVisible()) {
         window.webContents.toggleDevTools();
     }
+}
+
+function switchList(command: SwitchListCommand) {
+    if (!defaultLists.includes(command.list) && !storage.getLists().includes(command.list)) {
+        throw Error(`Can't switch to unknown list '${command.list}'`);
+    }
+    const config = storage.getConfig();
+    config.activeList = command.list;
+    storage.setConfig(config);
+    updateRenderer();
 }
 
 export function runCommand(command: Command) {
@@ -139,6 +173,9 @@ export function runCommand(command: Command) {
             break;
         case "renameItems":
             renameItem(command);
+            break;
+        case "switchList":
+            switchList(command);
             break;
         default: {
             const _exhaustiveCheck: never = command;
