@@ -1,6 +1,7 @@
 import clipboardEvent from "clipboard-event";
 import * as electron from "electron";
 import type { ClipItem, ClipItemMeta, ClipItemType } from "./types/types";
+import { toMarkdownImageLink } from "./util/transformations";
 
 let _lastId = "";
 
@@ -71,7 +72,7 @@ function writeItems(items: ClipItem[]) {
             case "image": {
                 const name = item.name ?? item.meta?.alt ?? "[IMAGE]";
                 if (item.meta?.src) {
-                    texts.push(`[${name}](${item.meta.src})`);
+                    texts.push(toMarkdownImageLink(name, item.meta.src));
                 } else {
                     texts.push(name);
                 }
