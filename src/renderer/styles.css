@@ -91,6 +91,9 @@ button.icon-btn {
     padding: 0 1rem;
 }
 
-button.starred {
+button.star-btn {
+    color: #dddddd;
+}
+button.star-btn.active {
     color: gold;
 }

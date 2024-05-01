@@ -105,7 +105,9 @@ export function ClipboardList({ items }: Props): JSX.Element {
                             </div>
                             <div className="col-auto">
                                 <button
-                                    className={"icon-btn" + (item.list != null ? " starred" : "")}
+                                    className={
+                                        "icon-btn star-btn" + (item.list != null ? " active" : "")
+                                    }
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         api.command({
