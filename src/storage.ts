@@ -13,6 +13,7 @@ const defaults: Storage = {
     config: {
         pinned: false,
         showSearch: false,
+        paused: false,
         activeList: "All",
     },
     lists: [],

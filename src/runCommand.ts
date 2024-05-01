@@ -75,6 +75,12 @@ function toggleSearch() {
     updateConfig(config);
 }
 
+function togglePaused() {
+    const config = storage.getConfig();
+    config.paused = !config.paused;
+    updateConfig(config);
+}
+
 function search(command: SearchCommand) {
     storage.setSearch({ text: command.text, type: command.type });
     const config = storage.getConfig();
@@ -227,6 +233,9 @@ export function runCommand(command: Command) {
             break;
         case "toggleSearch":
             toggleSearch();
+            break;
+        case "togglePaused":
+            togglePaused();
             break;
         case "search":
             search(command);

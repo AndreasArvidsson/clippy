@@ -23,6 +23,7 @@ export interface ClipItem {
 export interface Config {
     pinned: boolean;
     showSearch: boolean;
+    paused: boolean;
     activeList: string;
 }
 

@@ -2,6 +2,7 @@ import clipboardEvent from "clipboard-event";
 import * as electron from "electron";
 import type { ClipItem, ClipItemMeta, ClipItemType } from "./types/types";
 import { toMarkdownImageLink } from "./util/transformations";
+import { storage } from "./storage";
 
 let _lastId = "";
 
@@ -98,6 +99,10 @@ function onChange(callback: (item: ClipItem) => void) {
     clipboardEvent.startListening();
 
     clipboardEvent.on("change", () => {
+        if (storage.getConfig().paused) {
+            return;
+        }
+
         const item = read();
 
         if (item != null && item.id !== _lastId) {
