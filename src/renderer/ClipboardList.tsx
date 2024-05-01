@@ -50,6 +50,8 @@ export function ClipboardList({ items }: Props): JSX.Element {
                                 targets: hintsToPrimitiveTargets([hint]),
                                 text,
                             });
+                        } else if (e.key === "Escape") {
+                            setRenameItemId(undefined);
                         }
                     }}
                 />
