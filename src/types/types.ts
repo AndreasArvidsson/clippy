@@ -41,8 +41,8 @@ interface ClipItemContextMenu {
     hint: string;
 }
 
-interface RemoveMenu {
-    type: "remove";
+interface SimpleMenu {
+    type: "remove" | "lists";
 }
 
-export type MenuType = ClipItemContextMenu | RemoveMenu;
+export type MenuType = ClipItemContextMenu | SimpleMenu;

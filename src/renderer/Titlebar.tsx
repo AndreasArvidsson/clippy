@@ -1,4 +1,4 @@
-import { PinAngleFill, Search, XCircleFill, XLg } from "react-bootstrap-icons";
+import { CaretDownFill, PinAngleFill, Search, XCircleFill, XLg } from "react-bootstrap-icons";
 import { NAME } from "../constants";
 import { isMacOS } from "../util/isMacOS";
 import api from "./api";
@@ -13,13 +13,6 @@ interface Props {
 const isMac = isMacOS();
 
 export function Titlebar({ itemsCount, totalCount, pinned, showSearch }: Props): JSX.Element {
-    const count = (() => {
-        if (itemsCount === totalCount) {
-            return `${itemsCount}`;
-        }
-        return `${itemsCount} / ${totalCount}`;
-    })();
-
     function renderPinned() {
         return (
             <button
@@ -51,9 +44,18 @@ export function Titlebar({ itemsCount, totalCount, pinned, showSearch }: Props):
     }
 
     function renderTitle() {
+        const count = (() => {
+            if (itemsCount === totalCount) {
+                return `${itemsCount}`;
+            }
+            return `${itemsCount} / ${totalCount}`;
+        })();
+        const className = isMac ? "padding-left" : "padding-right";
         return (
-            <div className="title">
-                {NAME} ({count})
+            <div className={"title " + className}>
+                <button onClick={() => api.menu({ type: "lists" })}>
+                    {NAME} ({count}) <CaretDownFill />
+                </button>
             </div>
         );
     }
@@ -61,28 +63,20 @@ export function Titlebar({ itemsCount, totalCount, pinned, showSearch }: Props):
     if (isMac) {
         return (
             <header>
-                <div className="buttons">{renderClose()}</div>
-
+                {renderClose()}
                 {renderTitle()}
-
-                <div className="buttons">
-                    {renderSearch()}
-                    {renderPinned()}
-                </div>
+                {renderSearch()}
+                {renderPinned()}
             </header>
         );
     }
 
     return (
         <header>
-            <div className="buttons">
-                {renderPinned()}
-                {renderSearch()}
-            </div>
-
+            {renderPinned()}
+            {renderSearch()}
             {renderTitle()}
-
-            <div className="buttons">{renderClose()}</div>
+            {renderClose()}
         </header>
     );
 }

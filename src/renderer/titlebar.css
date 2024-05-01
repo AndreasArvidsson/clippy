@@ -14,12 +14,6 @@ footer {
     border-top-style: solid;
 }
 
-header > .buttons,
-footer > .buttons {
-    font-size: 0.75rem;
-    -webkit-app-region: no-drag;
-}
-
 header button.active,
 footer button.active {
     color: DodgerBlue;
@@ -35,11 +29,28 @@ header {
     flex: 1;
     pointer-events: none;
     text-align: center;
-    padding-top: 0.25rem;
+}
+
+.title > button {
+    pointer-events: auto;
+    font-size: 1rem;
+}
+
+.title svg {
+    font-size: 0.5rem;
+}
+
+.title.padding-left {
+    padding-left: 2.75rem;
+}
+.title.padding-right {
+    padding-right: 2.75rem;
 }
 
 header button,
 footer button {
+    font-size: 0.75rem;
+    -webkit-app-region: no-drag;
     border: 0;
     height: 2rem;
     background-color: transparent;

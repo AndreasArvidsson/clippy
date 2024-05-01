@@ -32,6 +32,45 @@ function clipItemContextMenu(hint: string) {
     menu.popup();
 }
 
+function listsMenu() {
+    const menu = Menu.buildFromTemplate([
+        {
+            label: "All",
+            type: "normal",
+            click: () => console.log("TODO"),
+        },
+        {
+            label: "My favorites",
+            type: "normal",
+            click: () => console.log("TODO"),
+        },
+        {
+            label: "Unstarred",
+            type: "normal",
+            click: () => console.log("TODO"),
+        },
+        {
+            type: "separator",
+        },
+        {
+            label: "Create new list",
+            type: "normal",
+            click: () => console.log("TODO"),
+        },
+        {
+            label: "Edit current list",
+            type: "normal",
+            click: () => console.log("TODO"),
+        },
+        {
+            label: "Delete current list",
+            type: "normal",
+            click: () => console.log("TODO"),
+        },
+    ]);
+    menu.popup();
+}
+
 export function showMenu(menuType: MenuType) {
     switch (menuType.type) {
         case "clipItemContext":
@@ -40,5 +79,11 @@ export function showMenu(menuType: MenuType) {
         case "remove":
             removeMenu.popup();
             break;
+        case "lists":
+            listsMenu();
+            break;
+        default: {
+            const _exhaustiveCheck: never = menuType;
+        }
     }
 }
