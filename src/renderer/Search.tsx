@@ -22,7 +22,7 @@ export function Search({ value }: Props): JSX.Element {
     return (
         <div className="search input-group">
             <input
-                type="text"
+                type="search"
                 className="form-control form-control-sm"
                 value={search.text ?? ""}
                 autoFocus

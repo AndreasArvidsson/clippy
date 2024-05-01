@@ -10,8 +10,13 @@ main {
     overflow: auto;
 }
 
+.search input,
 .search select {
     border-radius: 0;
+}
+
+.search input {
+    min-height: unset;
 }
 
 .clip-list > hr {
