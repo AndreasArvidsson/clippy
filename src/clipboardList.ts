@@ -29,11 +29,24 @@ export function setConfig(config: Config) {
     storage.setConfig(_config);
 }
 
+let t1 = 0;
+
 export function onChange(callback: () => void) {
     clipboard.onChange((item) => {
-        if (addNewItem(item)) {
+        const t2 = Date.now();
+
+        if (item.id !== _allItems[0]?.id) {
+            // TODO: Try to detect quick changes that are then reverted.
+            // Remove this once we have proper transient formats from Talon side.
+            if (item.id === _allItems[1]?.id && t2 - t1 < 300) {
+                removeItem(_allItems[0]);
+            } else {
+                addNewItem(item);
+            }
             callback();
         }
+
+        t1 = t2;
     });
 }
 
@@ -120,11 +133,7 @@ function filterItems(isVisible: boolean) {
     return items;
 }
 
-function addNewItem(item: ClipItem): boolean {
-    if (item.id === _allItems[0]?.id) {
-        return false;
-    }
-
+function addNewItem(item: ClipItem) {
     // Remove existing item
     const existing = removeItem(item);
 
@@ -137,8 +146,6 @@ function addNewItem(item: ClipItem): boolean {
     }
 
     persist();
-
-    return true;
 }
 
 function removeItem(item: ClipItem): ClipItem | undefined {
