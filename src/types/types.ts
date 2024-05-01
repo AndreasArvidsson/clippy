@@ -2,6 +2,11 @@ import type { ReadBookmark } from "electron";
 
 export type ClipItemType = "text" | "image";
 
+export interface ClipItemMeta {
+    src?: string;
+    alt?: string;
+}
+
 export interface ClipItem {
     id: string;
     type: ClipItemType;
@@ -10,6 +15,7 @@ export interface ClipItem {
     html?: string;
     image?: string;
     bookmark?: ReadBookmark;
+    meta?: ClipItemMeta;
 }
 
 export interface Config {

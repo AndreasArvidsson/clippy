@@ -78,7 +78,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
 
 function renderClipItem(item: ClipItem): JSX.Element {
     if (item.image != null) {
-        return <img src={item.image} />;
+        return <img src={item.image} alt={item.meta?.alt} title={item.meta?.alt} />;
     }
     const text = item.text ?? item.rtf;
     if (text != null) {

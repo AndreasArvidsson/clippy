@@ -1,6 +1,6 @@
 import clipboardEvent from "clipboard-event";
 import * as electron from "electron";
-import type { ClipItem, ClipItemType } from "./types/types";
+import type { ClipItem, ClipItemMeta, ClipItemType } from "./types/types";
 
 let _lastId = "";
 
@@ -17,17 +17,17 @@ function read(): ClipItem | null {
         return nativeImage.isEmpty() ? undefined : nativeImage.toDataURL();
     })();
     const type: ClipItemType = image ? "image" : "text";
+    let id: string | undefined;
+    let meta: ClipItemMeta | undefined;
 
-    const id = (() => {
-        if (image && html) {
-            const src = /<img.*?src=(?:"(.+?)"|'(.+?)').*?>/g.exec(html)?.[1];
-            if (src) {
-                return src;
-            }
-            return image;
-        }
-        return text;
-    })();
+    if (image && html) {
+        const src = /<img.*?src=(?:"(.+?)"|'(.+?)').*?>/g.exec(html)?.[1];
+        const alt = /<img.*?alt=(?:"(.+?)"|'(.+?)').*?>/g.exec(html)?.[1];
+        id = src || image;
+        meta = { src, alt };
+    } else {
+        id = text;
+    }
 
     const item = {
         type,
@@ -35,6 +35,7 @@ function read(): ClipItem | null {
         rtf,
         html,
         bookmark,
+        meta,
         image,
     };
 
