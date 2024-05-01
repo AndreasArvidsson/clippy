@@ -20,6 +20,11 @@ footer > .buttons {
     -webkit-app-region: no-drag;
 }
 
+header button.active,
+footer button.active {
+    color: DodgerBlue;
+}
+
 header {
     -webkit-app-region: drag;
     -webkit-user-select: none;

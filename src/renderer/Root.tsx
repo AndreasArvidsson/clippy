@@ -29,6 +29,7 @@ export function Root(): JSX.Element | null {
                 itemsCount={data.items.length}
                 totalCount={data.totalCount}
                 pinned={data.config.pinned}
+                showSearch={data.config.showSearch}
             />
 
             {data.config.showSearch && <Search value={data.search} />}

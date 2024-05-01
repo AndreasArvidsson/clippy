@@ -1,4 +1,4 @@
-import { PinAngle, PinAngleFill, Search, XCircleFill, XLg } from "react-bootstrap-icons";
+import { PinAngleFill, Search, XCircleFill, XLg } from "react-bootstrap-icons";
 import { NAME } from "../constants";
 import { isMacOS } from "../util/isMacOS";
 import api from "./api";
@@ -7,11 +7,12 @@ interface Props {
     itemsCount: number;
     totalCount: number;
     pinned: boolean;
+    showSearch: boolean;
 }
 
 const isMac = isMacOS();
 
-export function Titlebar({ itemsCount, totalCount, pinned }: Props): JSX.Element {
+export function Titlebar({ itemsCount, totalCount, pinned, showSearch }: Props): JSX.Element {
     const count = (() => {
         if (itemsCount === totalCount) {
             return `${itemsCount}`;
@@ -21,15 +22,21 @@ export function Titlebar({ itemsCount, totalCount, pinned }: Props): JSX.Element
 
     function renderPinned() {
         return (
-            <button onClick={() => api.command({ id: "togglePinned" })}>
-                {pinned ? <PinAngleFill /> : <PinAngle />}
+            <button
+                className={pinned ? "active" : undefined}
+                onClick={() => api.command({ id: "togglePinned" })}
+            >
+                <PinAngleFill />
             </button>
         );
     }
 
     function renderSearch() {
         return (
-            <button onClick={() => api.command({ id: "toggleSearch" })}>
+            <button
+                className={showSearch ? "active" : undefined}
+                onClick={() => api.command({ id: "toggleSearch" })}
+            >
                 <Search />
             </button>
         );
