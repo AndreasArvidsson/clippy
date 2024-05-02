@@ -62,6 +62,7 @@ main {
 
 .clip-name {
     text-align: center;
+    margin-bottom: 0.25rem;
     background-color: #f0f0f0;
     color: #000000;
     font-weight: 600;

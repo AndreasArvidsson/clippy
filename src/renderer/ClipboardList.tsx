@@ -148,7 +148,7 @@ function renderClipItem(item: ClipItem): JSX.Element {
         if (text.includes("\n")) {
             return <pre title={text}>{text}</pre>;
         }
-        return <span title={text}>{text}</span>;
+        return <div title={text}>{text}</div>;
     }
-    return <span>[FAILED TO RENDER]</span>;
+    return <div>[FAILED TO RENDER]</div>;
 }
