@@ -66,8 +66,6 @@ function addNewItem(item: ClipItem) {
         }
     }
 
-    console.log(itemToAdd);
-
     // Add new item at start of list
     items.unshift(itemToAdd);
 
