@@ -59,7 +59,7 @@ function showHide() {
     } else {
         // Update render even while window is hidden to make sure it's up to date when shown
         updateRenderer(true);
-        window.show();
+        // Show without taking focus
     }
 }
 
