@@ -51,17 +51,19 @@ function _createWindow(): BrowserWindow {
     });
 
     win.webContents.on("before-input-event", (e, input) => {
-        if (
-            input.type === "keyDown" &&
-            input.key === "F12" &&
-            !input.control &&
-            !input.shift &&
-            !input.alt
-        ) {
-            win.webContents.isDevToolsOpened()
-                ? win.webContents.closeDevTools()
-                : win.webContents.openDevTools();
-            e.preventDefault();
+        if (input.type !== "keyDown") {
+            return;
+        }
+
+        const key = parseInput(input);
+
+        switch (key) {
+            case "F12":
+                win.webContents.isDevToolsOpened()
+                    ? win.webContents.closeDevTools()
+                    : win.webContents.openDevTools();
+                e.preventDefault();
+                break;
         }
     });
 
@@ -87,4 +89,31 @@ function _createWindow(): BrowserWindow {
     });
 
     return win;
+}
+
+function parseInput(input: Electron.Input) {
+    const parts: string[] = [];
+    if (input.control) {
+        parts.push("ctrl");
+    }
+    if (input.shift) {
+        parts.push("shift");
+    }
+    if (input.alt) {
+        parts.push("alt");
+    }
+    if (input.meta) {
+        parts.push("super");
+    }
+    switch (input.key) {
+        case "Control":
+        case "Alt":
+        case "Shift":
+        case "Meta":
+            // Do nothing
+            break;
+        default:
+            parts.push(input.key);
+    }
+    return parts.join("-");
 }

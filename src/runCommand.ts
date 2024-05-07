@@ -60,6 +60,7 @@ function showHide() {
         // Update render even while window is hidden to make sure it's up to date when shown
         updateRenderer(true);
         // Show without taking focus
+        window.showInactive();
     }
 }
 
