@@ -29,13 +29,18 @@ function read(): ClipItem | null {
 
     if (image) {
         id = `image: ${hash(image)}`;
+
         if (html) {
-            const src = /<img.*?src=(?:"(.+?)"|'(.+?)').*?>/g.exec(html)?.[1];
-            const alt = /<img.*?alt=(?:"(.+?)"|'(.+?)').*?>/g.exec(html)?.[1];
-            meta = { src, alt };
+            meta = {
+                src: /<img.*?src=(?:"(.+?)"|'(.+?)').*?>/g.exec(html)?.[1],
+                alt: /<img.*?alt=(?:"(.+?)"|'(.+?)').*?>/g.exec(html)?.[1],
+            };
         }
-    } else if (text) {
-        id = `text: ${hash(text)}`;
+    } else {
+        const value = text ?? rtf ?? html;
+        if (value) {
+            id = `text: ${hash(value)}`;
+        }
     }
 
     const item = {
