@@ -4,9 +4,10 @@ import { NAME, iconPath } from "./constants";
 import { storage } from "./storage";
 
 let _window: BrowserWindow | null = null;
-let _bounds = storage.getWindowBounds();
+let _bounds: Electron.Rectangle | undefined = undefined;
 
 export function createWindow() {
+    _bounds = storage.getWindowBounds();
     _window = _createWindow();
 }
 

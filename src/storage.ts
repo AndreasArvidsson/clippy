@@ -1,8 +1,7 @@
 import { app } from "electron";
 import path from "node:path";
-import { loadClipboardItems } from "./storageItems";
 import type { ClipItem, Config, Search } from "./types/types";
-import { deleteFile, makeDirs, readJsonFile, writeJsonFile } from "./util/io";
+import { deleteFile, getFilesInFolder, makeDirs, readJsonFile, writeJsonFile } from "./util/io";
 
 const storageFile = path.join(app.getPath("userData"), "config.json");
 const dir = path.join(app.getPath("userData"), "clipboardItems");
@@ -12,7 +11,6 @@ interface Storage {
     windowBounds?: Electron.Rectangle;
     config: Config;
     lists: string[];
-    items: string[];
 }
 
 const configDefault: Storage = {
@@ -25,12 +23,22 @@ const configDefault: Storage = {
         activeList: "All",
     },
     lists: [],
-    items: [],
 };
 
 let _storage: Storage = configDefault;
 let _clipboardItems: ClipItem[] = [];
 let _search: Search = {};
+
+async function readItemsFromDisk(): Promise<ClipItem[]> {
+    const files = await getFilesInFolder(dir);
+    const promises = files.map((file) => {
+        const filepath = path.join(dir, file);
+        return readJsonFile<ClipItem>(filepath);
+    });
+    const items = Promise.all(promises);
+    (await items).sort((a, b) => b.created - a.created);
+    return items;
+}
 
 async function loadStorage() {
     const storage = await readJsonFile<Storage>(storageFile);
@@ -38,8 +46,7 @@ async function loadStorage() {
 }
 
 function saveStorage() {
-    const items = _clipboardItems.map((item) => item.id);
-    return writeJsonFile(storageFile, { _storage, items });
+    return writeJsonFile(storageFile, _storage);
 }
 
 function getWindowBounds(): Electron.Rectangle | undefined {
@@ -161,5 +168,5 @@ export const storage = {
 export async function initStorage() {
     await makeDirs(dir);
     _storage = await loadStorage();
-    _clipboardItems = await loadClipboardItems(dir, _storage.items);
+    _clipboardItems = await readItemsFromDisk();
 }

@@ -42,23 +42,24 @@ export function removeTargets(targets: Target[]) {
 async function addNewItem(item: ClipItem) {
     const items = storage.getClipboardItems();
     const existing = items.find((i) => i.id === item.id);
-    const itemToAdd = existing ?? item;
     const { autoStar, activeList } = storage.getConfig();
 
     if (autoStar) {
         switch (activeList) {
             case AllList:
             case UnstarredList:
-                itemToAdd.list = MyFavoritesList;
+                item.list = MyFavoritesList;
                 break;
             default:
-                itemToAdd.list = activeList;
+                item.list = activeList;
         }
     }
 
     if (existing != null) {
-        await storage.addExistingItem(itemToAdd);
+        item.name = existing.name;
+        item.list = item.list ?? existing.list;
+        await storage.addExistingItem(item);
     } else {
-        await storage.addItem(itemToAdd);
+        await storage.addItem(item);
     }
 }

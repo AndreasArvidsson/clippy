@@ -58,7 +58,11 @@ function read(): ClipItem | null {
         return null;
     }
 
-    return { id, ...item };
+    return {
+        id,
+        created: Date.now(),
+        ...item,
+    };
 }
 
 function write(items: ClipItem[]) {

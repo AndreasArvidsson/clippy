@@ -9,6 +9,7 @@ export interface ClipItemMeta {
 
 export interface ClipItem {
     id: string;
+    created: number;
     type: ClipItemType;
     name?: string;
     list?: string;
