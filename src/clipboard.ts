@@ -1,8 +1,9 @@
 import clipboardEvent from "clipboard-event";
 import * as electron from "electron";
-import type { ClipItem, ClipItemMeta, ClipItemType } from "./types/types";
-import { toMarkdownImageLink } from "./util/transformations";
 import { storage } from "./storage";
+import type { ClipItem, ClipItemMeta, ClipItemType } from "./types/types";
+import { hash } from "./util/hash";
+import { toMarkdownImageLink } from "./util/transformations";
 
 function read(): ClipItem | null {
     const formats = electron.clipboard.availableFormats();
@@ -26,13 +27,15 @@ function read(): ClipItem | null {
     let id: string | undefined;
     let meta: ClipItemMeta | undefined;
 
-    if (image && html) {
-        const src = /<img.*?src=(?:"(.+?)"|'(.+?)').*?>/g.exec(html)?.[1];
-        const alt = /<img.*?alt=(?:"(.+?)"|'(.+?)').*?>/g.exec(html)?.[1];
-        id = src || image;
-        meta = { src, alt };
-    } else {
-        id = text;
+    if (image) {
+        id = `image: ${hash(image)}`;
+        if (html) {
+            const src = /<img.*?src=(?:"(.+?)"|'(.+?)').*?>/g.exec(html)?.[1];
+            const alt = /<img.*?alt=(?:"(.+?)"|'(.+?)').*?>/g.exec(html)?.[1];
+            meta = { src, alt };
+        }
+    } else if (text) {
+        id = `text: ${hash(text)}`;
     }
 
     const item = {

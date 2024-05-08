@@ -94,16 +94,16 @@ function _createWindow(): BrowserWindow {
 function parseInput(input: Electron.Input) {
     const parts: string[] = [];
     if (input.control) {
-        parts.push("ctrl");
+        parts.push("Ctrl");
     }
     if (input.shift) {
-        parts.push("shift");
+        parts.push("Shift");
     }
     if (input.alt) {
-        parts.push("alt");
+        parts.push("Alt");
     }
     if (input.meta) {
-        parts.push("super");
+        parts.push("Meta");
     }
     switch (input.key) {
         case "Control":
@@ -115,5 +115,5 @@ function parseInput(input: Electron.Input) {
         default:
             parts.push(input.key);
     }
-    return parts.join("-");
+    return parts.join("+");
 }
