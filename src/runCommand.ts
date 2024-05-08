@@ -117,26 +117,26 @@ function copyItems(targets: Target[]) {
 }
 
 function removeItems(targets: Target[]) {
-    clipboardList.remove(targets);
+    clipboardList.removeTargets(targets);
     updateRenderer();
 }
 
 function removeAllItems(render = true) {
     const { activeList } = storage.getConfig();
-    let items = storage.getClipboardItems();
+    const allItems = storage.getClipboardItems();
 
-    switch (activeList) {
-        case AllList:
-            items = [];
-            break;
-        case UnstarredList:
-            items = items.filter((item) => item.list != null);
-            break;
-        default:
-            items = items.filter((item) => item.list !== activeList);
-    }
+    const itemsToRemove = (() => {
+        switch (activeList) {
+            case AllList:
+                return allItems;
+            case UnstarredList:
+                return allItems.filter((item) => item.list == null);
+            default:
+                return allItems.filter((item) => item.list === activeList);
+        }
+    })();
 
-    storage.setClipboardItems(items);
+    void storage.removeItems(itemsToRemove);
 
     if (render) {
         updateRenderer();
@@ -170,7 +170,7 @@ function renameItem(command: RenameCommand) {
         for (const item of items) {
             item.name = command.text || undefined;
         }
-        storage.setClipboardItems(storage.getClipboardItems());
+        void storage.replaceItems(items);
         updateRenderer();
     } else {
         const item = assertSingleItem(items);
@@ -218,7 +218,7 @@ function assignItemsToList(command: AssignItemsToListCommand) {
     for (const item of items) {
         item.list = command.list;
     }
-    storage.setClipboardItems(storage.getClipboardItems());
+    void storage.replaceItems(items);
     updateRenderer();
 }
 

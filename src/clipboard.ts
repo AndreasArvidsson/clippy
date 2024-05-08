@@ -28,7 +28,7 @@ function read(): ClipItem | null {
     let meta: ClipItemMeta | undefined;
 
     if (image) {
-        id = `image: ${hash(image)}`;
+        id = `image ${hash(image)}`;
 
         if (html) {
             meta = {
@@ -39,7 +39,7 @@ function read(): ClipItem | null {
     } else {
         const value = text ?? rtf ?? html;
         if (value) {
-            id = `text: ${hash(value)}`;
+            id = `text ${hash(value)}`;
         }
     }
 

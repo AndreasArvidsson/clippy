@@ -4,16 +4,14 @@ import type { Target } from "./types/Command";
 import { AllList, MyFavoritesList, UnstarredList, type ClipItem } from "./types/types";
 import { processTargets } from "./util/processTargets";
 
-const limit = 1000;
+let t1 = 0;
 
-(() => {
+export async function initClipboard() {
     const initialItem = clipboard.read();
     if (initialItem != null) {
-        addNewItem(initialItem);
+        await addNewItem(initialItem);
     }
-})();
-
-let t1 = 0;
+}
 
 export function onChange(callback: () => void) {
     clipboard.onChange((item) => {
@@ -25,10 +23,9 @@ export function onChange(callback: () => void) {
             // TODO: Try to detect quick changes that are then reverted.
             // Remove this once we have proper transient formats from Talon side.
             if (item.id === items[1]?.id && t2 - t1 < 300) {
-                removeItem(items, items[0]);
-                storage.setClipboardItems(items);
+                void storage.removeItems([item]);
             } else {
-                addNewItem(item);
+                void addNewItem(item);
             }
             callback();
         }
@@ -37,24 +34,17 @@ export function onChange(callback: () => void) {
     });
 }
 
-export function remove(targets: Target[]) {
-    const allItems = storage.getClipboardItems();
+export function removeTargets(targets: Target[]) {
     const targetItems = processTargets(targets);
-    for (const item of targetItems) {
-        removeItem(allItems, item);
-    }
-    storage.setClipboardItems(allItems);
+    void storage.removeItems(targetItems);
 }
 
-function addNewItem(item: ClipItem) {
+async function addNewItem(item: ClipItem) {
     const items = storage.getClipboardItems();
-
-    // Remove existing item
-    const existing = removeItem(items, item);
-
+    const existing = items.find((i) => i.id === item.id);
     const itemToAdd = existing ?? item;
-
     const { autoStar, activeList } = storage.getConfig();
+
     if (autoStar) {
         switch (activeList) {
             case AllList:
@@ -66,22 +56,9 @@ function addNewItem(item: ClipItem) {
         }
     }
 
-    // Add new item at start of list
-    items.unshift(itemToAdd);
-
-    // Apply length limit
-    // TODO: How do we handle starred items?
-    if (items.length > limit) {
-        items.pop();
+    if (existing != null) {
+        await storage.addExistingItem(itemToAdd);
+    } else {
+        await storage.addItem(itemToAdd);
     }
-
-    storage.setClipboardItems(items);
-}
-
-function removeItem(items: ClipItem[], item: ClipItem): ClipItem | undefined {
-    const index = items.findIndex((i) => i.id === item.id);
-    if (index > -1) {
-        return items.splice(index, 1)[0];
-    }
-    return undefined;
 }
