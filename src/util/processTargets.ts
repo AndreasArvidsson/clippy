@@ -1,11 +1,12 @@
 import type { Target } from "../types/Command";
 import type { ClipItem } from "../types/types";
-import { getFilteredItems } from "./filterItems";
-import { hintToIndex } from "./hints";
 import { getWindow } from "../window";
+import { applySearchFilters, getListItems } from "./filterItems";
+import { hintToIndex } from "./hints";
 
 export function processTargets(targets: Target[]): ClipItem[] {
-    const items = getFilteredItems(getWindow().isVisible());
+    const listItems = getListItems();
+    const items = applySearchFilters(listItems, getWindow().isVisible());
     const results: ClipItem[] = [];
     for (const target of targets) {
         if (target.type === "range") {

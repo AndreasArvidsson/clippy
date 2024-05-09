@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { StarFill } from "react-bootstrap-icons";
-import { MyFavoritesList, type ClipItem } from "../types/types";
+import { StarredList, type ClipItem } from "../types/types";
 import { getCommandForHints, hintsToPrimitiveTargets } from "../util/getCommandForHints";
 import { indexToHint } from "../util/hints";
 import api from "./api";
@@ -43,7 +43,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
                     onKeyDown={(e) => {
                         e.stopPropagation();
                         if (e.key === "Enter") {
-                            const text = e.currentTarget.value;
+                            const text = e.currentTarget.value.trim();
                             setRenameItemId(undefined);
                             api.command({
                                 id: "renameItems",
@@ -113,7 +113,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
                                         api.command({
                                             id: "assignItemsToList",
                                             targets: hintsToPrimitiveTargets([hint]),
-                                            list: item.list != null ? undefined : MyFavoritesList,
+                                            list: item.list != null ? undefined : StarredList.id,
                                         });
                                     }}
                                 >

@@ -1,6 +1,13 @@
 import { app } from "electron";
 import path from "node:path";
-import type { ClipItem, Config, Search, Storage } from "./types/types";
+import {
+    AllList,
+    type ClipItem,
+    type Config,
+    type List,
+    type Search,
+    type Storage,
+} from "./types/types";
 import { deleteFile, getFilesInFolder, makeDirs, readJsonFile, writeJsonFile } from "./util/io";
 import { showErrorNotification } from "./util/notifications";
 
@@ -16,7 +23,7 @@ const configDefault: Storage = {
         showSearch: false,
         paused: false,
         autoStar: false,
-        activeList: "All",
+        activeList: AllList,
     },
     lists: [],
 } as const;
@@ -50,16 +57,16 @@ export const storage = {
         saveStorage();
     },
 
-    getLists() {
+    getLists(): List[] {
         return _storage.lists;
     },
 
-    setLists(lists: string[]) {
+    setLists(lists: List[]) {
         _storage.lists = lists;
         saveStorage();
     },
 
-    getSearch() {
+    getSearch(): Search {
         return _search;
     },
 

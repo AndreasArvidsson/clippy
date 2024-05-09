@@ -1,7 +1,7 @@
 import { Menu, type MenuItemConstructorOptions } from "electron";
 import { runCommand } from "./runCommand";
 import { storage } from "./storage";
-import { defaultLists, type MenuType } from "./types/types";
+import { defaultLists, type List, type MenuType } from "./types/types";
 import { getCommandForHints } from "./util/getCommandForHints";
 
 Menu.setApplicationMenu(null);
@@ -34,15 +34,15 @@ function clipItemContextMenu(hint: string) {
 }
 
 function listsMenu() {
-    const config = storage.getConfig();
+    const { activeList } = storage.getConfig();
     const lists = defaultLists.concat(storage.getLists());
-    const activeIsDefault = defaultLists.includes(config.activeList);
+    const activeIsDefault = defaultLists.some((l) => l.id === activeList.id);
 
-    const getOptions = (label: string): MenuItemConstructorOptions => ({
-        label,
+    const getOptions = (list: List): MenuItemConstructorOptions => ({
+        label: list.name,
         type: "radio",
-        checked: label === config.activeList,
-        click: () => runCommand({ id: "switchList", name: label }),
+        checked: list.id === activeList.id,
+        click: () => runCommand({ id: "switchList", name: list.name }),
     });
 
     const menu = Menu.buildFromTemplate([

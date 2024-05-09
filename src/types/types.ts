@@ -27,13 +27,18 @@ export interface Config {
     showSearch: boolean;
     paused: boolean;
     autoStar: boolean;
-    activeList: string;
+    activeList: List;
+}
+
+export interface List {
+    id: string;
+    name: string;
 }
 
 export interface Storage {
     windowBounds?: Electron.Rectangle;
     config: Config;
-    lists: string[];
+    lists: List[];
 }
 
 export interface Search {
@@ -59,7 +64,7 @@ interface SimpleMenu {
 
 export type MenuType = ClipItemContextMenu | SimpleMenu;
 
-export const AllList = "All";
-export const MyFavoritesList = "My favorites";
-export const UnstarredList = "Unstarred";
-export const defaultLists = [AllList, MyFavoritesList, UnstarredList];
+export const AllList: List = { id: "all", name: "All" };
+export const StarredList: List = { id: "starred", name: "My favorites" };
+export const UnstarredList: List = { id: "unstarred", name: "Unstarred" };
+export const defaultLists = [AllList, StarredList, UnstarredList];

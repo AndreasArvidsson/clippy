@@ -1,4 +1,5 @@
 import { app } from "electron";
+import * as uuid from "uuid";
 import { clipboard } from "./clipboard";
 import * as clipboardList from "./clipboardList";
 import { storage } from "./storage";
@@ -14,24 +15,25 @@ import type {
 } from "./types/Command";
 import {
     AllList,
-    MyFavoritesList,
+    StarredList,
     UnstarredList,
     defaultLists,
     type ClipItem,
     type Config,
+    type List,
     type RendererData,
 } from "./types/types";
-import { getFilteredItems } from "./util/filterItems";
+import { applySearchFilters, getListItems } from "./util/filterItems";
 import { processTargets } from "./util/processTargets";
 import { getWindow } from "./window";
 
 export function getRendererData(): RendererData {
-    const items = storage.getClipboardItems();
+    const items = getListItems();
     return {
         totalCount: items.length,
         config: storage.getConfig(),
         search: storage.getSearch(),
-        items: getFilteredItems(true),
+        items: applySearchFilters(items, true),
     };
 }
 
@@ -134,7 +136,7 @@ function removeAllItems(render = true) {
             case UnstarredList:
                 return allItems.filter((item) => item.list == null);
             default:
-                return allItems.filter((item) => item.list === activeList);
+                return allItems.filter((item) => item.list === activeList.id);
         }
     })();
 
@@ -149,22 +151,19 @@ function switchList(command: SwitchListCommand) {
     const config = storage.getConfig();
     const listName = command.name;
 
-    if (listName === config.activeList) {
+    if (listName === config.activeList.name) {
         return;
     }
 
-    switch (listName) {
-        case AllList:
-        case MyFavoritesList:
-        case UnstarredList:
-            break;
-        default:
-            if (!storage.getLists().includes(command.name)) {
-                throw Error(`Can't switch to unknown list '${listName}'`);
-            }
+    const list =
+        defaultLists.find((l) => l.name === listName) ??
+        storage.getLists().find((l) => l.name === listName);
+
+    if (list == null) {
+        throw Error(`Can't switch to unknown list '${listName}'`);
     }
 
-    config.activeList = listName;
+    config.activeList = list;
     storage.setConfig(config);
 
     updateRenderer();
@@ -174,16 +173,23 @@ function createList(command: CreateListCommand) {
     const listName = command.name;
 
     if (listName) {
+        const config = storage.getConfig();
         const lists = storage.getLists();
 
-        if (defaultLists.includes(listName) || lists.includes(listName)) {
+        if (
+            defaultLists.some((l) => l.name === listName) ||
+            lists.some((l) => l.name === listName)
+        ) {
             throw Error(`Can't create list: List '${listName}' already exists`);
         }
 
-        lists.push(listName);
+        const list: List = {
+            id: uuid.v4(),
+            name: listName,
+        };
 
-        const config = storage.getConfig();
-        config.activeList = listName;
+        config.activeList = list;
+        lists.push(list);
 
         storage.setConfig(config);
         storage.setLists(lists);
@@ -205,25 +211,29 @@ function renameList(command: RenameListCommand) {
         const lists = storage.getLists();
         const { activeList } = config;
 
-        if (activeList === newName) {
+        if (activeList.name === newName) {
             return;
         }
 
-        if (defaultLists.includes(activeList)) {
-            throw Error(`Can't rename default list '${activeList}'`);
+        if (defaultLists.some((l) => l.id === activeList.id)) {
+            throw Error(`Can't rename default list '${activeList.name}'`);
         }
-        if (!lists.includes(activeList)) {
-            throw Error(`Can't rename unknown list '${activeList}'`);
-        }
-        if (lists.includes(newName)) {
+        if (lists.some((l) => l.name === newName)) {
             throw Error(`Can't rename list: List '${newName}' already exists`);
         }
 
-        lists.filter((list) => list !== activeList);
-        lists.push(newName);
-        storage.setLists(lists);
+        const list = lists.find((l) => l.id === activeList.id);
 
-        runCommand({ id: "switchList", name: newName });
+        if (list == null) {
+            throw Error(`Can't rename unknown list: ${activeList.name}`);
+        }
+
+        list.name = newName;
+
+        storage.setLists(lists);
+        storage.setConfig({ ...config, activeList: list });
+
+        updateRenderer();
     } else {
         const window = getWindow();
         if (window.isVisible()) {
@@ -237,16 +247,16 @@ function removeList() {
     const lists = storage.getLists();
     const { activeList } = config;
 
-    if (defaultLists.includes(activeList)) {
-        throw Error(`Can't remove default list '${activeList}'`);
+    if (defaultLists.some((l) => l.id === activeList.id)) {
+        throw Error(`Can't remove default list '${activeList.name}'`);
     }
-    if (!lists.includes(activeList)) {
-        throw Error(`Can't remove unknown list '${activeList}'`);
+    if (!lists.some((l) => l.id === activeList.id)) {
+        throw Error(`Can't remove unknown list '${activeList.name}'`);
     }
 
     removeAllItems(false);
 
-    storage.setLists(lists.filter((list) => list !== activeList));
+    storage.setLists(lists.filter((l) => l.id !== activeList.id));
     storage.setConfig({ ...config, activeList: AllList });
 
     updateRenderer();
@@ -279,7 +289,10 @@ function toggleDevTools() {
 
 function assignItemsToList(command: AssignItemsToListCommand) {
     if (command.list != null) {
-        if (command.list !== MyFavoritesList && !storage.getLists().includes(command.list)) {
+        if (
+            command.list !== StarredList.id &&
+            !storage.getLists().some((l) => l.id === command.list)
+        ) {
             throw Error(`Can't assign item to unknown list '${command.list}'`);
         }
     }

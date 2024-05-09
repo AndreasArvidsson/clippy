@@ -1,7 +1,7 @@
 import { clipboard } from "./clipboard";
 import { storage } from "./storage";
 import type { Target } from "./types/Command";
-import { AllList, MyFavoritesList, UnstarredList, type ClipItem } from "./types/types";
+import { AllList, StarredList, UnstarredList, type ClipItem } from "./types/types";
 import { processTargets } from "./util/processTargets";
 
 let t1 = 0;
@@ -41,10 +41,10 @@ function addNewItem(item: ClipItem) {
         switch (activeList) {
             case AllList:
             case UnstarredList:
-                item.list = MyFavoritesList;
+                item.list = StarredList.id;
                 break;
             default:
-                item.list = activeList;
+                item.list = activeList.id;
         }
     }
 

@@ -1,28 +1,25 @@
 import { storage } from "../storage";
-import type { ClipItem, Config, Search } from "../types/types";
+import { AllList, UnstarredList, type ClipItem } from "../types/types";
 
-export function getFilteredItems(isVisible: boolean) {
-    return filterItems(
-        storage.getClipboardItems(),
-        storage.getConfig(),
-        storage.getSearch(),
-        isVisible,
-    );
+export function getListItems(): ClipItem[] {
+    const items = storage.getClipboardItems();
+    const { activeList } = storage.getConfig();
+
+    switch (activeList.id) {
+        case AllList.id:
+            return items;
+        case UnstarredList.id:
+            return items.filter((item) => item.list == null);
+        default:
+            return items.filter((item) => item.list === activeList.id);
+    }
 }
 
-function filterItems(items: ClipItem[], config: Config, search: Search, isVisible: boolean) {
-    switch (config.activeList) {
-        case "All":
-            // Do nothing
-            break;
-        case "Unstarred":
-            items = items.filter((item) => item.list == null);
-            break;
-        default:
-            items = items.filter((item) => item.list === config.activeList);
-    }
+export function applySearchFilters(items: ClipItem[], isVisible: boolean): ClipItem[] {
+    const { showSearch } = storage.getConfig();
+    const search = storage.getSearch();
 
-    if (config.showSearch && isVisible) {
+    if (showSearch && isVisible) {
         if (search.type) {
             items = items.filter((item) => item.type === search.type);
         }
