@@ -51,7 +51,7 @@ export interface RenameItemsCommand {
 export interface AssignItemsToListCommand {
     id: "assignItemsToList";
     targets: Target[];
-    list?: string;
+    name?: string;
 }
 
 export interface SwitchListCommand {

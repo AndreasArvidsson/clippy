@@ -113,7 +113,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
                                         api.command({
                                             id: "assignItemsToList",
                                             targets: hintsToPrimitiveTargets([hint]),
-                                            list: item.list != null ? undefined : StarredList.id,
+                                            name: item.list != null ? undefined : StarredList.name,
                                         });
                                     }}
                                 >

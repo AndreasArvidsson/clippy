@@ -1,8 +1,9 @@
 import { Menu, type MenuItemConstructorOptions } from "electron";
 import { runCommand } from "./commands/runCommand";
 import { storage } from "./storage";
-import { defaultLists, type List, type MenuType } from "./types/types";
-import { getCommandForHints } from "./util/getCommandForHints";
+import { StarredList, defaultLists, type List, type MenuType } from "./types/types";
+import { getCommandForHints, hintsToPrimitiveTargets } from "./util/getCommandForHints";
+import { processTargets } from "./util/processTargets";
 
 Menu.setApplicationMenu(null);
 
@@ -15,11 +16,32 @@ const removeMenu = Menu.buildFromTemplate([
 ]);
 
 function clipItemContextMenu(hint: string) {
+    const item = processTargets(hintsToPrimitiveTargets([hint]))[0];
+    const lists = [StarredList, ...storage.getLists()];
+
     const menu = Menu.buildFromTemplate([
         {
             label: "Rename item",
             type: "normal",
             click: () => runCommand(getCommandForHints("renameItems", [hint])),
+        },
+        {
+            type: "separator",
+        },
+        {
+            label: "Move item",
+            type: "submenu",
+            submenu: lists.map((list) => ({
+                label: list.name,
+                type: "normal",
+                enabled: list.id !== item.list,
+                click: () =>
+                    runCommand({
+                        id: "assignItemsToList",
+                        name: list.name,
+                        targets: hintsToPrimitiveTargets([hint]),
+                    }),
+            })),
         },
         {
             type: "separator",
