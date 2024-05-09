@@ -1,5 +1,5 @@
 import { Menu, type MenuItemConstructorOptions } from "electron";
-import { runCommand } from "./runCommand";
+import { runCommand } from "./commands/runCommand";
 import { storage } from "./storage";
 import { defaultLists, type List, type MenuType } from "./types/types";
 import { getCommandForHints } from "./util/getCommandForHints";

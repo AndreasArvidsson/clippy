@@ -1,7 +1,13 @@
-import type { Command, PrimitiveTarget, TargetCommand } from "../types/Command";
+import type {
+    Command,
+    CopyItemsCommand,
+    PrimitiveTarget,
+    RemoveItemsCommand,
+    RenameItemsCommand,
+} from "../types/Command";
 
 export function getCommandForHints(
-    id: TargetCommand["id"] | "renameItems",
+    id: CopyItemsCommand["id"] | RemoveItemsCommand["id"] | RenameItemsCommand["id"],
     hints: string[],
 ): Command {
     return {

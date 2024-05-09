@@ -1,13 +1,15 @@
 import { app, ipcMain } from "electron";
-import * as clipboardList from "./clipboardList";
-import { NAME } from "./constants";
 import { showMenu } from "./Menu";
+import * as clipboardList from "./clipboardList";
+import { runCommand } from "./commands/runCommand";
+import { NAME } from "./constants";
+import { getRendererData } from "./util/getRendererData";
 import RpcServer from "./rpc/RpcServer";
-import { getRendererData, runCommand, updateRenderer } from "./runCommand";
 import { storage } from "./storage";
 import { createTray } from "./tray";
 import type { Command } from "./types/Command";
 import type { MenuType } from "./types/types";
+import { updateRenderer } from "./util/updateRenderer";
 import { showErrorNotification } from "./util/notifications";
 import { createWindow } from "./window";
 

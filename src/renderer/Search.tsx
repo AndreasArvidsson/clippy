@@ -16,7 +16,7 @@ export function Search({ value }: Props): JSX.Element {
     function onChange(change: Partial<Search>) {
         const value = { ...search, ...change };
         setSearch(value);
-        api.command({ id: "search", text: value.text, type: value.type });
+        api.command({ id: "searchItems", text: value.text, type: value.type });
     }
 
     return (

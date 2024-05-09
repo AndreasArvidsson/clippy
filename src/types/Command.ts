@@ -27,14 +27,19 @@ interface SimpleCommand {
         | "removeList";
 }
 
-export interface SearchCommand {
-    id: "search";
+export interface SearchItemsCommand {
+    id: "searchItems";
     text?: string;
     type?: ClipItemType;
 }
 
-export interface TargetCommand {
-    id: "copyItems" | "removeItems";
+export interface CopyItemsCommand {
+    id: "copyItems";
+    targets: Target[];
+}
+
+export interface RemoveItemsCommand {
+    id: "removeItems";
     targets: Target[];
 }
 
@@ -66,8 +71,9 @@ export interface RenameListCommand {
 
 export type Command =
     | SimpleCommand
-    | SearchCommand
-    | TargetCommand
+    | SearchItemsCommand
+    | CopyItemsCommand
+    | RemoveItemsCommand
     | RenameItemsCommand
     | AssignItemsToListCommand
     | SwitchListCommand

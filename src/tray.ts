@@ -1,5 +1,5 @@
 import { Menu, nativeImage, Tray } from "electron";
-import { runCommand } from "./runCommand";
+import { runCommand } from "./commands/runCommand";
 import { iconPath, NAME } from "./constants";
 
 export function createTray() {
