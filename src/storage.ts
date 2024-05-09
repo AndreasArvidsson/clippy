@@ -1,18 +1,12 @@
 import { app } from "electron";
 import path from "node:path";
-import type { ClipItem, Config, Search } from "./types/types";
+import type { ClipItem, Config, Search, Storage } from "./types/types";
 import { deleteFile, getFilesInFolder, makeDirs, readJsonFile, writeJsonFile } from "./util/io";
 import { showErrorNotification } from "./util/notifications";
 
 const storageFile = path.join(app.getPath("userData"), "config.json");
 const dir = path.join(app.getPath("userData"), "clipboardItems");
 const limit = 1000;
-
-interface Storage {
-    windowBounds?: Electron.Rectangle;
-    config: Config;
-    lists: string[];
-}
 
 const configDefault: Storage = {
     windowBounds: undefined,
@@ -24,32 +18,16 @@ const configDefault: Storage = {
         activeList: "All",
     },
     lists: [],
-};
+} as const;
 
 let _storage: Storage = configDefault;
 let _clipboardItems: ClipItem[] = [];
 let _search: Search = {};
 
-async function readItemsFromDisk(): Promise<ClipItem[]> {
-    const files = await getFilesInFolder(dir);
-    const promises = files.map((file) => {
-        const filepath = path.join(dir, file);
-        return readJsonFile<ClipItem>(filepath);
-    });
-    const items = Promise.all(promises);
-    (await items).sort((a, b) => b.created - a.created);
-    return items;
-}
-
-async function loadStorage() {
-    const storage = await readJsonFile<Storage>(storageFile);
-    return Object.assign({}, configDefault, storage);
-}
-
-function saveStorage() {
-    writeJsonFile(storageFile, _storage).catch((error) => {
-        showErrorNotification("Failed to save storage", error);
-    });
+async function init() {
+    await makeDirs(dir);
+    _storage = await loadStorage();
+    _clipboardItems = await readItemsFromDisk();
 }
 
 function getWindowBounds(): Electron.Rectangle | undefined {
@@ -92,20 +70,9 @@ function getClipboardItems(): ClipItem[] {
 }
 
 function addNewItem(item: ClipItem) {
-    // Add new item at start of list
     _clipboardItems.unshift(item);
     writeClipItemToDisk(item);
-
-    // Apply length limit
-    if (_clipboardItems.length > limit) {
-        const index = _clipboardItems.findLastIndex((i) => i.list == null);
-        if (index > 0) {
-            const removedItem = _clipboardItems.splice(index, 1)[0];
-            if (removedItem != null) {
-                deleteClipItemFromDisk(removedItem);
-            }
-        }
-    }
+    applyLengthLimit();
 }
 
 function addExistingItem(item: ClipItem) {
@@ -126,16 +93,51 @@ function replaceItems(items: ClipItem[]) {
 
 function removeItems(items: ClipItem[]) {
     for (const item of items) {
-        removeItem(item);
+        const index = _clipboardItems.findIndex((i) => i.id === item.id);
+        if (index > -1) {
+            _clipboardItems.splice(index, 1);
+            deleteClipItemFromDisk(item);
+        }
     }
 }
 
-function removeItem(item: ClipItem) {
-    const index = _clipboardItems.findIndex((i) => i.id === item.id);
-    if (index > -1) {
-        _clipboardItems.splice(index, 1);
-        deleteClipItemFromDisk(item);
-    }
+export const storage = {
+    init,
+    getWindowBounds,
+    setWindowBounds,
+    getConfig,
+    setConfig,
+    getLists,
+    setLists,
+    getSearch,
+    setSearch,
+    getClipboardItems,
+    addNewItem,
+    addExistingItem,
+    replaceItems,
+    removeItems,
+};
+
+async function loadStorage() {
+    const storage = await readJsonFile<Storage>(storageFile);
+    return Object.assign({}, configDefault, storage);
+}
+
+async function readItemsFromDisk(): Promise<ClipItem[]> {
+    const files = await getFilesInFolder(dir);
+    const promises = files.map((file) => {
+        const filepath = path.join(dir, file);
+        return readJsonFile<ClipItem>(filepath);
+    });
+    const items = await Promise.all(promises);
+    items.sort((a, b) => b.created - a.created);
+    return items;
+}
+
+function saveStorage() {
+    writeJsonFile(storageFile, _storage).catch((error) => {
+        showErrorNotification("Failed to save storage", error);
+    });
 }
 
 function writeClipItemToDisk(item: ClipItem) {
@@ -154,24 +156,13 @@ function getFilePath(item: ClipItem) {
     return path.join(dir, `${item.id}.json`);
 }
 
-export const storage = {
-    getWindowBounds,
-    setWindowBounds,
-    getConfig,
-    setConfig,
-    getLists,
-    setLists,
-    getSearch,
-    setSearch,
-    getClipboardItems,
-    addNewItem,
-    addExistingItem,
-    replaceItems,
-    removeItems,
-};
-
-export async function initStorage() {
-    await makeDirs(dir);
-    _storage = await loadStorage();
-    _clipboardItems = await readItemsFromDisk();
+function applyLengthLimit() {
+    if (_clipboardItems.length > limit) {
+        const index = _clipboardItems.findLastIndex((i) => i.list == null);
+        // Index 0 is the most recent item, so we don't want to remove that.
+        if (index > 0) {
+            const removedItem = _clipboardItems.splice(index, 1)[0];
+            deleteClipItemFromDisk(removedItem);
+        }
+    }
 }

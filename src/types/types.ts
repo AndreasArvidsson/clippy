@@ -56,3 +56,9 @@ export const AllList = "All";
 export const MyFavoritesList = "My favorites";
 export const UnstarredList = "Unstarred";
 export const defaultLists = [AllList, MyFavoritesList, UnstarredList];
+
+export interface Storage {
+    windowBounds?: Electron.Rectangle;
+    config: Config;
+    lists: string[];
+}

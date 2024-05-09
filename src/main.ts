@@ -4,7 +4,7 @@ import { NAME } from "./constants";
 import { showMenu } from "./Menu";
 import RpcServer from "./rpc/RpcServer";
 import { getRendererData, runCommand, updateRenderer } from "./runCommand";
-import { initStorage } from "./storage";
+import { storage } from "./storage";
 import { createTray } from "./tray";
 import type { Command } from "./types/Command";
 import type { MenuType } from "./types/types";
@@ -12,7 +12,7 @@ import { showErrorNotification } from "./util/notifications";
 import { createWindow } from "./window";
 
 void app.whenReady().then(async () => {
-    await initStorage();
+    await storage.init();
 
     clipboardList.onChange(updateRenderer);
 
