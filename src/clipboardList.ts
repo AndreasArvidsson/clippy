@@ -6,13 +6,6 @@ import { processTargets } from "./util/processTargets";
 
 let t1 = 0;
 
-export async function initClipboard() {
-    const initialItem = clipboard.read();
-    if (initialItem != null) {
-        await addNewItem(initialItem);
-    }
-}
-
 export function onChange(callback: () => void) {
     clipboard.onChange((item) => {
         const t2 = Date.now();

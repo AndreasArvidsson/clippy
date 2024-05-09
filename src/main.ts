@@ -12,7 +12,6 @@ import { createWindow } from "./window";
 
 void app.whenReady().then(async () => {
     await initStorage();
-    await clipboardList.initClipboard();
 
     clipboardList.onChange(updateRenderer);
 
