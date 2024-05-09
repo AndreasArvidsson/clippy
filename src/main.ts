@@ -28,10 +28,7 @@ void app.whenReady().then(async () => {
     });
 
     const rpc = new RpcServer<Command>(NAME, "Control+Shift+Alt+O");
-    rpc.onCommand((command) => {
-        runCommand(command);
-        return Promise.resolve();
-    });
+    rpc.onCommand((command) => runCommand(command));
 
     createTray();
     createWindow();

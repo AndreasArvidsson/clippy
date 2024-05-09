@@ -8,7 +8,7 @@ export default class RpcServer<T> {
     private dirPath: string;
     private requestPath: string;
     private responsePath: string;
-    private callback?: (data: T) => Promise<unknown>;
+    private callback?: (data: T) => unknown;
     private executing: boolean = false;
 
     constructor(
@@ -20,7 +20,7 @@ export default class RpcServer<T> {
         this.responsePath = join(this.dirPath, "response.json");
     }
 
-    onCommand(callback: (data: T) => Promise<unknown>) {
+    onCommand(callback: (data: T) => unknown) {
         this.callback = callback;
 
         initializeCommunicationDir(this.dirPath);
@@ -47,7 +47,7 @@ export default class RpcServer<T> {
             );
 
             try {
-                const callbackPromise = this.callback!(data as T);
+                const callbackPromise = Promise.resolve(this.callback!(data as T));
 
                 let returnValue: unknown = null;
 
