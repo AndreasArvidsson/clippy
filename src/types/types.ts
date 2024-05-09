@@ -22,11 +22,18 @@ export interface ClipItem {
 }
 
 export interface Config {
+    limit: number;
     pinned: boolean;
     showSearch: boolean;
     paused: boolean;
     autoStar: boolean;
     activeList: string;
+}
+
+export interface Storage {
+    windowBounds?: Electron.Rectangle;
+    config: Config;
+    lists: string[];
 }
 
 export interface Search {
@@ -56,9 +63,3 @@ export const AllList = "All";
 export const MyFavoritesList = "My favorites";
 export const UnstarredList = "Unstarred";
 export const defaultLists = [AllList, MyFavoritesList, UnstarredList];
-
-export interface Storage {
-    windowBounds?: Electron.Rectangle;
-    config: Config;
-    lists: string[];
-}

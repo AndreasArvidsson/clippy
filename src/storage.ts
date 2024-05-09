@@ -4,13 +4,14 @@ import type { ClipItem, Config, Search, Storage } from "./types/types";
 import { deleteFile, getFilesInFolder, makeDirs, readJsonFile, writeJsonFile } from "./util/io";
 import { showErrorNotification } from "./util/notifications";
 
-const storageFile = path.join(app.getPath("userData"), "config.json");
-const dir = path.join(app.getPath("userData"), "clipboardItems");
-const limit = 1000;
+const userDataDir = app.getPath("userData");
+const storageFile = path.join(userDataDir, "config.json");
+const clipItemsDir = path.join(userDataDir, "clipboardItems");
 
 const configDefault: Storage = {
     windowBounds: undefined,
     config: {
+        limit: 1000,
         pinned: false,
         showSearch: false,
         paused: false,
@@ -24,98 +25,83 @@ let _storage: Storage = configDefault;
 let _clipboardItems: ClipItem[] = [];
 let _search: Search = {};
 
-async function init() {
-    await makeDirs(dir);
-    _storage = await loadStorage();
-    _clipboardItems = await readItemsFromDisk();
-}
+export const storage = {
+    async init() {
+        await makeDirs(clipItemsDir);
+        _storage = await loadStorage();
+        _clipboardItems = await readItemsFromDisk();
+    },
 
-function getWindowBounds(): Electron.Rectangle | undefined {
-    return _storage.windowBounds;
-}
+    getWindowBounds(): Electron.Rectangle | undefined {
+        return _storage.windowBounds;
+    },
 
-function setWindowBounds(bounds: Electron.Rectangle) {
-    _storage.windowBounds = bounds;
-    saveStorage();
-}
+    setWindowBounds(bounds: Electron.Rectangle) {
+        _storage.windowBounds = bounds;
+        saveStorage();
+    },
 
-function getConfig(): Config {
-    return _storage.config;
-}
+    getConfig(): Config {
+        return _storage.config;
+    },
 
-function setConfig(config: Config) {
-    _storage.config = config;
-    saveStorage();
-}
+    setConfig(config: Config) {
+        _storage.config = config;
+        saveStorage();
+    },
 
-function getLists() {
-    return _storage.lists;
-}
+    getLists() {
+        return _storage.lists;
+    },
 
-function setLists(lists: string[]) {
-    _storage.lists = lists;
-    saveStorage();
-}
+    setLists(lists: string[]) {
+        _storage.lists = lists;
+        saveStorage();
+    },
 
-function getSearch() {
-    return _search;
-}
+    getSearch() {
+        return _search;
+    },
 
-function setSearch(search: Search) {
-    _search = search;
-}
+    setSearch(search: Search) {
+        _search = search;
+    },
 
-function getClipboardItems(): ClipItem[] {
-    return _clipboardItems;
-}
+    getClipboardItems(): ClipItem[] {
+        return _clipboardItems;
+    },
 
-function addNewItem(item: ClipItem) {
-    _clipboardItems.unshift(item);
-    writeClipItemToDisk(item);
-    applyLengthLimit();
-}
-
-function addExistingItem(item: ClipItem) {
-    const index = _clipboardItems.findIndex((i) => i.id === item.id);
-    if (index > -1) {
-        _clipboardItems.splice(index, 1);
-    }
-    _clipboardItems.unshift(item);
-
-    writeClipItemToDisk(item);
-}
-
-function replaceItems(items: ClipItem[]) {
-    for (const item of items) {
+    addNewItem(item: ClipItem) {
+        _clipboardItems.unshift(item);
         writeClipItemToDisk(item);
-    }
-}
+        applyLengthLimit();
+    },
 
-function removeItems(items: ClipItem[]) {
-    for (const item of items) {
+    addExistingItem(item: ClipItem) {
         const index = _clipboardItems.findIndex((i) => i.id === item.id);
         if (index > -1) {
             _clipboardItems.splice(index, 1);
-            deleteClipItemFromDisk(item);
         }
-    }
-}
+        _clipboardItems.unshift(item);
 
-export const storage = {
-    init,
-    getWindowBounds,
-    setWindowBounds,
-    getConfig,
-    setConfig,
-    getLists,
-    setLists,
-    getSearch,
-    setSearch,
-    getClipboardItems,
-    addNewItem,
-    addExistingItem,
-    replaceItems,
-    removeItems,
+        item;
+    },
+
+    replaceItems(items: ClipItem[]) {
+        for (const item of items) {
+            writeClipItemToDisk(item);
+        }
+    },
+
+    removeItems(items: ClipItem[]) {
+        for (const item of items) {
+            const index = _clipboardItems.findIndex((i) => i.id === item.id);
+            if (index > -1) {
+                _clipboardItems.splice(index, 1);
+                deleteClipItemFromDisk(item);
+            }
+        }
+    },
 };
 
 async function loadStorage() {
@@ -124,9 +110,9 @@ async function loadStorage() {
 }
 
 async function readItemsFromDisk(): Promise<ClipItem[]> {
-    const files = await getFilesInFolder(dir);
+    const files = await getFilesInFolder(clipItemsDir);
     const promises = files.map((file) => {
-        const filepath = path.join(dir, file);
+        const filepath = path.join(clipItemsDir, file);
         return readJsonFile<ClipItem>(filepath);
     });
     const items = await Promise.all(promises);
@@ -153,11 +139,11 @@ function deleteClipItemFromDisk(item: ClipItem) {
 }
 
 function getFilePath(item: ClipItem) {
-    return path.join(dir, `${item.id}.json`);
+    return path.join(clipItemsDir, `${item.id}.json`);
 }
 
 function applyLengthLimit() {
-    if (_clipboardItems.length > limit) {
+    if (_clipboardItems.length > _storage.config.limit) {
         const index = _clipboardItems.findLastIndex((i) => i.list == null);
         // Index 0 is the most recent item, so we don't want to remove that.
         if (index > 0) {
