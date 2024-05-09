@@ -16,7 +16,7 @@ export function onChange(callback: () => void) {
             // TODO: Try to detect quick changes that are then reverted.
             // Remove this once we have proper transient formats from Talon side.
             if (item.id === items[1]?.id && t2 - t1 < 300) {
-                void storage.removeItems([item]);
+                void storage.removeItems([items[0]]);
             } else {
                 void addNewItem(item);
             }
