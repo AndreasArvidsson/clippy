@@ -16,7 +16,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
     const [renameItemId, setRenameItemId] = useState<string>();
 
     useEffect(() => {
-        api.onRename(setRenameItemId);
+        api.onRenameItem(setRenameItemId);
 
         function onKeyDown(e: KeyboardEvent) {
             if (isNormal(e) && e.key === "Enter") {

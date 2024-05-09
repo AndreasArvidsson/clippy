@@ -38,27 +38,38 @@ export interface TargetCommand {
     targets: Target[];
 }
 
-export interface RenameCommand {
+export interface RenameItemsCommand {
     id: "renameItems";
     targets: Target[];
     text?: string;
 }
-
-export interface SwitchListCommand {
-    id: "switchList";
-    list: string;
-}
-
 export interface AssignItemsToListCommand {
     id: "assignItemsToList";
     targets: Target[];
-    list: string | undefined;
+    list?: string;
+}
+
+export interface SwitchListCommand {
+    id: "switchList";
+    name: string;
+}
+
+export interface CreateListCommand {
+    id: "createList";
+    name?: string;
+}
+
+export interface RenameListCommand {
+    id: "renameList";
+    name?: string;
 }
 
 export type Command =
     | SimpleCommand
     | SearchCommand
     | TargetCommand
-    | RenameCommand
+    | RenameItemsCommand
+    | AssignItemsToListCommand
     | SwitchListCommand
-    | AssignItemsToListCommand;
+    | CreateListCommand
+    | RenameListCommand;

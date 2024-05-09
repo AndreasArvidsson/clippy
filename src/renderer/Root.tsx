@@ -17,6 +17,13 @@ export function Root(): JSX.Element | null {
                 api.onUpdate(setData);
             })
             .catch(console.error);
+
+        api.onCreateList(() => {
+            console.log("onCreateList");
+        });
+        api.onRenameList(() => {
+            console.log("onRenameList");
+        });
     }, []);
 
     if (data == null) {

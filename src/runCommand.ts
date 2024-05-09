@@ -5,7 +5,9 @@ import { storage } from "./storage";
 import type {
     AssignItemsToListCommand,
     Command,
-    RenameCommand,
+    CreateListCommand,
+    RenameItemsCommand,
+    RenameListCommand,
     SearchCommand,
     SwitchListCommand,
     Target,
@@ -143,6 +145,93 @@ function removeAllItems(render = true) {
     }
 }
 
+function switchList(command: SwitchListCommand) {
+    const config = storage.getConfig();
+    const listName = command.name;
+
+    if (listName === config.activeList) {
+        return;
+    }
+
+    switch (listName) {
+        case AllList:
+        case MyFavoritesList:
+        case UnstarredList:
+            break;
+        default:
+            if (!storage.getLists().includes(command.name)) {
+                throw Error(`Can't switch to unknown list '${listName}'`);
+            }
+    }
+
+    config.activeList = listName;
+    storage.setConfig(config);
+
+    updateRenderer();
+}
+
+function createList(command: CreateListCommand) {
+    const listName = command.name;
+
+    if (listName) {
+        const lists = storage.getLists();
+
+        if (defaultLists.includes(listName) || lists.includes(listName)) {
+            throw Error(`Can't create list: List '${listName}' already exists`);
+        }
+
+        lists.push(listName);
+
+        const config = storage.getConfig();
+        config.activeList = listName;
+
+        storage.setConfig(config);
+        storage.setLists(lists);
+
+        updateRenderer();
+    } else {
+        const window = getWindow();
+        if (window.isVisible()) {
+            window.webContents.send("createList");
+        }
+    }
+}
+
+function renameList(command: RenameListCommand) {
+    const newName = command.name;
+
+    if (newName) {
+        const config = storage.getConfig();
+        const lists = storage.getLists();
+        const { activeList } = config;
+
+        if (activeList === newName) {
+            return;
+        }
+
+        if (defaultLists.includes(activeList)) {
+            throw Error(`Can't rename default list '${activeList}'`);
+        }
+        if (!lists.includes(activeList)) {
+            throw Error(`Can't rename unknown list '${activeList}'`);
+        }
+        if (lists.includes(newName)) {
+            throw Error(`Can't rename list: List '${newName}' already exists`);
+        }
+
+        lists.filter((list) => list !== activeList);
+        lists.push(newName);
+        storage.setLists(lists);
+
+        runCommand({ id: "switchList", name: newName });
+    } else {
+        const window = getWindow();
+        if (window.isVisible()) {
+            window.webContents.send("renameList");
+        }
+    }
+}
+
 function removeList() {
     const config = storage.getConfig();
     const lists = storage.getLists();
@@ -163,7 +252,7 @@ function removeList() {
     updateRenderer();
 }
 
-function renameItem(command: RenameCommand) {
+function renameItem(command: RenameItemsCommand) {
     const items = processTargets(command.targets);
 
     if (command.text != null) {
@@ -175,9 +264,8 @@ function renameItem(command: RenameCommand) {
     } else {
         const item = assertSingleItem(items);
         const window = getWindow();
-
         if (window.isVisible()) {
-            window.webContents.send("rename", item.id);
+            window.webContents.send("renameItem", item.id);
         }
     }
 }
@@ -187,24 +275,6 @@ function toggleDevTools() {
     if (window.isVisible()) {
         window.webContents.toggleDevTools();
     }
-}
-
-function switchList(command: SwitchListCommand) {
-    switch (command.list) {
-        case AllList:
-        case MyFavoritesList:
-        case UnstarredList:
-            break;
-        default:
-            if (!storage.getLists().includes(command.list)) {
-                throw Error(`Can't switch to unknown list '${command.list}'`);
-            }
-    }
-
-    const config = storage.getConfig();
-    config.activeList = command.list;
-    storage.setConfig(config);
-    updateRenderer();
 }
 
 function assignItemsToList(command: AssignItemsToListCommand) {
@@ -268,6 +338,12 @@ export function runCommand(command: Command) {
             break;
         case "removeAllItems":
             removeAllItems();
+            break;
+        case "createList":
+            createList(command);
+            break;
+        case "renameList":
+            renameList(command);
             break;
         case "removeList":
             removeList();

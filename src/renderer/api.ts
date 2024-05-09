@@ -9,8 +9,14 @@ export default {
     onUpdate(callback: (data: RendererData) => void) {
         ipcRenderer.on("update", (_, data: RendererData) => callback(data));
     },
-    onRename(callback: (id: string) => void) {
-        ipcRenderer.on("rename", (_, id: string) => callback(id));
+    onRenameItem(callback: (id: string) => void) {
+        ipcRenderer.on("renameItem", (_, id: string) => callback(id));
+    },
+    onRenameList(callback: () => void) {
+        ipcRenderer.on("renameList", () => callback());
+    },
+    onCreateList(callback: () => void) {
+        ipcRenderer.on("createList", () => callback());
     },
     command(command: Command) {
         ipcRenderer.send("command", command);

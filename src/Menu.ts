@@ -42,7 +42,7 @@ function listsMenu() {
         label,
         type: "radio",
         checked: label === config.activeList,
-        click: () => runCommand({ id: "switchList", list: label }),
+        click: () => runCommand({ id: "switchList", name: label }),
     });
 
     const menu = Menu.buildFromTemplate([
@@ -53,12 +53,12 @@ function listsMenu() {
         {
             label: "Create new list",
             type: "normal",
-            click: () => console.log("TODO"),
+            click: () => runCommand({ id: "createList" }),
         },
         {
             label: "Rename list",
             type: "normal",
-            click: () => console.log("TODO"),
+            click: () => runCommand({ id: "renameList" }),
             enabled: !activeIsDefault,
         },
         {
