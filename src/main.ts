@@ -1,4 +1,4 @@
-import { app, ipcMain, Notification } from "electron";
+import { app, ipcMain } from "electron";
 import * as clipboardList from "./clipboardList";
 import { NAME } from "./constants";
 import { showMenu } from "./Menu";
@@ -8,6 +8,7 @@ import { initStorage } from "./storage";
 import { createTray } from "./tray";
 import type { Command } from "./types/Command";
 import type { MenuType } from "./types/types";
+import { showErrorNotification } from "./util/notifications";
 import { createWindow } from "./window";
 
 void app.whenReady().then(async () => {
@@ -23,7 +24,7 @@ void app.whenReady().then(async () => {
         try {
             return runCommand(command);
         } catch (error) {
-            new Notification({ title: "Error", body: (error as Error).message }).show();
+            showErrorNotification(`Command ${command.id} failed`, error);
         }
     });
 

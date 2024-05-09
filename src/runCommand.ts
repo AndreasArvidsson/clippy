@@ -136,7 +136,7 @@ function removeAllItems(render = true) {
         }
     })();
 
-    void storage.removeItems(itemsToRemove);
+    storage.removeItems(itemsToRemove);
 
     if (render) {
         updateRenderer();
@@ -170,7 +170,7 @@ function renameItem(command: RenameCommand) {
         for (const item of items) {
             item.name = command.text || undefined;
         }
-        void storage.replaceItems(items);
+        storage.replaceItems(items);
         updateRenderer();
     } else {
         const item = assertSingleItem(items);
@@ -218,7 +218,7 @@ function assignItemsToList(command: AssignItemsToListCommand) {
     for (const item of items) {
         item.list = command.list;
     }
-    void storage.replaceItems(items);
+    storage.replaceItems(items);
     updateRenderer();
 }
 

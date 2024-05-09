@@ -1,5 +1,6 @@
 import { globalShortcut } from "electron";
 import { join } from "node:path";
+import { showErrorNotification } from "../util/notifications";
 import { getCommunicationDirPath } from "./getCommunicationDirPath";
 import { initializeCommunicationDir } from "./initializeCommunicationDir";
 import { readRequest, writeResponse } from "./io";
@@ -35,7 +36,7 @@ export default class RpcServer<T> {
 
     private async executeRequest(): Promise<void> {
         if (this.executing) {
-            console.error("Already executing!!!!!");
+            showErrorNotification("Already executing!!!!!");
             return;
         }
 
@@ -71,7 +72,7 @@ export default class RpcServer<T> {
                 });
             }
         } catch (error) {
-            console.error(error);
+            showErrorNotification("Failed to execute request", error);
         }
 
         this.executing = false;

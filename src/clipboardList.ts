@@ -16,9 +16,9 @@ export function onChange(callback: () => void) {
             // TODO: Try to detect quick changes that are then reverted.
             // Remove this once we have proper transient formats from Talon side.
             if (item.id === items[1]?.id && t2 - t1 < 300) {
-                void storage.removeItems([items[0]]);
+                storage.removeItems([items[0]]);
             } else {
-                void addNewItem(item);
+                addNewItem(item);
             }
             callback();
         }
@@ -29,10 +29,10 @@ export function onChange(callback: () => void) {
 
 export function removeTargets(targets: Target[]) {
     const targetItems = processTargets(targets);
-    void storage.removeItems(targetItems);
+    storage.removeItems(targetItems);
 }
 
-async function addNewItem(item: ClipItem) {
+function addNewItem(item: ClipItem) {
     const items = storage.getClipboardItems();
     const existing = items.find((i) => i.id === item.id);
     const { autoStar, activeList } = storage.getConfig();
@@ -51,8 +51,8 @@ async function addNewItem(item: ClipItem) {
     if (existing != null) {
         item.name = existing.name;
         item.list = item.list ?? existing.list;
-        await storage.addExistingItem(item);
+        storage.addExistingItem(item);
     } else {
-        await storage.addItem(item);
+        storage.addNewItem(item);
     }
 }

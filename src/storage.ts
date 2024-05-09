@@ -2,6 +2,7 @@ import { app } from "electron";
 import path from "node:path";
 import type { ClipItem, Config, Search } from "./types/types";
 import { deleteFile, getFilesInFolder, makeDirs, readJsonFile, writeJsonFile } from "./util/io";
+import { showErrorNotification } from "./util/notifications";
 
 const storageFile = path.join(app.getPath("userData"), "config.json");
 const dir = path.join(app.getPath("userData"), "clipboardItems");
@@ -46,7 +47,9 @@ async function loadStorage() {
 }
 
 function saveStorage() {
-    return writeJsonFile(storageFile, _storage);
+    writeJsonFile(storageFile, _storage).catch((error) => {
+        showErrorNotification("Failed to save storage", error);
+    });
 }
 
 function getWindowBounds(): Electron.Rectangle | undefined {
@@ -55,7 +58,7 @@ function getWindowBounds(): Electron.Rectangle | undefined {
 
 function setWindowBounds(bounds: Electron.Rectangle) {
     _storage.windowBounds = bounds;
-    void saveStorage();
+    saveStorage();
 }
 
 function getConfig(): Config {
@@ -64,7 +67,7 @@ function getConfig(): Config {
 
 function setConfig(config: Config) {
     _storage.config = config;
-    void saveStorage();
+    saveStorage();
 }
 
 function getLists() {
@@ -73,7 +76,7 @@ function getLists() {
 
 function setLists(lists: string[]) {
     _storage.lists = lists;
-    void saveStorage();
+    saveStorage();
 }
 
 function getSearch() {
@@ -88,61 +91,63 @@ function getClipboardItems(): ClipItem[] {
     return _clipboardItems;
 }
 
-async function addItem(item: ClipItem) {
+function addNewItem(item: ClipItem) {
     // Add new item at start of list
     _clipboardItems.unshift(item);
-    await writeClipItemToDisk(item);
+    writeClipItemToDisk(item);
 
     // Apply length limit
-    // TODO: How do we handle starred items?
     if (_clipboardItems.length > limit) {
-        const removedItem = _clipboardItems.pop();
-        if (removedItem != null) {
-            await removeClipItemFromDisk(removedItem);
+        const index = _clipboardItems.findLastIndex((i) => i.list == null);
+        if (index > 0) {
+            const removedItem = _clipboardItems.splice(index, 1)[0];
+            if (removedItem != null) {
+                deleteClipItemFromDisk(removedItem);
+            }
         }
     }
-
-    await saveStorage();
 }
 
-async function addExistingItem(item: ClipItem) {
+function addExistingItem(item: ClipItem) {
     const index = _clipboardItems.findIndex((i) => i.id === item.id);
     if (index > -1) {
         _clipboardItems.splice(index, 1);
     }
     _clipboardItems.unshift(item);
 
-    await writeClipItemToDisk(item);
-    await saveStorage();
+    writeClipItemToDisk(item);
 }
 
-async function replaceItems(items: ClipItem[]) {
+function replaceItems(items: ClipItem[]) {
     for (const item of items) {
-        await writeClipItemToDisk(item);
+        writeClipItemToDisk(item);
     }
 }
 
-async function removeItems(items: ClipItem[]) {
+function removeItems(items: ClipItem[]) {
     for (const item of items) {
-        await removeItem(item);
+        removeItem(item);
     }
-    await saveStorage();
 }
 
-async function removeItem(item: ClipItem) {
+function removeItem(item: ClipItem) {
     const index = _clipboardItems.findIndex((i) => i.id === item.id);
     if (index > -1) {
         _clipboardItems.splice(index, 1);
-        await removeClipItemFromDisk(item);
+        deleteClipItemFromDisk(item);
     }
 }
 
 function writeClipItemToDisk(item: ClipItem) {
-    return writeJsonFile(getFilePath(item), item);
+    writeJsonFile(getFilePath(item), item).catch((error) => {
+        showErrorNotification("Failed to save clipboard item to disk", error);
+    });
 }
 
-function removeClipItemFromDisk(item: ClipItem) {
-    return deleteFile(getFilePath(item));
+function deleteClipItemFromDisk(item: ClipItem) {
+    deleteFile(getFilePath(item)).catch((error) => {
+        showErrorNotification("Failed to delete clipboard item from disk", error);
+    });
 }
 
 function getFilePath(item: ClipItem) {
@@ -159,7 +164,7 @@ export const storage = {
     getSearch,
     setSearch,
     getClipboardItems,
-    addItem,
+    addNewItem,
     addExistingItem,
     replaceItems,
     removeItems,
