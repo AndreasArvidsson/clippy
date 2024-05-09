@@ -141,14 +141,26 @@ export function ClipboardList({ items }: Props): JSX.Element {
 
 function renderClipItem(item: ClipItem): JSX.Element {
     if (item.image != null) {
-        return <img src={item.image} alt={item.meta?.alt} title={item.meta?.alt} />;
+        return (
+            <div className="clip-content-image" title={item.meta?.alt}>
+                <img src={item.image} alt={item.meta?.alt} />
+            </div>
+        );
     }
     const text = item.text ?? item.rtf;
     if (text != null) {
         if (text.includes("\n")) {
-            return <pre title={text}>{text}</pre>;
+            return (
+                <pre className="clip-content-text" title={text}>
+                    {text}
+                </pre>
+            );
         }
-        return <div title={text}>{text}</div>;
+        return (
+            <div className="clip-content-text" title={text}>
+                {text}
+            </div>
+        );
     }
     return <div>[FAILED TO RENDER]</div>;
 }

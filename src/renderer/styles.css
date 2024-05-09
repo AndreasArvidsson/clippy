@@ -51,9 +51,8 @@ main {
     text-overflow: ellipsis;
 }
 
-.clip-content > pre,
-.clip-content > span,
-.clip-content > img {
+.clip-content-text,
+.clip-content-image > img {
     max-height: 10rem;
     margin: 0;
     overflow: hidden;
@@ -62,10 +61,13 @@ main {
 
 .clip-name {
     text-align: center;
-    margin-bottom: 0.25rem;
     background-color: #f0f0f0;
     color: #000000;
     font-weight: 600;
+}
+
+.clip-name + .clip-content-image {
+    margin-top: 0.25rem;
 }
 
 /* TODO: Remove if not needed */
