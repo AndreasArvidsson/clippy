@@ -84,10 +84,10 @@ function _createWindow(): BrowserWindow {
     void win.loadFile(path.resolve(__dirname, "index.html"));
 
     // TODO: Remove this in production
-    win.once("ready-to-show", () => {
-        win.webContents.openDevTools();
-        win.show();
-    });
+    // win.once("ready-to-show", () => {
+    //     win.webContents.openDevTools();
+    //     win.show();
+    // });
 
     return win;
 }
