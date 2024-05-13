@@ -8,7 +8,14 @@ import {
     type Search,
     type Storage,
 } from "./types/types";
-import { deleteFile, getFilesInFolder, makeDirs, readJsonFile, writeJsonFile } from "./util/io";
+import {
+    deleteFile,
+    fileExists,
+    getFilesInFolder,
+    makeDirs,
+    readJsonFile,
+    writeJsonFile,
+} from "./util/io";
 import { showErrorNotification } from "./util/notifications";
 
 const userDataDir = app.getPath("userData");
@@ -112,8 +119,11 @@ export const storage = {
 };
 
 async function loadStorage() {
-    const storage = await readJsonFile<Storage>(storageFile);
-    return Object.assign({}, configDefault, storage);
+    if (fileExists(storageFile)) {
+        const storage = await readJsonFile<Storage>(storageFile);
+        return Object.assign({}, configDefault, storage);
+    }
+    return Object.assign({}, configDefault);
 }
 
 async function readItemsFromDisk(): Promise<ClipItem[]> {

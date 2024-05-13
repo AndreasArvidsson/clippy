@@ -1,4 +1,5 @@
 import * as fsPromises from "node:fs/promises";
+import * as fs from "node:fs";
 
 export async function readJsonFile<T>(path: string): Promise<T> {
     const data = await fsPromises.readFile(path, "utf-8");
@@ -20,4 +21,8 @@ export function getFilesInFolder(path: string): Promise<string[]> {
 
 export function deleteFile(path: string): Promise<void> {
     return fsPromises.unlink(path);
+}
+
+export function fileExists(path: string): boolean {
+    return fs.existsSync(path);
 }
