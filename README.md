@@ -25,3 +25,7 @@ def clippy_show_hide():
     command = {"id": "showHide"}
     rpc.send(command, wait_for_finish=True)
 ```
+
+### Mac OS. Clipboard doesn't update
+
+`chmod +x node_modules/clipboard-event/platform/clipboard-event-handler-mac`
