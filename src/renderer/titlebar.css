@@ -63,3 +63,11 @@ footer button:active {
 #close-btn:active {
     background-color: #f1707a;
 }
+
+@media (prefers-color-scheme: dark) {
+    header,
+    footer {
+        background: #333;
+        color: white;
+    }
+}

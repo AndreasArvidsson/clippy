@@ -1,4 +1,4 @@
-import { BrowserWindow, app, screen } from "electron";
+import { BrowserWindow, app, nativeTheme, screen } from "electron";
 import path from "node:path";
 import { NAME, iconPath } from "./constants";
 import { storage } from "./storage";
@@ -36,6 +36,8 @@ function _createWindow(): BrowserWindow {
     if (isMacOS()) {
         app.dock.setIcon(iconPath);
     }
+
+    nativeTheme.themeSource = "system";
 
     const win = new BrowserWindow({
         icon: iconPath,

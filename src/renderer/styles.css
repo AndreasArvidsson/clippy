@@ -101,3 +101,10 @@ button.star-btn {
 button.star-btn.active {
     color: gold;
 }
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background: #333;
+        color: white;
+    }
+}
