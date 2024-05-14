@@ -1,7 +1,8 @@
-import { BrowserWindow, screen } from "electron";
+import { BrowserWindow, app, screen } from "electron";
 import path from "node:path";
 import { NAME, iconPath } from "./constants";
 import { storage } from "./storage";
+import { isMacOS } from "./util/isMacOS";
 
 let _window: BrowserWindow | null = null;
 let _bounds: Electron.Rectangle | undefined = undefined;
@@ -31,6 +32,10 @@ function getBounds(): Partial<Electron.Rectangle> {
 
 function _createWindow(): BrowserWindow {
     const bounds = getBounds();
+
+    if (isMacOS()) {
+        app.dock.setIcon(iconPath);
+    }
 
     const win = new BrowserWindow({
         icon: iconPath,
