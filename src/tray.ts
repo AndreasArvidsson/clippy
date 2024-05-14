@@ -2,12 +2,12 @@ import { Menu, nativeImage, Tray } from "electron";
 import { runCommand } from "./commands/runCommand";
 import { iconPath, NAME } from "./constants";
 
-export function createTray() {
-    const icon = nativeImage.createFromPath(iconPath);
+export async function createTray() {
+    const size = 32;
+    const icon = await nativeImage.createThumbnailFromPath(iconPath, { width: size, height: size });
     const tray = new Tray(icon);
 
     tray.setToolTip(NAME);
-    tray.setTitle(NAME);
 
     const contextMenu = Menu.buildFromTemplate([
         {
