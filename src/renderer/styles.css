@@ -54,6 +54,7 @@ main {
 .clip-content-text,
 .clip-content-image > img {
     max-height: 10rem;
+    max-width: 100%;
     margin: 0;
     overflow: hidden;
     text-overflow: ellipsis;
