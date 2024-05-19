@@ -28,9 +28,11 @@ export function applySearchFilters(items: ClipItem[], isVisible: boolean): ClipI
         if (searchText) {
             items = items.filter(
                 (item) =>
+                    item.name?.toLowerCase().includes(searchText) ||
                     (item.text ?? item.rtf)?.toLowerCase().includes(searchText) ||
                     item.html?.toLowerCase().includes(searchText) ||
-                    item.bookmark?.title?.toLowerCase().includes(searchText),
+                    item.bookmark?.title?.toLowerCase().includes(searchText) ||
+                    item.meta?.alt?.toLowerCase().includes(searchText),
             );
         }
     }
