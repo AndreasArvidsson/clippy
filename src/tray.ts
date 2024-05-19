@@ -2,7 +2,7 @@ import { Menu, nativeImage, Tray } from "electron";
 import { runCommand } from "./commands/runCommand";
 import { NAME } from "./constants";
 
-const ICON_SIZE = 32;
+const ICON_SIZE = 24;
 
 export async function createTray(iconPath: string) {
     const tray = new Tray(await getTrayIcon(iconPath));
