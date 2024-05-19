@@ -11,12 +11,13 @@ export function createWindow(iconPath: string) {
     _bounds = storage.getWindowBounds();
     _window = _createWindow(iconPath);
 
+    if (isMacOS()) {
+        app.dock.hide();
+    }
+
     return {
         updateIcon: (iconPath: string) => {
             getWindow().setIcon(iconPath);
-            if (isMacOS()) {
-                app.dock.setIcon(iconPath);
-            }
         },
     };
 }
@@ -41,10 +42,6 @@ function getBounds(): Partial<Electron.Rectangle> {
 
 function _createWindow(iconPath: string): BrowserWindow {
     const bounds = getBounds();
-
-    if (isMacOS()) {
-        app.dock.setIcon(iconPath);
-    }
 
     nativeTheme.themeSource = "system";
 
