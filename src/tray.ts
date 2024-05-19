@@ -1,11 +1,11 @@
 import { Menu, nativeImage, Tray } from "electron";
 import { runCommand } from "./commands/runCommand";
-import { iconPath, NAME } from "./constants";
+import { NAME } from "./constants";
 
-export async function createTray() {
-    const size = 32;
-    const icon = await nativeImage.createThumbnailFromPath(iconPath, { width: size, height: size });
-    const tray = new Tray(icon);
+const ICON_SIZE = 32;
+
+export async function createTray(iconPath: string) {
+    const tray = new Tray(await getTrayIcon(iconPath));
 
     tray.setToolTip(NAME);
 
@@ -20,4 +20,16 @@ export async function createTray() {
     tray.setContextMenu(contextMenu);
 
     tray.addListener("click", () => runCommand({ id: "showHide" }));
+
+    return {
+        updateIcon: (iconPath: string) => {
+            getTrayIcon(iconPath)
+                .then((icon) => tray.setImage(icon))
+                .catch(console.error);
+        },
+    };
+}
+
+function getTrayIcon(iconPath: string) {
+    return nativeImage.createThumbnailFromPath(iconPath, { width: ICON_SIZE, height: ICON_SIZE });
 }

@@ -1,15 +1,24 @@
 import { BrowserWindow, app, nativeTheme, screen } from "electron";
 import path from "node:path";
-import { NAME, iconPath } from "./constants";
+import { NAME } from "./constants";
 import { storage } from "./storage";
 import { isMacOS } from "./util/isMacOS";
 
 let _window: BrowserWindow | null = null;
 let _bounds: Electron.Rectangle | undefined = undefined;
 
-export function createWindow() {
+export function createWindow(iconPath: string) {
     _bounds = storage.getWindowBounds();
-    _window = _createWindow();
+    _window = _createWindow(iconPath);
+
+    return {
+        updateIcon: (iconPath: string) => {
+            getWindow().setIcon(iconPath);
+            if (isMacOS()) {
+                app.dock.setIcon(iconPath);
+            }
+        },
+    };
 }
 
 export function getWindow(): BrowserWindow {
@@ -30,7 +39,7 @@ function getBounds(): Partial<Electron.Rectangle> {
     };
 }
 
-function _createWindow(): BrowserWindow {
+function _createWindow(iconPath: string): BrowserWindow {
     const bounds = getBounds();
 
     if (isMacOS()) {

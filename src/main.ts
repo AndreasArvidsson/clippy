@@ -2,15 +2,16 @@ import { app, ipcMain } from "electron";
 import { showMenu } from "./Menu";
 import * as clipboardList from "./clipboardList";
 import { runCommand } from "./commands/runCommand";
-import { NAME } from "./constants";
-import { getRendererData } from "./util/getRendererData";
+import { NAME, getIconPath } from "./constants";
 import RpcServer from "./rpc/RpcServer";
 import { storage } from "./storage";
 import { createTray } from "./tray";
 import type { Command } from "./types/Command";
 import type { MenuType } from "./types/types";
-import { updateRenderer } from "./util/updateRenderer";
+import { getRendererData } from "./util/getRendererData";
 import { showErrorNotification } from "./util/notifications";
+import { onDarkModeChange } from "./util/onDarkModeChange";
+import { updateRenderer } from "./util/updateRenderer";
 import { createWindow } from "./window";
 
 void app.whenReady().then(async () => {
@@ -33,6 +34,13 @@ void app.whenReady().then(async () => {
     const rpc = new RpcServer<Command>(NAME, "Control+Shift+Alt+O");
     rpc.onCommand((command) => runCommand(command));
 
-    await createTray();
-    createWindow();
+    const iconPath = getIconPath();
+    const tray = await createTray(iconPath);
+    const window = createWindow(iconPath);
+
+    onDarkModeChange(() => {
+        const iconPath = getIconPath();
+        tray.updateIcon(iconPath);
+        window.updateIcon(iconPath);
+    });
 });
