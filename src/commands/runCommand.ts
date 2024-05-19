@@ -3,6 +3,7 @@ import type { Command } from "../types/Command";
 import { assignItemsToList } from "./assignItemsToList";
 import { copyItems } from "./copyItems";
 import { createList } from "./createList";
+import { getItems } from "./getItems";
 import { removeAllItems } from "./removeAllItems";
 import { removeItems } from "./removeItems";
 import { removeList } from "./removeList";
@@ -17,7 +18,7 @@ import { togglePaused } from "./togglePaused";
 import { togglePinned } from "./togglePinned";
 import { toggleSearch } from "./toggleSearch";
 
-export function runCommand(command: Command) {
+export function runCommand(command: Command): unknown {
     console.debug(command);
 
     switch (command.id) {
@@ -68,6 +69,8 @@ export function runCommand(command: Command) {
         case "copyItems":
             copyItems(command);
             break;
+        case "getItems":
+            return getItems(command);
         case "removeItems":
             removeItems(command);
             break;
@@ -75,8 +78,11 @@ export function runCommand(command: Command) {
             renameItems(command);
             break;
 
-        default: {
-            const _exhaustiveCheck: never = command;
-        }
+        default:
+            assertUnreachable(command);
     }
+}
+
+function assertUnreachable(command: never): never {
+    throw new Error("Unknown command", command);
 }

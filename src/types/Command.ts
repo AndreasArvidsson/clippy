@@ -38,6 +38,11 @@ export interface CopyItemsCommand {
     targets: Target[];
 }
 
+export interface GetItemsCommand {
+    id: "getItems";
+    targets: Target[];
+}
+
 export interface RemoveItemsCommand {
     id: "removeItems";
     targets: Target[];
@@ -52,6 +57,12 @@ export interface AssignItemsToListCommand {
     id: "assignItemsToList";
     targets: Target[];
     name?: string;
+}
+
+export interface RenameItemsCommand {
+    id: "renameItems";
+    targets: Target[];
+    text?: string;
 }
 
 export interface SwitchListCommand {
@@ -73,6 +84,7 @@ export type Command =
     | SimpleCommand
     | SearchItemsCommand
     | CopyItemsCommand
+    | GetItemsCommand
     | RemoveItemsCommand
     | RenameItemsCommand
     | AssignItemsToListCommand
