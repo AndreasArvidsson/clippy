@@ -47,7 +47,7 @@ export function Titlebar({
             <button
                 className="icon-btn"
                 id="close-btn"
-                onClick={() => api.command({ id: "showHide" })}
+                onClick={() => api.command({ id: "toggleShowHide" })}
             >
                 {isMac ? <XCircleFill /> : <XLg />}
             </button>

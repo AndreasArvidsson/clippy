@@ -19,7 +19,7 @@ export async function createTray(iconPath: string) {
 
     tray.setContextMenu(contextMenu);
 
-    tray.addListener("click", () => runCommand({ id: "showHide" }));
+    tray.addListener("click", () => runCommand({ id: "toggleShowHide" }));
 
     return {
         updateIcon: (iconPath: string) => {
