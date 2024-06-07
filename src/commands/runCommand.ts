@@ -25,23 +25,65 @@ export function runCommand(command: Command): unknown {
         case "exit":
             app.exit();
             break;
-        case "showHide":
+
+        case "toggleShowHide":
             showHide();
             break;
-        case "toggleDevTools":
-            toggleDevTools();
+        case "show":
+            showHide(true);
             break;
+        case "hide":
+            showHide(false);
+            break;
+
         case "togglePinned":
             togglePinned();
             break;
+        case "pin":
+            break;
+            togglePinned(true);
+        case "unpin":
+            togglePinned(false);
+            break;
+
+        case "toggleDevTools":
+            toggleDevTools();
+            break;
+        case "showDevTools":
+            toggleDevTools(true);
+            break;
+        case "hideDevTools":
+            toggleDevTools(false);
+            break;
+
         case "toggleSearch":
             toggleSearch();
             break;
+        case "showSearch":
+            toggleSearch(true);
+            break;
+        case "hideSearch":
+            toggleSearch(false);
+            break;
+
         case "togglePaused":
             togglePaused();
             break;
+        case "pause":
+            togglePaused(true);
+            break;
+        case "resume":
+            togglePaused(false);
+            break;
+
         case "toggleAutoStar":
             toggleAutoStar();
+            break;
+        case "enableAutoStar":
+            toggleAutoStar(true);
+            break;
+        case "disableAutoStar":
+            toggleAutoStar(false);
             break;
 
         case "switchList":

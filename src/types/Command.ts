@@ -17,12 +17,24 @@ export type Target = PrimitiveTarget | RangeTarget;
 interface SimpleCommand {
     id:
         | "exit"
-        | "showHide"
-        | "toggleSearch"
+        | "toggleShowHide"
+        | "show"
+        | "hide"
         | "togglePinned"
+        | "pin"
+        | "unpin"
         | "toggleDevTools"
+        | "showDevTools"
+        | "hideDevTools"
+        | "toggleSearch"
+        | "showSearch"
+        | "hideSearch"
         | "togglePaused"
+        | "pause"
+        | "resume"
         | "toggleAutoStar"
+        | "enableAutoStar"
+        | "disableAutoStar"
         | "removeAllItems"
         | "removeList";
 }
