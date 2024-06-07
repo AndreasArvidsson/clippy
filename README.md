@@ -22,7 +22,7 @@ $ npm start
 rpc = RpcClient("Clippy", "ctrl-shift-alt-o")
 
 def clippy_show_hide():
-    command = {"id": "showHide"}
+    command = {"id": "toggleShowHide"}
     rpc.send(command, wait_for_finish=True)
 ```
 
