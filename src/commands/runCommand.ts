@@ -40,8 +40,8 @@ export function runCommand(command: Command): unknown {
             togglePinned();
             break;
         case "pin":
-            break;
             togglePinned(true);
+            break;
         case "unpin":
             togglePinned(false);
             break;
