@@ -8,10 +8,10 @@ import * as path from "node:path";
         dir: __dirname,
         out: "dist",
         overwrite: true,
-        ignore: [whiteListToIgnore(["out", "node_modules", "package.json"]), ".map$"],
+        ignore: [whitelistToIgnore(["out", "node_modules", "package.json"]), ".map$"],
     });
 })();
 
-function whiteListToIgnore(whitelist: string[]) {
+function whitelistToIgnore(whitelist: string[]) {
     return `^/(?!(${whitelist.join("|")}))`;
 }
