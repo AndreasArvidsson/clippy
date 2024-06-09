@@ -1,5 +1,4 @@
 import { packager } from "@electron/packager";
-import * as path from "node:path";
 
 (async () => {
     console.log("Packaging...");
