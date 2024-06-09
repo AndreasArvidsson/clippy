@@ -8,9 +8,10 @@
     "main": "out/main.js",
     "scripts": {
         "clean": "rm -rf out/*",
-        "build": "tsc -p . && npm run copyAssets",
+        "build": "npm run compile && npm run prepareAssets",
+        "compile": "tsc -p .",
+        "prepareAssets": "tsx prepareAssets.ts",
         "start": "npm run build && electron .",
-        "copyAssets": "sh copyAssets.sh",
         "test": "eslint src && prettier --check .",
         "fix": "prettier --write ."
     },
