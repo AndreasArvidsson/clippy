@@ -8,9 +8,8 @@ export function renameList(command: RenameListCommand) {
     const newName = command.name;
 
     if (newName) {
-        const config = storage.getConfig();
+        const { activeList } = storage.getConfig();
         const lists = storage.getLists();
-        const { activeList } = config;
 
         if (activeList.name === newName) {
             return;
@@ -32,7 +31,7 @@ export function renameList(command: RenameListCommand) {
         list.name = newName;
 
         storage.setLists(lists);
-        storage.setConfig({ ...config, activeList: list });
+        storage.patchConfig({ activeList: list });
 
         updateRenderer();
     } else {

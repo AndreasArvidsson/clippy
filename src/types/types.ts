@@ -3,35 +3,36 @@ import type { ReadBookmark } from "electron";
 export type ClipItemType = "text" | "image";
 
 export interface ClipItemMeta {
-    src?: string;
-    alt?: string;
+    readonly src?: string;
+    readonly alt?: string;
 }
 
 export interface ClipItem {
-    id: string;
-    created: number;
-    type: ClipItemType;
+    readonly id: string;
+    readonly created: number;
+    readonly type: ClipItemType;
     name?: string;
     list?: string;
-    text?: string;
-    rtf?: string;
-    html?: string;
-    image?: string;
-    bookmark?: ReadBookmark;
-    meta?: ClipItemMeta;
+    readonly text?: string;
+    readonly rtf?: string;
+    readonly html?: string;
+    readonly image?: string;
+    readonly bookmark?: ReadBookmark;
+    readonly meta?: ClipItemMeta;
 }
 
 export interface Config {
-    limit: number;
-    pinned: boolean;
-    showSearch: boolean;
-    paused: boolean;
-    autoStar: boolean;
-    activeList: List;
+    readonly limit: number;
+    readonly pinned: boolean;
+    readonly showSearch: boolean;
+    readonly paused: boolean;
+    readonly autoStar: boolean;
+    readonly openAtLogin: boolean;
+    readonly activeList: List;
 }
 
 export interface List {
-    id: string;
+    readonly id: string;
     name: string;
 }
 
@@ -42,24 +43,24 @@ export interface Storage {
 }
 
 export interface Search {
-    text?: string;
-    type?: ClipItemType;
+    readonly text?: string;
+    readonly type?: ClipItemType;
 }
 
 export interface RendererData {
-    totalCount: number;
-    config: Config;
-    search: Search;
-    items: ClipItem[];
+    readonly totalCount: number;
+    readonly config: Config;
+    readonly search: Search;
+    readonly items: ClipItem[];
 }
 
 interface ClipItemContextMenu {
-    type: "clipItemContext";
-    hint: string;
+    readonly type: "clipItemContext";
+    readonly hint: string;
 }
 
 interface SimpleMenu {
-    type: "remove" | "lists";
+    readonly type: "remove" | "lists";
 }
 
 export type MenuType = ClipItemContextMenu | SimpleMenu;
