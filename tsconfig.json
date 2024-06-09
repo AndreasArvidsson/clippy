@@ -10,7 +10,7 @@
         "strict": true,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
-        "outDir": "out"
+        "outDir": "dist"
         // "baseUrl": "."
         // "noEmit": true
     },
