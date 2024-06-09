@@ -9,7 +9,7 @@
     "scripts": {
         "clean": "rm -rf out/*",
         "start": "npm run build && electron .",
-        "package": "npm run build && npx @electron/packager . clippy --out=dist",
+        "package": "npm run build && tsx packager.ts",
         "build": "tsc -p . && npm run copyAssets",
         "copyAssets": "sh copyAssets.sh",
         "test": "eslint src && prettier --check .",
