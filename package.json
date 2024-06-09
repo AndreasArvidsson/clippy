@@ -1,6 +1,7 @@
 {
     "name": "clippy",
     "displayName": "Clippy",
+    "productName": "Clippy",
     "description": "Clipboard manager with RPC",
     "version": "1.0.0",
     "author": "AndreasArvidsson",
