@@ -40,11 +40,18 @@ let _storage: Storage = configDefault;
 let _clipboardItems: ClipItem[] = [];
 let _search: Search = {};
 
+function updateOpenAtLogin() {
+    app.setLoginItemSettings({
+        openAtLogin: _storage.config.openAtLogin,
+    });
+}
+
 export const storage = {
     async init() {
         await makeDirs(clipItemsDir);
         _storage = await loadStorage();
         _clipboardItems = await readItemsFromDisk();
+        updateOpenAtLogin();
     },
 
     getWindowBounds(): Electron.Rectangle | undefined {
@@ -63,6 +70,10 @@ export const storage = {
     patchConfig(config: Partial<Config>) {
         _storage.config = { ..._storage.config, ...config };
         saveStorage();
+
+        if (config.openAtLogin !== undefined) {
+            updateOpenAtLogin();
+        }
     },
 
     getLists(): List[] {
