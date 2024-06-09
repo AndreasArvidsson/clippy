@@ -22,12 +22,13 @@ export interface ClipItem {
 }
 
 export interface Config {
-    limit: number;
-    pinned: boolean;
-    showSearch: boolean;
-    paused: boolean;
-    autoStar: boolean;
-    activeList: List;
+    readonly limit: number;
+    readonly pinned: boolean;
+    readonly showSearch: boolean;
+    readonly paused: boolean;
+    readonly autoStar: boolean;
+    readonly openAtLogin: boolean;
+    readonly activeList: List;
 }
 
 export interface List {

@@ -4,9 +4,8 @@ import { updateRenderer } from "../util/updateRenderer";
 import { removeAllItems } from "./removeAllItems";
 
 export function removeList() {
-    const config = storage.getConfig();
+    const { activeList } = storage.getConfig();
     const lists = storage.getLists();
-    const { activeList } = config;
 
     if (defaultLists.some((l) => l.id === activeList.id)) {
         throw Error(`Can't remove default list '${activeList.name}'`);
@@ -18,7 +17,7 @@ export function removeList() {
     removeAllItems(false);
 
     storage.setLists(lists.filter((l) => l.id !== activeList.id));
-    storage.setConfig({ ...config, activeList: AllList });
+    storage.patchConfig({ activeList: AllList });
 
     updateRenderer();
 }

@@ -6,8 +6,7 @@ export function searchItems(command: SearchItemsCommand) {
     storage.setSearch({ text: command.text, type: command.type });
     const config = storage.getConfig();
     if (!config.showSearch) {
-        config.showSearch = true;
-        storage.setConfig(config);
+        storage.patchConfig({ showSearch: true });
     }
     updateRenderer();
 }

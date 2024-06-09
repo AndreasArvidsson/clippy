@@ -9,7 +9,6 @@ export function createList(command: CreateListCommand) {
     const listName = command.name;
 
     if (listName) {
-        const config = storage.getConfig();
         const lists = storage.getLists();
 
         if (
@@ -24,11 +23,10 @@ export function createList(command: CreateListCommand) {
             name: listName,
         };
 
-        config.activeList = list;
         lists.push(list);
 
-        storage.setConfig(config);
         storage.setLists(lists);
+        storage.patchConfig({ activeList: list });
 
         updateRenderer();
     } else {

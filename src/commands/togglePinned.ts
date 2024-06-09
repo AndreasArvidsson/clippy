@@ -1,15 +1,15 @@
 import { storage } from "../storage";
-import { updateConfig } from "../util/updateConfig";
+import { patchConfig } from "../util/patchConfig";
 import { getWindow } from "../window";
 
 export function togglePinned(pinned?: boolean) {
     const config = storage.getConfig();
-    config.pinned = pinned ?? !config.pinned;
-    updateConfig(config);
+    pinned = pinned ?? !config.pinned;
+    patchConfig({ pinned });
 
     const window = getWindow();
 
-    if (config.pinned && !window.isVisible()) {
+    if (pinned && !window.isVisible()) {
         window.showInactive();
     }
 }

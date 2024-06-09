@@ -30,6 +30,7 @@ const configDefault: Storage = {
         showSearch: false,
         paused: false,
         autoStar: false,
+        openAtLogin: false,
         activeList: AllList,
     },
     lists: [],
@@ -59,8 +60,8 @@ export const storage = {
         return _storage.config;
     },
 
-    setConfig(config: Config) {
-        _storage.config = config;
+    patchConfig(config: Partial<Config>) {
+        _storage.config = { ..._storage.config, ...config };
         saveStorage();
     },
 

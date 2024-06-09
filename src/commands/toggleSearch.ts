@@ -1,8 +1,9 @@
 import { storage } from "../storage";
-import { updateConfig } from "../util/updateConfig";
+import { patchConfig } from "../util/patchConfig";
 
 export function toggleSearch(show?: boolean) {
     const config = storage.getConfig();
-    config.showSearch = show ?? !config.showSearch;
-    updateConfig(config);
+    patchConfig({
+        showSearch: show ?? !config.showSearch,
+    });
 }
