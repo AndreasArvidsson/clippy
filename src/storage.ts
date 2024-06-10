@@ -17,6 +17,7 @@ import {
     writeJsonFile,
 } from "./util/io";
 import { showErrorNotification } from "./util/notifications";
+import { isProduction } from "./util/runMode";
 
 const userDataDir = app.getPath("userData");
 const storageFile = path.join(userDataDir, "config.json");
@@ -41,9 +42,11 @@ let _clipboardItems: ClipItem[] = [];
 let _search: Search = {};
 
 function updateOpenAtLogin() {
-    app.setLoginItemSettings({
-        openAtLogin: _storage.config.openAtLogin,
-    });
+    if (isProduction()) {
+        app.setLoginItemSettings({
+            openAtLogin: _storage.config.openAtLogin,
+        });
+    }
 }
 
 export const storage = {
