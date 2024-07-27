@@ -1,5 +1,7 @@
 import { app } from "electron";
 import type { Command } from "../types/Command";
+import type { ClipItem } from "../types/types";
+import { showErrorNotification } from "../util/notifications";
 import { assignItemsToList } from "./assignItemsToList";
 import { copyItems } from "./copyItems";
 import { createList } from "./createList";
@@ -18,7 +20,16 @@ import { togglePaused } from "./togglePaused";
 import { togglePinned } from "./togglePinned";
 import { toggleSearch } from "./toggleSearch";
 
-export function runCommand(command: Command): unknown {
+export function runCommand(command: Command): ClipItem[] | void {
+    try {
+        return runCommandInternal(command);
+    } catch (error) {
+        showErrorNotification(`Command ${command.id} failed`, error);
+        throw error;
+    }
+}
+
+function runCommandInternal(command: Command): ClipItem[] | void {
     console.debug(command);
 
     switch (command.id) {

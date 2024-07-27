@@ -9,5 +9,6 @@ export function showErrorNotification(message: string, error?: unknown) {
         const errorString = error instanceof Error ? error.message : String(error);
         return `${message}\n${errorString}`;
     })();
+    console.log(body);
     new Notification({ title: "Error", body }).show();
 }
