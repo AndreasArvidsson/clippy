@@ -8,7 +8,7 @@
     "license": "MIT",
     "main": "out/main.js",
     "scripts": {
-        "clean": "rm -rf out/*",
+        "clean": "rm -rf out dist",
         "start": "npm run build && electron .",
         "build": "npm run compile && npm run prepareAssets",
         "compile": "tsc -p .",
