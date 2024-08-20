@@ -13,8 +13,12 @@ import { showErrorNotification } from "./util/notifications";
 import { onDarkModeChange } from "./util/onDarkModeChange";
 import { updateRenderer } from "./util/updateRenderer";
 import { createWindow } from "./window";
+import { isMacOS } from "./util/isMacOS";
+
 
 void app.whenReady().then(async () => {
+    const isMac = isMacOS();
+
     await storage.init();
 
     clipboardList.onChange(updateRenderer);
@@ -31,7 +35,13 @@ void app.whenReady().then(async () => {
         }
     });
 
-    const rpc = new RpcServer<Command>(NAME, "Control+Shift+Alt+O");
+    let hotkey;
+    if (isMac) {
+        hotkey = "Cmd+Shift+F18";
+    } else {
+        hotkey = "Control+Shift+Alt+O";
+    }
+    const rpc = new RpcServer<Command>(NAME, hotkey);
     rpc.onCommand((command) => runCommand(command));
 
     const iconPath = getIconPath();
