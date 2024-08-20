@@ -9,11 +9,10 @@ import { createTray } from "./tray";
 import type { Command } from "./types/Command";
 import type { MenuType } from "./types/types";
 import { getRendererData } from "./util/getRendererData";
+import { isMacOS } from "./util/isMacOS";
 import { onDarkModeChange } from "./util/onDarkModeChange";
 import { updateRenderer } from "./util/updateRenderer";
 import { createWindow } from "./window";
-import { isMacOS } from "./util/isMacOS";
-
 
 void app.whenReady().then(async () => {
     const isMac = isMacOS();
@@ -28,13 +27,8 @@ void app.whenReady().then(async () => {
 
     ipcMain.on("command", (_, command: Command) => runCommand(command));
 
-    let hotkey;
-    if (isMac) {
-        hotkey = "Cmd+Shift+F18";
-    } else {
-        hotkey = "Control+Shift+Alt+O";
-    }
-    const rpc = new RpcServer<Command>(NAME, hotkey);
+    const keybind = isMac ? "Cmd+Shift+F18" : "Control+Shift+Alt+O";
+    const rpc = new RpcServer<Command>(NAME, keybind);
 
     rpc.onCommand((command) => runCommand(command));
 
