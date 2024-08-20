@@ -1,17 +1,19 @@
 {
     "name": "clippy",
     "displayName": "Clippy",
+    "productName": "Clippy",
     "description": "Clipboard manager with RPC",
     "version": "1.0.0",
     "author": "AndreasArvidsson",
     "license": "MIT",
     "main": "out/main.js",
     "scripts": {
-        "clean": "rm -rf out/*",
+        "clean": "rm -rf out dist",
+        "start": "npm run build && electron .",
         "build": "npm run compile && npm run prepareAssets",
         "compile": "tsc -p .",
         "prepareAssets": "tsx prepareAssets.ts",
-        "start": "npm run build && electron .",
+        "package": "npm run build && tsx packager.ts",
         "test": "eslint src && prettier --check .",
         "fix": "prettier --write ."
     },
@@ -24,7 +26,7 @@
         "uuid": "9.0.1"
     },
     "devDependencies": {
-        "@electron-forge/cli": "7.4.0",
+        "@electron/packager": "18.3.2",
         "@types/node": "20.12.7",
         "@types/react-dom": "18.2.25",
         "@types/uuid": "9.0.8",

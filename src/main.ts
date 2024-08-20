@@ -9,7 +9,6 @@ import { createTray } from "./tray";
 import type { Command } from "./types/Command";
 import type { MenuType } from "./types/types";
 import { getRendererData } from "./util/getRendererData";
-import { showErrorNotification } from "./util/notifications";
 import { onDarkModeChange } from "./util/onDarkModeChange";
 import { updateRenderer } from "./util/updateRenderer";
 import { createWindow } from "./window";
@@ -27,13 +26,7 @@ void app.whenReady().then(async () => {
 
     ipcMain.on("menu", (_, menuType: MenuType) => showMenu(menuType));
 
-    ipcMain.on("command", (_, command: Command) => {
-        try {
-            return runCommand(command);
-        } catch (error) {
-            showErrorNotification(`Command ${command.id} failed`, error);
-        }
-    });
+    ipcMain.on("command", (_, command: Command) => runCommand(command));
 
     let hotkey;
     if (isMac) {
@@ -42,6 +35,7 @@ void app.whenReady().then(async () => {
         hotkey = "Control+Shift+Alt+O";
     }
     const rpc = new RpcServer<Command>(NAME, hotkey);
+
     rpc.onCommand((command) => runCommand(command));
 
     const iconPath = getIconPath();
