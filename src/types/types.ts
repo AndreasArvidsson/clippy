@@ -1,6 +1,7 @@
 import type { ReadBookmark } from "electron";
 
 export type ClipItemType = "text" | "image";
+export type SearchType = "text" | "image" | "url";
 
 export interface ClipItemMeta {
     readonly src?: string;
