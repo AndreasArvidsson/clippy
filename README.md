@@ -2,11 +2,20 @@
 
 Clipboard manager with RPC. Support keyboard, mouse and excellent Talon Voice integration.
 
-## Running
+## Run
 
 ```
 $ npm install
 $ npm start
+```
+
+## Package app
+
+Creates `dist` folder with executable
+
+```
+$ npm install
+$ npm package
 ```
 
 ## Talon user scripts
