@@ -1,4 +1,4 @@
-import { GearFill, PauseFill, StarFill } from "react-bootstrap-icons";
+import { PauseFill, StarFill } from "react-bootstrap-icons";
 import api from "./api";
 
 interface Props {
@@ -21,10 +21,12 @@ export function Footer({ paused, autoStar }: Props): JSX.Element {
             >
                 <StarFill />
             </button>
-            <div className="title" />
-            <button className="icon-btn" onClick={() => console.log("TODO")}>
+
+            {/* TODO: Activate settings icon when we actually have a settings menu */}
+            {/* <div className="title" /> */}
+            {/* <button className="icon-btn" onClick={() => console.log("TODO")}>
                 <GearFill />
-            </button>
+            </button> */}
             {/* TODO: Do we really need this? */}
             {/* <button className="icon-btn" onClick={() => api.menu({ type: "remove" })}>
                 <TrashFill />
