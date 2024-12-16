@@ -43,12 +43,14 @@ export default class RpcServer<T> {
         this.executing = true;
 
         try {
-            const { uuid, data, returnCommandOutput, waitForFinish } = await readRequest(
+            const { uuid, args, returnCommandOutput, waitForFinish } = await readRequest(
                 this.requestPath,
             );
 
+            const data = args[0] as T;
+
             try {
-                const callbackPromise = Promise.resolve(this.callback!(data as T));
+                const callbackPromise = Promise.resolve(this.callback!(data));
 
                 let returnValue: unknown = null;
 

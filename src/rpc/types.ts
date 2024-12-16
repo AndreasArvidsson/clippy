@@ -6,7 +6,8 @@ export interface Request {
     uuid: string;
 
     /** The data payload */
-    data: unknown;
+    commandId: string;
+    args: unknown[];
 
     /**
      * A boolean indicating if we should return the output of the command

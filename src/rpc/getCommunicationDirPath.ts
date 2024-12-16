@@ -8,9 +8,5 @@ export function getCommunicationDirPath(name: string): string {
     // bother with a suffix
     const suffix = info.uid >= 0 ? `-${info.uid}` : "";
 
-    return join(tmpdir(), `${cleanName(name)}${suffix}`);
-}
-
-function cleanName(name: string): string {
-    return name.replace(/[^a-zA-Z0-9_]/g, "-").toLowerCase();
+    return join(tmpdir(), `${name}${suffix}`);
 }
