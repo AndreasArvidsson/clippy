@@ -20,8 +20,7 @@ $ npm package
 
 ## Talon user scripts
 
--   [Talon RPC client](https://github.com/AndreasArvidsson/andreas-talon/blob/master/core/rpc_client)
--   [Clippy Talon](https://github.com/AndreasArvidsson/andreas-talon/tree/master/plugins/clippy)
+-   [Clippy Talon](https://github.com/AndreasArvidsson/andreas-talon/tree/master/apps/clippy)
 
 ### Usage example
 
