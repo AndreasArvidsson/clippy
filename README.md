@@ -37,3 +37,7 @@ def clippy_show_hide():
 ### Mac OS. Clipboard doesn't update
 
 `chmod +x node_modules/clipboard-event/platform/clipboard-event-handler-mac`
+
+## Images
+
+![Clippy](./images/clippy.png)
