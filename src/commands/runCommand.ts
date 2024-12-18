@@ -1,6 +1,7 @@
 import { app } from "electron";
 import type { Command } from "../types/Command";
-import type { ClipItem } from "../types/types";
+import type { ClipItem, Visibility } from "../types/types";
+import { handleVisibility } from "./handleVisibility";
 import { showErrorNotification } from "../util/notifications";
 import { assignItemsToList } from "./assignItemsToList";
 import { copyItems } from "./copyItems";
@@ -12,7 +13,7 @@ import { removeList } from "./removeList";
 import { renameItems } from "./renameItems";
 import { renameList } from "./renameList";
 import { searchItems } from "./searchItems";
-import { showHide } from "./showHide";
+import { hideWindow, showWindow, toggleShowHide, toggleShowInactiveHide } from "./showHide";
 import { switchList } from "./switchList";
 import { toggleAutoStar } from "./toggleAutoStar";
 import { toggleDevTools } from "./toggleDevTools";
@@ -32,19 +33,25 @@ export function runCommand(command: Command): ClipItem[] | void {
 function runCommandInternal(command: Command): ClipItem[] | void {
     console.debug(command);
 
+    let result: ClipItem[] | undefined;
+    let preferredVisibility: Visibility = "show";
+
     switch (command.id) {
         case "exit":
             app.exit();
             return;
 
         case "toggleShowHide":
-            showHide();
+            toggleShowHide();
+            return;
+        case "toggleShowInactiveHide":
+            toggleShowInactiveHide();
             return;
         case "show":
-            showHide(true);
+            showWindow();
             return;
         case "hide":
-            showHide(false);
+            hideWindow();
             return;
 
         case "togglePinned":
@@ -121,9 +128,11 @@ function runCommandInternal(command: Command): ClipItem[] | void {
             break;
         case "copyItems":
             copyItems(command);
-            return;
+            preferredVisibility = "hide";
+            break;
         case "getItems":
-            return getItems(command);
+            result = getItems(command);
+            break;
         case "removeItems":
             removeItems(command);
             break;
@@ -135,7 +144,9 @@ function runCommandInternal(command: Command): ClipItem[] | void {
             assertUnreachable(command);
     }
 
-    showHide(true);
+    handleVisibility(preferredVisibility, command.visibility);
+
+    return result;
 }
 
 function assertUnreachable(command: never): never {

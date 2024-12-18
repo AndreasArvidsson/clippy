@@ -2,6 +2,7 @@ import type { ReadBookmark } from "electron";
 
 export type ClipItemType = "text" | "image";
 export type SearchType = "text" | "image" | "url";
+export type Visibility = "no-op" | "show" | "showInactive" | "hide" | "hideOrBlur";
 
 export interface ClipItemMeta {
     readonly src?: string;

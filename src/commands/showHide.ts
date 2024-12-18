@@ -1,21 +1,70 @@
+import { storage } from "../storage";
 import { updateRenderer } from "../util/updateRenderer";
 import { getWindow } from "../window";
 
-export function showHide(show?: boolean) {
+export function showWindow() {
     const window = getWindow();
-    show = show ?? !window.isVisible();
 
-    if (show) {
-        if (window.isVisible()) {
-            return;
-        }
-
+    if (!window.isVisible()) {
         // Update render even while window is hidden to make sure it's up to date when shown
         updateRenderer(true);
 
-        // Show without taking focus
+        window.show();
+    } else if (!window.isFocused()) {
+        window.focus();
+    }
+}
+
+export function showInactiveWindow() {
+    const window = getWindow();
+
+    if (!window.isVisible()) {
+        updateRenderer(true);
+
         window.showInactive();
-    } else {
+    }
+}
+
+export function hideWindow() {
+    const window = getWindow();
+    const config = storage.getConfig();
+
+    if (window.isVisible() && !config.pinned) {
         window.hide();
+    }
+}
+
+export function hideOrBlurWindow() {
+    const window = getWindow();
+    const config = storage.getConfig();
+
+    if (window.isVisible()) {
+        if (config.pinned) {
+            if (window.isFocused()) {
+                window.blur();
+            }
+        } else {
+            window.hide();
+        }
+    }
+}
+
+export function toggleShowHide() {
+    const window = getWindow();
+
+    if (window.isVisible()) {
+        hideWindow();
+    } else {
+        showWindow();
+    }
+}
+
+export function toggleShowInactiveHide() {
+    const window = getWindow();
+
+    if (window.isVisible()) {
+        hideWindow();
+    } else {
+        showInactiveWindow();
     }
 }
