@@ -1,19 +1,25 @@
 import { app } from "electron";
 import type { Command } from "../types/Command";
 import type { ClipItem, Visibility } from "../types/types";
-import { handleVisibility } from "./handleVisibility";
 import { showErrorNotification } from "../util/notifications";
 import { assignItemsToList } from "./assignItemsToList";
 import { copyItems } from "./copyItems";
 import { createList } from "./createList";
 import { getItems } from "./getItems";
+import { handleVisibility } from "./handleVisibility";
 import { removeAllItems } from "./removeAllItems";
 import { removeItems } from "./removeItems";
 import { removeList } from "./removeList";
 import { renameItems } from "./renameItems";
 import { renameList } from "./renameList";
 import { searchItems } from "./searchItems";
-import { hideWindow, showWindow, toggleShowHide, toggleShowInactiveHide } from "./showHide";
+import {
+    hideWindow,
+    showInactiveWindow,
+    showWindow,
+    toggleShowHide,
+    toggleShowInactiveHide,
+} from "./showHide";
 import { switchList } from "./switchList";
 import { toggleAutoStar } from "./toggleAutoStar";
 import { toggleDevTools } from "./toggleDevTools";
@@ -57,6 +63,9 @@ function runCommandInternal(command: Command): ClipItem[] | void {
             return;
         case "show":
             showWindow();
+            return;
+        case "showInactive":
+            showInactiveWindow();
             return;
         case "hide":
             hideWindow();

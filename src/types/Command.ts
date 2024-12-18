@@ -23,10 +23,10 @@ export type Target = PrimitiveTarget | RangeTarget | SearchTarget;
 
 interface SimpleCommand {
     id:
-        | "exit"
         | "toggleShowHide"
         | "toggleShowInactiveHide"
         | "show"
+        | "showInactive"
         | "hide"
         | "togglePinned"
         | "pin"
@@ -44,7 +44,8 @@ interface SimpleCommand {
         | "enableAutoStar"
         | "disableAutoStar"
         | "removeAllItems"
-        | "removeList";
+        | "removeList"
+        | "exit";
     visibility?: Visibility;
 }
 
