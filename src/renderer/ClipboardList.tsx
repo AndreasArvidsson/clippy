@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { StarFill } from "react-bootstrap-icons";
+import { apiRenderer } from "../api";
 import { StarredList, type ClipItem } from "../types/types";
 import { getCommandForHints, hintsToPrimitiveTargets } from "../util/getCommandForHints";
 import { indexToHint } from "../util/hints";
-import { apiRenderer } from "../api";
+import classNames from "./classNames";
 import { isNormal } from "./keybinds";
 
 interface Props {
@@ -79,7 +80,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
                     <React.Fragment key={item.id}>
                         {i > 0 && <hr />}
                         <div
-                            className={"row clip-item" + (isSelected ? " selected" : "")}
+                            className={classNames("row clip-item", { selected: isSelected })}
                             onClick={(e) => {
                                 if (e.ctrlKey) {
                                     if (isSelected) {
@@ -105,9 +106,9 @@ export function ClipboardList({ items }: Props): JSX.Element {
                             </div>
                             <div className="col-auto">
                                 <button
-                                    className={
-                                        "icon-btn star-btn" + (item.list != null ? " active" : "")
-                                    }
+                                    className={classNames("icon-btn star-btn", {
+                                        active: item.list != null,
+                                    })}
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         apiRenderer.command({

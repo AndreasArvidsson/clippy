@@ -2,6 +2,7 @@ import { app } from "electron";
 import type { Command } from "../types/Command";
 import type { ClipItem, Visibility } from "../types/types";
 import { showErrorNotification } from "../util/notifications";
+import { patchConfig } from "../util/patchConfig";
 import { assignItemsToList } from "./assignItemsToList";
 import { copyItems } from "./copyItems";
 import { createList } from "./createList";
@@ -167,6 +168,10 @@ function runCommandInternal(command: Command): ClipItem[] | void {
             break;
         case "renameItems":
             renameItems(command);
+            break;
+
+        case "patchConfig":
+            patchConfig(command.config);
             break;
 
         default:

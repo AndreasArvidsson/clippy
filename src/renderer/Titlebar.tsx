@@ -1,7 +1,8 @@
 import { CaretDownFill, PinAngleFill, Search, XCircleFill, XLg } from "react-bootstrap-icons";
+import { apiRenderer } from "../api";
 import type { List } from "../types/types";
 import { isMacOS } from "../util/isMacOS";
-import { apiRenderer } from "../api";
+import classNames from "./classNames";
 
 interface Props {
     activeList: List;
@@ -25,7 +26,7 @@ export function Titlebar({
     function renderPinned() {
         return (
             <button
-                className={"icon-btn" + (pinned ? " active" : "")}
+                className={classNames("icon-btn", { active: pinned })}
                 onClick={() => apiRenderer.command({ id: "togglePinned" })}
             >
                 <PinAngleFill />
@@ -34,12 +35,9 @@ export function Titlebar({
     }
 
     function renderSearch() {
-        if (showSettings) {
-            return null;
-        }
         return (
             <button
-                className={"icon-btn" + (showSearch ? " active" : "")}
+                className={classNames("icon-btn", { active: showSearch })}
                 onClick={() => apiRenderer.command({ id: "toggleSearch" })}
             >
                 <Search />
@@ -60,7 +58,10 @@ export function Titlebar({
     }
 
     function renderTitle() {
-        const className = "title " + (isMac ? "padding-left" : "padding-right");
+        const className = classNames("title", {
+            "padding-left": isMac,
+            "padding-right": !isMac,
+        });
 
         if (showSettings) {
             return <div className={className}>Settings</div>;

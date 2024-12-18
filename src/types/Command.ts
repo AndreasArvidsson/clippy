@@ -1,4 +1,4 @@
-import type { ClipItemType, SearchType, Visibility } from "./types";
+import type { ClipItemType, Config, SearchType, Visibility } from "./types";
 
 export interface PrimitiveTarget {
     type: "primitive";
@@ -109,6 +109,12 @@ export interface RenameListCommand {
     name?: string;
 }
 
+export interface PatchConfigCommand {
+    id: "patchConfig";
+    visibility?: Visibility;
+    config: Partial<Config>;
+}
+
 export type Command =
     | SimpleCommand
     | SearchItemsCommand
@@ -119,4 +125,5 @@ export type Command =
     | AssignItemsToListCommand
     | SwitchListCommand
     | CreateListCommand
-    | RenameListCommand;
+    | RenameListCommand
+    | PatchConfigCommand;

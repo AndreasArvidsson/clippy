@@ -37,12 +37,12 @@ export interface ClipItem {
 }
 
 export interface Config {
-    readonly limit: number;
+    readonly openAtLogin: boolean;
     readonly pinned: boolean;
     readonly showSearch: boolean;
     readonly paused: boolean;
     readonly autoStar: boolean;
-    readonly openAtLogin: boolean;
+    readonly limit: number;
     readonly activeList: List;
 }
 
