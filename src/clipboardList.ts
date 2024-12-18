@@ -15,7 +15,7 @@ export function onChange(callback: () => void) {
         const items = storage.getClipboardItems();
 
         if (item.id !== items[0]?.id) {
-            // TODO: Try to detect quick changes that are then reverted.
+            // FIXME: Try to detect quick changes that are then reverted.
             // Remove this once we have proper transient formats from Talon side.
             if (item.id === items[1]?.id && t2 - t1 < 300) {
                 storage.removeItems([items[0]]);

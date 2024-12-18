@@ -24,7 +24,6 @@
         }
     },
     "rules": {
-        "no-warning-comments": "warn",
         "@typescript-eslint/semi": "warn",
         "@typescript-eslint/no-explicit-any": "off",
         "curly": "error",
@@ -34,6 +33,12 @@
             "always",
             {
                 "null": "never"
+            }
+        ],
+        "no-warning-comments": [
+            "warn",
+            {
+                "terms": ["todo"]
             }
         ],
         "@typescript-eslint/no-unused-vars": [
