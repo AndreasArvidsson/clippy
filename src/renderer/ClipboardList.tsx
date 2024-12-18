@@ -40,15 +40,15 @@ export function ClipboardList({ items }: Props): JSX.Element {
                     type="search"
                     defaultValue={item.name}
                     onClick={(e) => e.stopPropagation()}
+                    onBlur={() => setRenameItemId(undefined)}
                     onKeyDown={(e) => {
                         e.stopPropagation();
                         if (e.key === "Enter") {
-                            const text = e.currentTarget.value.trim();
                             setRenameItemId(undefined);
                             api.command({
                                 id: "renameItems",
                                 targets: hintsToPrimitiveTargets([hint]),
-                                text,
+                                name: e.currentTarget.value,
                             });
                         } else if (e.key === "Escape") {
                             setRenameItemId(undefined);

@@ -23,6 +23,14 @@ import { toggleSearch } from "./toggleSearch";
 
 export function runCommand(command: Command): ClipItem[] | void {
     try {
+        return runCommandWithThrow(command);
+    } catch (_error) {
+        // Do nothing
+    }
+}
+
+export function runCommandWithThrow(command: Command): ClipItem[] | void {
+    try {
         return runCommandInternal(command);
     } catch (error) {
         showErrorNotification(`Command ${command.id} failed`, error);
@@ -132,6 +140,7 @@ function runCommandInternal(command: Command): ClipItem[] | void {
             break;
         case "getItems":
             result = getItems(command);
+            preferredVisibility = "no-op";
             break;
         case "removeItems":
             removeItems(command);

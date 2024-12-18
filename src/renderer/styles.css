@@ -65,10 +65,11 @@ main {
     background-color: #f0f0f0;
     color: #000000;
     font-weight: 600;
+    margin-top: 0.2rem;
 }
 
 .clip-name + .clip-content-image {
-    margin-top: 0.25rem;
+    margin-top: 0.4rem;
 }
 
 /* TODO: Remove if not needed */

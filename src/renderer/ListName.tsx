@@ -19,12 +19,12 @@ export function ListName({ type, activeList, done }: Props): JSX.Element {
                 type="search"
                 defaultValue={defaultValue}
                 onClick={(e) => e.stopPropagation()}
+                onBlur={() => done()}
                 onKeyDown={(e) => {
                     e.stopPropagation();
                     if (e.key === "Enter") {
-                        const name = e.currentTarget.value.trim();
                         done();
-                        api.command({ id: type, name });
+                        api.command({ id: type, name: e.currentTarget.value });
                     } else if (e.key === "Escape") {
                         done();
                     }

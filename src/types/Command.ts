@@ -77,20 +77,14 @@ export interface RenameItemsCommand {
     id: "renameItems";
     visibility?: Visibility;
     targets: Target[];
-    text?: string;
+    name?: string;
 }
+
 export interface AssignItemsToListCommand {
     id: "assignItemsToList";
     visibility?: Visibility;
     targets: Target[];
     name?: string;
-}
-
-export interface RenameItemsCommand {
-    id: "renameItems";
-    visibility?: Visibility;
-    targets: Target[];
-    text?: string;
 }
 
 export interface SwitchListCommand {

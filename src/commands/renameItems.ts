@@ -8,9 +8,10 @@ import { getWindow } from "../window";
 export function renameItems(command: RenameItemsCommand) {
     const items = processTargets(command.targets);
 
-    if (command.text != null) {
+    if (command.name != null) {
+        const name = command.name.trim() || undefined;
         for (const item of items) {
-            item.name = command.text || undefined;
+            item.name = name;
         }
         storage.replaceItems(items);
         updateRenderer();

@@ -1,7 +1,7 @@
 import { app, ipcMain } from "electron";
 import { showMenu } from "./Menu";
 import * as clipboardList from "./clipboardList";
-import { runCommand } from "./commands/runCommand";
+import { runCommand, runCommandWithThrow } from "./commands/runCommand";
 import { RPC_COMMUNICATION_DIR, getIconPath } from "./constants";
 import RpcServer from "./rpc/RpcServer";
 import { storage } from "./storage";
@@ -30,7 +30,7 @@ void app.whenReady().then(async () => {
     const keybind = isMac ? "Cmd+Shift+F18" : "Control+Shift+Alt+O";
     const rpc = new RpcServer<Command>(RPC_COMMUNICATION_DIR, keybind);
 
-    rpc.onCommand((command) => runCommand(command));
+    rpc.onCommand((command) => runCommandWithThrow(command));
 
     const iconPath = getIconPath();
     const tray = await createTray(iconPath);
