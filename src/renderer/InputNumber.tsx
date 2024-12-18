@@ -43,7 +43,7 @@ export default function InputNumber({
     };
 
     return (
-        <div className="input-group">
+        <div className="input-group" title={title}>
             <span className="input-group-text">{children}</span>
             <input
                 type="text"
@@ -54,7 +54,6 @@ export default function InputNumber({
                     },
                     className,
                 )}
-                title={title}
                 value={currentValue}
                 placeholder={placeholder}
                 disabled={disabled}

@@ -37,7 +37,7 @@ export interface ClipItem {
 }
 
 export interface Config {
-    readonly openAtLogin: boolean;
+    readonly startWithOS: boolean;
     readonly pinned: boolean;
     readonly showSearch: boolean;
     readonly paused: boolean;

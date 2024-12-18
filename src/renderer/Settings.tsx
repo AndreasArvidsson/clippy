@@ -1,3 +1,4 @@
+import { Question, QuestionCircleFill } from "react-bootstrap-icons";
 import { apiRenderer } from "../api";
 import type { Config } from "../types/types";
 import InputCheckbox from "./InputCheckbox";
@@ -15,10 +16,11 @@ export function Settings({ config }: Props): JSX.Element {
     return (
         <main className="container-fluid">
             <InputCheckbox
-                checked={config.openAtLogin}
-                onChange={(openAtLogin) => patchConfig({ openAtLogin })}
+                title="Run at operating system start"
+                checked={config.startWithOS}
+                onChange={(openAtLogin) => patchConfig({ startWithOS: openAtLogin })}
             >
-                Open at login
+                Start with OS
             </InputCheckbox>
 
             <InputCheckbox checked={config.pinned} onChange={(pinned) => patchConfig({ pinned })}>
@@ -45,6 +47,7 @@ export function Settings({ config }: Props): JSX.Element {
 
             <InputNumber
                 isInteger
+                title="hello"
                 value={config.limit}
                 onChange={(limit) => patchConfig({ limit })}
             >

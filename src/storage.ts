@@ -28,7 +28,7 @@ const configDefault: Storage = {
         showSearch: false,
         paused: false,
         autoStar: false,
-        openAtLogin: false,
+        startWithOS: false,
         activeList: AllList,
     },
     lists: [],
@@ -42,7 +42,7 @@ let _showSettings = false;
 function updateOpenAtLogin() {
     if (isProduction()) {
         app.setLoginItemSettings({
-            openAtLogin: _storage.config.openAtLogin,
+            openAtLogin: _storage.config.startWithOS,
         });
     }
 }
@@ -73,7 +73,7 @@ export const storage = {
         _storage.config = { ..._storage.config, ...config };
         saveStorage();
 
-        if (config.openAtLogin !== undefined) {
+        if (config.startWithOS !== undefined) {
             updateOpenAtLogin();
         }
     },

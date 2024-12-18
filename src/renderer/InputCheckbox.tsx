@@ -19,12 +19,11 @@ export default function InputCheckbox({
 }: Props): JSX.Element {
     return (
         <div className={classNames("form-check", className)}>
-            <label>
+            <label title={title}>
                 <input
                     type="checkbox"
                     className="form-check-input"
                     checked={checked}
-                    title={title}
                     disabled={disabled}
                     onChange={onChange ? (e) => onChange(e.target.checked) : undefined}
                 />
