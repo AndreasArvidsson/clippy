@@ -1,10 +1,9 @@
+import { apiMain } from "../api";
+import { isWindowVisible } from "../window";
 import { getRendererData } from "./getRendererData";
-import { getWindow } from "../window";
 
 export function updateRenderer(force = false) {
-    const window = getWindow();
-
-    if (window.isVisible() || force) {
-        window.webContents.send("update", getRendererData());
+    if (isWindowVisible() || force) {
+        apiMain.update(getRendererData());
     }
 }

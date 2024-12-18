@@ -11,7 +11,5 @@ export function showErrorNotification(message: string, error?: unknown) {
         return `${message}\n${errorString}`;
     })();
 
-    console.log(body);
-
     new Notification({ title: "Error", body }).show();
 }

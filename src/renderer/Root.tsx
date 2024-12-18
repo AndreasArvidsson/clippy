@@ -1,28 +1,52 @@
 import { useEffect, useState } from "react";
+import { apiRenderer } from "../api";
 import type { RendererData } from "../types/types";
 import { ClipboardList } from "./ClipboardList";
 import { Footer } from "./Footer";
-import { ListName } from "./ListName";
 import type { ListNameType } from "./ListName";
+import { ListName } from "./ListName";
 import { Search } from "./Search";
+import { Settings } from "./Settings";
 import { Titlebar } from "./Titlebar";
-import api from "./api";
-import "./keybinds";
+import { registerKeybindings } from "./keybinds";
 
 export function Root(): JSX.Element | null {
     const [data, setData] = useState<RendererData>();
     const [listNameType, setListNameType] = useState<ListNameType>();
 
     useEffect(() => {
-        api.getInitialData().then(setData).catch(console.error);
-        api.onUpdate(setData);
-        api.onCreateList(() => setListNameType("createList"));
-        api.onRenameList(() => setListNameType("renameList"));
+        apiRenderer.getRendererData().then(setData).catch(console.error);
+        apiRenderer.onUpdate(setData);
+        apiRenderer.onCreateList(() => setListNameType("createList"));
+        apiRenderer.onRenameList(() => setListNameType("renameList"));
+        registerKeybindings();
     }, []);
 
     if (data == null) {
         return null;
     }
+
+    const renderBody = () => {
+        if (data.showSettings) {
+            return <Settings config={data.config} />;
+        }
+
+        return (
+            <>
+                {listNameType != null && (
+                    <ListName
+                        type={listNameType}
+                        activeList={data.config.activeList}
+                        done={() => setListNameType(undefined)}
+                    />
+                )}
+
+                {data.config.showSearch && <Search value={data.search} />}
+
+                <ClipboardList items={data.items} />
+            </>
+        );
+    };
 
     return (
         <>
@@ -32,20 +56,16 @@ export function Root(): JSX.Element | null {
                 totalCount={data.totalCount}
                 pinned={data.config.pinned}
                 showSearch={data.config.showSearch}
+                showSettings={data.showSettings}
             />
 
-            {listNameType != null && (
-                <ListName
-                    type={listNameType}
-                    activeList={data.config.activeList}
-                    done={() => setListNameType(undefined)}
-                />
-            )}
-            {data.config.showSearch && <Search value={data.search} />}
+            {renderBody()}
 
-            <ClipboardList items={data.items} />
-
-            <Footer paused={data.config.paused} autoStar={data.config.autoStar} />
+            <Footer
+                paused={data.config.paused}
+                autoStar={data.config.autoStar}
+                showSettings={data.showSettings}
+            />
         </>
     );
 }

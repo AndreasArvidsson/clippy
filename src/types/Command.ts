@@ -43,6 +43,9 @@ interface SimpleCommand {
         | "toggleAutoStar"
         | "enableAutoStar"
         | "disableAutoStar"
+        | "toggleSettings"
+        | "showSettings"
+        | "hideSettings"
         | "removeAllItems"
         | "removeList"
         | "exit";

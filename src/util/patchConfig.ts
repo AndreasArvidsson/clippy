@@ -4,5 +4,6 @@ import { updateRenderer } from "./updateRenderer";
 
 export function patchConfig(config: Partial<Config>) {
     storage.patchConfig(config);
+
     updateRenderer();
 }

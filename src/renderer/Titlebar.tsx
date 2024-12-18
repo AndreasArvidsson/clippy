@@ -1,7 +1,7 @@
 import { CaretDownFill, PinAngleFill, Search, XCircleFill, XLg } from "react-bootstrap-icons";
 import type { List } from "../types/types";
 import { isMacOS } from "../util/isMacOS";
-import api from "./api";
+import { apiRenderer } from "../api";
 
 interface Props {
     activeList: List;
@@ -9,6 +9,7 @@ interface Props {
     totalCount: number;
     pinned: boolean;
     showSearch: boolean;
+    showSettings: boolean;
 }
 
 const isMac = isMacOS();
@@ -19,12 +20,13 @@ export function Titlebar({
     totalCount,
     pinned,
     showSearch,
+    showSettings,
 }: Props): JSX.Element {
     function renderPinned() {
         return (
             <button
                 className={"icon-btn" + (pinned ? " active" : "")}
-                onClick={() => api.command({ id: "togglePinned" })}
+                onClick={() => apiRenderer.command({ id: "togglePinned" })}
             >
                 <PinAngleFill />
             </button>
@@ -32,10 +34,13 @@ export function Titlebar({
     }
 
     function renderSearch() {
+        if (showSettings) {
+            return null;
+        }
         return (
             <button
                 className={"icon-btn" + (showSearch ? " active" : "")}
-                onClick={() => api.command({ id: "toggleSearch" })}
+                onClick={() => apiRenderer.command({ id: "toggleSearch" })}
             >
                 <Search />
             </button>
@@ -47,7 +52,7 @@ export function Titlebar({
             <button
                 className="icon-btn"
                 id="close-btn"
-                onClick={() => api.command({ id: "toggleShowHide" })}
+                onClick={() => apiRenderer.command({ id: "toggleShowHide" })}
             >
                 {isMac ? <XCircleFill /> : <XLg />}
             </button>
@@ -55,15 +60,22 @@ export function Titlebar({
     }
 
     function renderTitle() {
+        const className = "title " + (isMac ? "padding-left" : "padding-right");
+
+        if (showSettings) {
+            return <div className={className}>Settings</div>;
+        }
+
         const count = (() => {
             if (itemsCount === totalCount) {
                 return `${itemsCount}`;
             }
             return `${itemsCount} / ${totalCount}`;
         })();
+
         return (
-            <div className={"title " + (isMac ? "padding-left" : "padding-right")}>
-                <button className="icon-btn" onClick={() => api.menu({ type: "lists" })}>
+            <div className={className}>
+                <button className="icon-btn" onClick={() => apiRenderer.menu({ type: "lists" })}>
                     {activeList.name} ({count}) <CaretDownFill />
                 </button>
             </div>

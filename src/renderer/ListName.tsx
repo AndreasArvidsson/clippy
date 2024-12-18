@@ -1,5 +1,5 @@
 import type { List } from "../types/types";
-import api from "./api";
+import { apiRenderer } from "../api";
 
 export type ListNameType = "createList" | "renameList";
 
@@ -24,7 +24,7 @@ export function ListName({ type, activeList, done }: Props): JSX.Element {
                     e.stopPropagation();
                     if (e.key === "Enter") {
                         done();
-                        api.command({ id: type, name: e.currentTarget.value });
+                        apiRenderer.command({ id: type, name: e.currentTarget.value });
                     } else if (e.key === "Escape") {
                         done();
                     }

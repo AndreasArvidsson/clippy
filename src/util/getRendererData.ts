@@ -8,6 +8,7 @@ export function getRendererData(): RendererData {
         totalCount: items.length,
         config: storage.getConfig(),
         search: storage.getSearch(),
+        showSettings: storage.getShowSettings(),
         items: applySearchFilters(items, true),
     };
 }

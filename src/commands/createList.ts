@@ -1,9 +1,9 @@
 import * as uuid from "uuid";
+import { apiMain } from "../api";
 import { storage } from "../storage";
 import type { CreateListCommand } from "../types/Command";
 import { defaultLists, type List } from "../types/types";
 import { updateRenderer } from "../util/updateRenderer";
-import { getWindow } from "../window";
 
 export function createList(command: CreateListCommand) {
     if (command.name != null) {
@@ -30,7 +30,6 @@ export function createList(command: CreateListCommand) {
 
         updateRenderer();
     } else {
-        const window = getWindow();
-        window.webContents.send("createList");
+        apiMain.simple("createList");
     }
 }

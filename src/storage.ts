@@ -18,10 +18,7 @@ import {
 } from "./util/io";
 import { showErrorNotification } from "./util/notifications";
 import { isProduction } from "./util/runMode";
-
-const userDataDir = app.getPath("userData");
-const storageFile = path.join(userDataDir, "config.json");
-const clipItemsDir = path.join(userDataDir, "clipboardItems");
+import { storagePaths } from "./util/storagePaths";
 
 const configDefault: Storage = {
     windowBounds: undefined,
@@ -40,6 +37,7 @@ const configDefault: Storage = {
 let _storage: Storage = configDefault;
 let _clipboardItems: ClipItem[] = [];
 let _search: Search = {};
+let _showSettings = false;
 
 function updateOpenAtLogin() {
     if (isProduction()) {
@@ -51,6 +49,7 @@ function updateOpenAtLogin() {
 
 export const storage = {
     async init() {
+        const { clipItemsDir } = storagePaths.init();
         await makeDirs(clipItemsDir);
         _storage = await loadStorage();
         _clipboardItems = await readItemsFromDisk();
@@ -90,6 +89,14 @@ export const storage = {
 
     getSearch(): Search {
         return _search;
+    },
+
+    setShowSettings(show: boolean) {
+        _showSettings = show;
+    },
+
+    getShowSettings(): boolean {
+        return _showSettings;
     },
 
     setSearch(search: Search) {
@@ -134,6 +141,7 @@ export const storage = {
 };
 
 async function loadStorage() {
+    const { storageFile } = storagePaths.get();
     if (fileExists(storageFile)) {
         const storage = await readJsonFile<Storage>(storageFile);
         return Object.assign({}, configDefault, storage);
@@ -142,6 +150,7 @@ async function loadStorage() {
 }
 
 async function readItemsFromDisk(): Promise<ClipItem[]> {
+    const { clipItemsDir } = storagePaths.get();
     const files = await getFilesInFolder(clipItemsDir);
     const promises = files.map((file) => {
         const filepath = path.join(clipItemsDir, file);
@@ -153,6 +162,7 @@ async function readItemsFromDisk(): Promise<ClipItem[]> {
 }
 
 function saveStorage() {
+    const { storageFile } = storagePaths.get();
     writeJsonFile(storageFile, _storage).catch((error) => {
         showErrorNotification("Failed to save storage", error);
     });
@@ -171,6 +181,7 @@ function deleteClipItemFromDisk(item: ClipItem) {
 }
 
 function getFilePath(item: ClipItem) {
+    const { clipItemsDir } = storagePaths.get();
     return path.join(clipItemsDir, `${item.id}.json`);
 }
 

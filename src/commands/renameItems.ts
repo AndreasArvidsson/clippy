@@ -1,9 +1,9 @@
+import { apiMain } from "../api";
 import { storage } from "../storage";
 import type { RenameItemsCommand } from "../types/Command";
 import type { ClipItem } from "../types/types";
 import { processTargets } from "../util/processTargets";
 import { updateRenderer } from "../util/updateRenderer";
-import { getWindow } from "../window";
 
 export function renameItems(command: RenameItemsCommand) {
     const items = processTargets(command.targets);
@@ -17,8 +17,7 @@ export function renameItems(command: RenameItemsCommand) {
         updateRenderer();
     } else {
         const item = assertSingleItem(items);
-        const window = getWindow();
-        window.webContents.send("renameItem", item.id);
+        apiMain.renameItem(item.id);
     }
 }
 

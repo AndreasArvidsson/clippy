@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { ClipItemType, Search } from "../types/types";
-import api from "./api";
+import { apiRenderer } from "../api";
 
 interface Props {
     value: Search;
@@ -16,7 +16,7 @@ export function Search({ value }: Props): JSX.Element {
     function onChange(change: Partial<Search>) {
         const value = { ...search, ...change };
         setSearch(value);
-        api.command({ id: "searchItems", text: value.text, type: value.type });
+        apiRenderer.command({ id: "searchItems", text: value.text, type: value.type });
     }
 
     return (

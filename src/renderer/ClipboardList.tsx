@@ -3,7 +3,7 @@ import { StarFill } from "react-bootstrap-icons";
 import { StarredList, type ClipItem } from "../types/types";
 import { getCommandForHints, hintsToPrimitiveTargets } from "../util/getCommandForHints";
 import { indexToHint } from "../util/hints";
-import api from "./api";
+import { apiRenderer } from "../api";
 import { isNormal } from "./keybinds";
 
 interface Props {
@@ -16,13 +16,13 @@ export function ClipboardList({ items }: Props): JSX.Element {
     const [renameItemId, setRenameItemId] = useState<string>();
 
     useEffect(() => {
-        api.onRenameItem(setRenameItemId);
+        apiRenderer.onRenameItem(setRenameItemId);
 
         function onKeyDown(e: KeyboardEvent) {
             if (isNormal(e) && e.key === "Enter") {
                 const hints = [...ref.current];
                 hints.sort();
-                api.command(getCommandForHints("copyItems", hints));
+                apiRenderer.command(getCommandForHints("copyItems", hints));
             }
         }
 
@@ -45,7 +45,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
                         e.stopPropagation();
                         if (e.key === "Enter") {
                             setRenameItemId(undefined);
-                            api.command({
+                            apiRenderer.command({
                                 id: "renameItems",
                                 targets: hintsToPrimitiveTargets([hint]),
                                 name: e.currentTarget.value,
@@ -90,12 +90,12 @@ export function ClipboardList({ items }: Props): JSX.Element {
                                     ref.current = [...selected];
                                     setSelected(ref.current);
                                 } else {
-                                    api.command(getCommandForHints("copyItems", [hint]));
+                                    apiRenderer.command(getCommandForHints("copyItems", [hint]));
                                 }
                             }}
                             onContextMenu={(e) => {
                                 e.preventDefault();
-                                api.menu({ type: "clipItemContext", hint });
+                                apiRenderer.menu({ type: "clipItemContext", hint });
                             }}
                         >
                             <div className="col-auto clip-number">{hint}</div>
@@ -110,7 +110,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
                                     }
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        api.command({
+                                        apiRenderer.command({
                                             id: "assignItemsToList",
                                             targets: hintsToPrimitiveTargets([hint]),
                                             name: item.list != null ? undefined : StarredList.name,

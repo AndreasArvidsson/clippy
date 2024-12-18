@@ -66,6 +66,7 @@ export interface RendererData {
     readonly totalCount: number;
     readonly config: Config;
     readonly search: Search;
+    readonly showSettings: boolean;
     readonly items: ClipItem[];
 }
 

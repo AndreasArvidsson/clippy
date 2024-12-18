@@ -26,6 +26,7 @@ import { toggleDevTools } from "./toggleDevTools";
 import { togglePaused } from "./togglePaused";
 import { togglePinned } from "./togglePinned";
 import { toggleSearch } from "./toggleSearch";
+import { toggleSettings } from "./toggleSettings";
 
 export function runCommand(command: Command): ClipItem[] | void {
     try {
@@ -119,6 +120,16 @@ function runCommandInternal(command: Command): ClipItem[] | void {
             break;
         case "disableAutoStar":
             toggleAutoStar(false);
+            break;
+
+        case "toggleSettings":
+            toggleSettings();
+            break;
+        case "showSettings":
+            toggleSettings(true);
+            break;
+        case "hideSettings":
+            toggleSettings(false);
             break;
 
         case "switchList":

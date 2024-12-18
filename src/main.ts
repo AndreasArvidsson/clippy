@@ -1,5 +1,6 @@
-import { app, ipcMain } from "electron";
+import { app } from "electron";
 import { showMenu } from "./Menu";
+import { apiMain } from "./api";
 import * as clipboardList from "./clipboardList";
 import { runCommand, runCommandWithThrow } from "./commands/runCommand";
 import { RPC_COMMUNICATION_DIR, getIconPath } from "./constants";
@@ -7,7 +8,6 @@ import RpcServer from "./rpc/RpcServer";
 import { storage } from "./storage";
 import { createTray } from "./tray";
 import type { Command } from "./types/Command";
-import type { MenuType } from "./types/types";
 import { getRendererData } from "./util/getRendererData";
 import { isMacOS } from "./util/isMacOS";
 import { onDarkModeChange } from "./util/onDarkModeChange";
@@ -21,16 +21,13 @@ void app.whenReady().then(async () => {
 
     clipboardList.onChange(updateRenderer);
 
-    ipcMain.handle("getInitialData", getRendererData);
-
-    ipcMain.on("menu", (_, menuType: MenuType) => showMenu(menuType));
-
-    ipcMain.on("command", (_, command: Command) => runCommand(command));
+    apiMain.onGetRendererData(getRendererData);
+    apiMain.onMenu(showMenu);
+    apiMain.onCommand(runCommand);
 
     const keybind = isMac ? "Cmd+Shift+F18" : "Control+Shift+Alt+O";
     const rpc = new RpcServer<Command>(RPC_COMMUNICATION_DIR, keybind);
-
-    rpc.onCommand((command) => runCommandWithThrow(command));
+    rpc.onCommand(runCommandWithThrow);
 
     const iconPath = getIconPath();
     const tray = await createTray(iconPath);

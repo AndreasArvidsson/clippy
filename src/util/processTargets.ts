@@ -75,7 +75,6 @@ function isSearchMatch(item: ClipItem, itemType?: SearchType, pattern?: RegExp):
             if (item.text == null || !urlRegex.test(item.text)) {
                 return false;
             }
-            console.log(item.text.match(urlRegex));
         } else if (item.type !== itemType) {
             return false;
         }

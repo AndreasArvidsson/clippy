@@ -1,8 +1,8 @@
+import { apiMain } from "../api";
 import { storage } from "../storage";
 import type { RenameListCommand } from "../types/Command";
 import { defaultLists } from "../types/types";
 import { updateRenderer } from "../util/updateRenderer";
-import { getWindow } from "../window";
 
 export function renameList(command: RenameListCommand) {
     if (command.name != null) {
@@ -39,7 +39,6 @@ export function renameList(command: RenameListCommand) {
 
         updateRenderer();
     } else {
-        const window = getWindow();
-        window.webContents.send("renameList");
+        apiMain.simple("renameList");
     }
 }
