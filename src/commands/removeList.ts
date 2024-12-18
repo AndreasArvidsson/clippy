@@ -10,6 +10,7 @@ export function removeList() {
     if (defaultLists.some((l) => l.id === activeList.id)) {
         throw Error(`Can't remove default list '${activeList.name}'`);
     }
+
     if (!lists.some((l) => l.id === activeList.id)) {
         throw Error(`Can't remove unknown list '${activeList.name}'`);
     }

@@ -3,7 +3,7 @@ import { patchConfig } from "../util/patchConfig";
 
 export function toggleAutoStar(enabled?: boolean) {
     const config = storage.getConfig();
-    patchConfig({
-        autoStar: enabled ?? !config.autoStar,
-    });
+    const autoStar = enabled ?? !config.autoStar;
+
+    patchConfig({ autoStar });
 }

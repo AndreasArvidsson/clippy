@@ -35,17 +35,17 @@ function runCommandInternal(command: Command): ClipItem[] | void {
     switch (command.id) {
         case "exit":
             app.exit();
-            break;
+            return;
 
         case "toggleShowHide":
             showHide();
-            break;
+            return;
         case "show":
             showHide(true);
-            break;
+            return;
         case "hide":
             showHide(false);
-            break;
+            return;
 
         case "togglePinned":
             togglePinned();
@@ -121,7 +121,7 @@ function runCommandInternal(command: Command): ClipItem[] | void {
             break;
         case "copyItems":
             copyItems(command);
-            break;
+            return;
         case "getItems":
             return getItems(command);
         case "removeItems":
@@ -134,6 +134,8 @@ function runCommandInternal(command: Command): ClipItem[] | void {
         default:
             assertUnreachable(command);
     }
+
+    showHide(true);
 }
 
 function assertUnreachable(command: never): never {

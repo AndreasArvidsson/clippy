@@ -19,9 +19,7 @@ export function switchList(command: SwitchListCommand) {
         throw Error(`Can't switch to unknown list '${listName}'`);
     }
 
-    storage.patchConfig({
-        activeList: list,
-    });
+    storage.patchConfig({ activeList: list });
 
     updateRenderer();
 }

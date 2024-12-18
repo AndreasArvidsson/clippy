@@ -1,8 +1,8 @@
 import { storage } from "../storage";
 import type { RenameItemsCommand } from "../types/Command";
 import type { ClipItem } from "../types/types";
-import { updateRenderer } from "../util/updateRenderer";
 import { processTargets } from "../util/processTargets";
+import { updateRenderer } from "../util/updateRenderer";
 import { getWindow } from "../window";
 
 export function renameItems(command: RenameItemsCommand) {

@@ -2,8 +2,8 @@ import * as uuid from "uuid";
 import { storage } from "../storage";
 import type { CreateListCommand } from "../types/Command";
 import { defaultLists, type List } from "../types/types";
-import { getWindow } from "../window";
 import { updateRenderer } from "../util/updateRenderer";
+import { getWindow } from "../window";
 
 export function createList(command: CreateListCommand) {
     const listName = command.name;

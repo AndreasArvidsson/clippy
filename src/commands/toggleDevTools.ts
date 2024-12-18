@@ -1,19 +1,18 @@
 import { getWindow } from "../window";
 
-export function toggleDevTools(show?: boolean) {
+export function toggleDevTools(enabled?: boolean) {
     const window = getWindow();
+    const show = enabled ?? shouldShow();
 
-    if (!window.isVisible()) {
-        return;
-    }
-
-    if (show != null) {
-        if (show) {
-            window.webContents.openDevTools();
-        } else {
-            window.webContents.closeDevTools();
-        }
+    if (show) {
+        window.webContents.openDevTools();
     } else {
-        window.webContents.toggleDevTools();
+        window.webContents.closeDevTools();
     }
+}
+
+function shouldShow(): boolean {
+    const window = getWindow();
+    // If the window is hidden always show dev tools
+    return !window.webContents.isDevToolsOpened() || !window.isVisible();
 }

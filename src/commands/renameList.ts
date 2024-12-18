@@ -1,8 +1,8 @@
 import { storage } from "../storage";
 import type { RenameListCommand } from "../types/Command";
 import { defaultLists } from "../types/types";
-import { getWindow } from "../window";
 import { updateRenderer } from "../util/updateRenderer";
+import { getWindow } from "../window";
 
 export function renameList(command: RenameListCommand) {
     const newName = command.name;

@@ -1,9 +1,15 @@
 import { storage } from "../storage";
 import { patchConfig } from "../util/patchConfig";
+import { isWindowVisible } from "../window";
 
-export function toggleSearch(show?: boolean) {
+export function toggleSearch(enabled?: boolean) {
+    const showSearch = enabled ?? shouldShow();
+
+    patchConfig({ showSearch });
+}
+
+function shouldShow(): boolean {
     const config = storage.getConfig();
-    patchConfig({
-        showSearch: show ?? !config.showSearch,
-    });
+    // If the window is hidden always show search
+    return !config.showSearch || !isWindowVisible();
 }

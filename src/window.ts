@@ -29,6 +29,10 @@ export function getWindow(): BrowserWindow {
     return _window;
 }
 
+export function isWindowVisible(): boolean {
+    return getWindow().isVisible();
+}
+
 function getBounds(): Partial<Electron.Rectangle> {
     if (_bounds != null) {
         return _bounds;

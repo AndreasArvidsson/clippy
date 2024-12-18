@@ -8,10 +8,13 @@ export function assignItemsToList(command: AssignItemsToListCommand) {
     const listId = getListId(command.name);
 
     const items = processTargets(command.targets);
+
     for (const item of items) {
         item.list = listId;
     }
+
     storage.replaceItems(items);
+
     updateRenderer();
 }
 

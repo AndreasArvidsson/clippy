@@ -4,5 +4,6 @@ import { updateRenderer } from "../util/updateRenderer";
 
 export function removeItems(command: RemoveItemsCommand) {
     clipboardList.removeTargets(command.targets);
+
     updateRenderer();
 }

@@ -3,8 +3,9 @@ import { getWindow } from "../window";
 
 export function showHide(show?: boolean) {
     const window = getWindow();
+    show = show ?? !window.isVisible();
 
-    if (show ?? !window.isVisible()) {
+    if (show) {
         if (window.isVisible()) {
             return;
         }
