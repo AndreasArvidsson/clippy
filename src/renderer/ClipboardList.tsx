@@ -120,17 +120,6 @@ export function ClipboardList({ items }: Props): JSX.Element {
                                     <StarFill />
                                 </button>
                             </div>
-                            {/* TODO: Do we really need this?  */}
-                            {/* <div className="col-auto clip-trash">
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        api.command(getCommandForHints("removeItems", [hint]));
-                                    }}
-                                >
-                                    <Trash />
-                                </button>
-                            </div> */}
                         </div>
                     </React.Fragment>
                 );
