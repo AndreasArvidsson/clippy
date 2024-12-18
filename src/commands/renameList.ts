@@ -36,8 +36,6 @@ export function renameList(command: RenameListCommand) {
         updateRenderer();
     } else {
         const window = getWindow();
-        if (window.isVisible()) {
-            window.webContents.send("renameList");
-        }
+        window.webContents.send("renameList");
     }
 }

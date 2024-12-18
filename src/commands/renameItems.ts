@@ -17,9 +17,7 @@ export function renameItems(command: RenameItemsCommand) {
     } else {
         const item = assertSingleItem(items);
         const window = getWindow();
-        if (window.isVisible()) {
-            window.webContents.send("renameItem", item.id);
-        }
+        window.webContents.send("renameItem", item.id);
     }
 }
 

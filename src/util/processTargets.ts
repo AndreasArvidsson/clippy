@@ -1,13 +1,13 @@
 import type { PrimitiveTarget, RangeTarget, SearchTarget, Target } from "../types/Command";
 import type { ClipItem, SearchType } from "../types/types";
-import { getWindow } from "../window";
+import { isWindowVisible } from "../window";
 import { applySearchFilters, getListItems } from "./filterItems";
 import { hintToIndex } from "./hints";
 import { constructSearchRegexp, urlRegex } from "./regex";
 
 export function processTargets(targets: Target[]): ClipItem[] {
     const listItems = getListItems();
-    const items = applySearchFilters(listItems, getWindow().isVisible());
+    const items = applySearchFilters(listItems, isWindowVisible());
     const results: ClipItem[] = [];
     for (const target of targets) {
         results.push(...processTarget(items, target));

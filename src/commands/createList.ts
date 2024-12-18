@@ -31,8 +31,6 @@ export function createList(command: CreateListCommand) {
         updateRenderer();
     } else {
         const window = getWindow();
-        if (window.isVisible()) {
-            window.webContents.send("createList");
-        }
+        window.webContents.send("createList");
     }
 }
