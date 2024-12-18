@@ -1,5 +1,11 @@
 import type { Visibility } from "../types/types";
-import { hideOrBlurWindow, hideWindow, showInactiveWindow, showWindow } from "./showHide";
+import {
+    hideOrBlurWindowIfPinned,
+    hideWindow,
+    hideWindowIfNotPinned,
+    showInactiveWindow,
+    showWindow,
+} from "./showHide";
 
 export function handleVisibility(preferredVisibility: Visibility, commandVisibility?: Visibility) {
     const visibility = commandVisibility ?? preferredVisibility;
@@ -21,8 +27,12 @@ export function handleVisibility(preferredVisibility: Visibility, commandVisibil
             hideWindow();
             break;
 
-        case "hideOrBlur":
-            hideOrBlurWindow();
+        case "hideIfNotPinned":
+            hideWindowIfNotPinned();
+            break;
+
+        case "hideOrBlurIfPinned":
+            hideOrBlurWindowIfPinned();
             break;
 
         default: {

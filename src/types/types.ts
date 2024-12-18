@@ -2,7 +2,20 @@ import type { ReadBookmark } from "electron";
 
 export type ClipItemType = "text" | "image";
 export type SearchType = "text" | "image" | "url";
-export type Visibility = "no-op" | "show" | "showInactive" | "hide" | "hideOrBlur";
+
+export type Visibility =
+    // Do nothing
+    | "no-op"
+    // Show and focus window
+    | "show"
+    // Show, but don't focus window
+    | "showInactive"
+    // Hide window
+    | "hide"
+    // Hide window if not pinned
+    | "hideIfNotPinned"
+    // Hide window if not pinned. If pinned, blur window
+    | "hideOrBlurIfPinned";
 
 export interface ClipItemMeta {
     readonly src?: string;

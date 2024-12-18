@@ -136,11 +136,11 @@ function runCommandInternal(command: Command): ClipItem[] | void {
             break;
         case "copyItems":
             copyItems(command);
-            preferredVisibility = "hide";
+            preferredVisibility = "hideIfNotPinned";
             break;
         case "getItems":
             result = getItems(command);
-            preferredVisibility = "no-op";
+            preferredVisibility = "hideIfNotPinned";
             break;
         case "removeItems":
             removeItems(command);

@@ -10,7 +10,9 @@ export function showWindow() {
         updateRenderer(true);
 
         window.show();
-    } else if (!window.isFocused()) {
+    }
+    // Always show the window focused / active
+    else if (!window.isFocused()) {
         window.focus();
     }
 }
@@ -27,14 +29,21 @@ export function showInactiveWindow() {
 
 export function hideWindow() {
     const window = getWindow();
-    const config = storage.getConfig();
 
-    if (window.isVisible() && !config.pinned) {
+    if (window.isVisible()) {
         window.hide();
     }
 }
 
-export function hideOrBlurWindow() {
+export function hideWindowIfNotPinned() {
+    const config = storage.getConfig();
+
+    if (!config.pinned) {
+        hideWindow();
+    }
+}
+
+export function hideOrBlurWindowIfPinned() {
     const window = getWindow();
     const config = storage.getConfig();
 
