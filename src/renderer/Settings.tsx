@@ -18,7 +18,7 @@ export function Settings({ config }: Props): JSX.Element {
             <InputCheckbox
                 title={texts.startWithOS.desc}
                 checked={config.startWithOS}
-                onChange={(openAtLogin) => patchConfig({ startWithOS: openAtLogin })}
+                onChange={(startWithOS) => patchConfig({ startWithOS })}
             >
                 {texts.startWithOS.title}
             </InputCheckbox>
