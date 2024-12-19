@@ -72,21 +72,6 @@ main {
     margin-top: 0.4rem;
 }
 
-/* TODO: Remove if not needed */
-/* .clip-item .clip-trash {
-    display: none;
-} */
-
-/* .clip-item:hover .clip-trash {
-    display: flex;
-} */
-
-/* .clip-trash > button {
-    border: 0;
-    background-color: transparent;
-    color: red;
-} */
-
 button.icon-btn {
     font-size: 0.75rem;
     -webkit-app-region: no-drag;
