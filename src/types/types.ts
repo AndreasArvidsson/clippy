@@ -38,6 +38,7 @@ export interface ClipItem {
 
 export interface Config {
     readonly startWithOS: boolean;
+    readonly alwaysOnTop: boolean;
     readonly pinned: boolean;
     readonly showSearch: boolean;
     readonly paused: boolean;

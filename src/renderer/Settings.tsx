@@ -24,6 +24,14 @@ export function Settings({ config }: Props): JSX.Element {
             </InputCheckbox>
 
             <InputCheckbox
+                title={texts.alwaysOnTop.desc}
+                checked={config.alwaysOnTop}
+                onChange={(alwaysOnTop) => patchConfig({ alwaysOnTop })}
+            >
+                {texts.alwaysOnTop.title}
+            </InputCheckbox>
+
+            <InputCheckbox
                 title={texts.pinned.desc}
                 checked={config.pinned}
                 onChange={(pinned) => patchConfig({ pinned })}

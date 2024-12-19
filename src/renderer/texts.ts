@@ -3,6 +3,10 @@ export const texts: Record<TextId, Text> = {
         title: "Start with OS",
         desc: "When enabled, run at operating system start",
     },
+    alwaysOnTop: {
+        title: "Always on top",
+        desc: "When enabled, the window will always be on top",
+    },
     pinned: {
         title: "Pin window",
         desc: "When enabled, the window will not close on copy commands",
@@ -40,6 +44,7 @@ export function getText(id: TextId): string {
 
 type TextId =
     | "startWithOS"
+    | "alwaysOnTop"
     | "pinned"
     | "search"
     | "close"

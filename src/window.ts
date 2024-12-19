@@ -44,18 +44,19 @@ function getBounds(): Partial<Electron.Rectangle> {
     };
 }
 
-function _createWindow(iconPath: string): BrowserWindow {
+function _createWindow(icon: string): BrowserWindow {
     const bounds = getBounds();
+    const { alwaysOnTop } = storage.getConfig();
 
     nativeTheme.themeSource = "system";
 
     const win = new BrowserWindow({
-        icon: iconPath,
         title: NAME,
+        icon,
+        alwaysOnTop,
 
         show: false,
         frame: false,
-        alwaysOnTop: true,
         center: true,
         x: bounds?.x,
         y: bounds?.y,

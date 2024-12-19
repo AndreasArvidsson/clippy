@@ -19,16 +19,18 @@ import {
 import { showErrorNotification } from "./util/notifications";
 import { isProduction } from "./util/runMode";
 import { storagePaths } from "./util/storagePaths";
+import { getWindow } from "./window";
 
 const configDefault: Storage = {
     windowBounds: undefined,
     config: {
-        limit: 1000,
+        startWithOS: false,
+        alwaysOnTop: false,
         pinned: false,
         showSearch: false,
         paused: false,
         autoStar: false,
-        startWithOS: false,
+        limit: 1000,
         activeList: AllList,
     },
     lists: [],
@@ -73,8 +75,11 @@ export const storage = {
         _storage.config = { ..._storage.config, ...config };
         saveStorage();
 
-        if (config.startWithOS !== undefined) {
+        if (config.startWithOS != null) {
             updateStartWithOS();
+        }
+        if (config.alwaysOnTop != null) {
+            getWindow().setAlwaysOnTop(config.alwaysOnTop);
         }
     },
 
