@@ -1,9 +1,9 @@
 import { storage } from "../storage";
 import type { SearchItemsCommand } from "../types/Command";
-import { patchConfig } from "../util/patchConfig";
+import { updateRenderer } from "../util/updateRenderer";
 
 export function searchItems(command: SearchItemsCommand) {
-    storage.setSearch({ text: command.text, type: command.type });
+    storage.setSearch({ show: true, text: command.text, type: command.type });
 
-    patchConfig({ showSearch: true });
+    updateRenderer();
 }

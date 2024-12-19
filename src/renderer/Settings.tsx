@@ -40,14 +40,6 @@ export function Settings({ config }: Props): JSX.Element {
             </InputCheckbox>
 
             <InputCheckbox
-                title={texts.search.desc}
-                checked={config.showSearch}
-                onChange={(showSearch) => patchConfig({ showSearch })}
-            >
-                {texts.search.title}
-            </InputCheckbox>
-
-            <InputCheckbox
                 title={texts.paused.desc}
                 checked={config.paused}
                 onChange={(paused) => patchConfig({ paused })}

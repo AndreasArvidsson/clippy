@@ -16,10 +16,9 @@ export function getListItems(): ClipItem[] {
 }
 
 export function applySearchFilters(items: ClipItem[], isVisible: boolean): ClipItem[] {
-    const { showSearch } = storage.getConfig();
     const search = storage.getSearch();
 
-    if (showSearch && isVisible) {
+    if (search.show && isVisible) {
         if (search.type) {
             items = items.filter((item) => item.type === search.type);
         }

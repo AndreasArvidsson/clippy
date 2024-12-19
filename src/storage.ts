@@ -1,4 +1,3 @@
-import { app } from "electron";
 import path from "node:path";
 import {
     AllList,
@@ -6,7 +5,7 @@ import {
     type Config,
     type List,
     type Search,
-    type Storage,
+    type StorageState,
 } from "./types/types";
 import {
     deleteFile,
@@ -17,83 +16,86 @@ import {
     writeJsonFile,
 } from "./util/io";
 import { showErrorNotification } from "./util/notifications";
-import { isProduction } from "./util/runMode";
 import { storagePaths } from "./util/storagePaths";
+import { updateStartWithOS } from "./util/updateStartWithOS";
 import { getWindow } from "./window";
 
-const configDefault: Storage = {
+const stateDefault: StorageState = {
     windowBounds: undefined,
     config: {
         startWithOS: false,
         alwaysOnTop: false,
         pinned: false,
-        showSearch: false,
         paused: false,
         autoStar: false,
         limit: 1000,
         activeList: AllList,
     },
     lists: [],
-} as const;
+};
 
-let _storage: Storage = configDefault;
+let _state: StorageState = stateDefault;
 let _clipboardItems: ClipItem[] = [];
-let _search: Search = {};
+let _search: Search = { show: false };
 let _showSettings = false;
-
-function updateStartWithOS() {
-    if (isProduction()) {
-        app.setLoginItemSettings({
-            openAtLogin: _storage.config.startWithOS,
-        });
-    }
-}
 
 export const storage = {
     async init() {
         const { clipItemsDir } = storagePaths.init();
         await makeDirs(clipItemsDir);
-        _storage = await loadStorage();
+        _state = await readStateFile();
         _clipboardItems = await readItemsFromDisk();
-        updateStartWithOS();
+        updateStartWithOS(_state.config.startWithOS);
     },
 
     getWindowBounds(): Electron.Rectangle | undefined {
-        return _storage.windowBounds;
+        return _state.windowBounds;
     },
 
     setWindowBounds(bounds: Electron.Rectangle) {
-        _storage.windowBounds = bounds;
-        saveStorage();
+        _state.windowBounds = bounds;
+        saveStateFile();
     },
 
     getConfig(): Config {
-        return _storage.config;
+        return _state.config;
     },
 
     patchConfig(config: Partial<Config>) {
-        _storage.config = { ..._storage.config, ...config };
-        saveStorage();
+        _state.config = { ..._state.config, ...config };
+
+        saveStateFile();
 
         if (config.startWithOS != null) {
-            updateStartWithOS();
+            updateStartWithOS(config.startWithOS);
         }
         if (config.alwaysOnTop != null) {
             getWindow().setAlwaysOnTop(config.alwaysOnTop);
         }
+        if (config.limit != null) {
+            applyLengthLimit();
+        }
     },
 
     getLists(): List[] {
-        return _storage.lists;
+        return _state.lists;
     },
 
     setLists(lists: List[]) {
-        _storage.lists = lists;
-        saveStorage();
+        _state.lists = lists;
+        saveStateFile();
     },
 
     getSearch(): Search {
         return _search;
+    },
+
+    setSearch(search: Search) {
+        _search = search;
+    },
+
+    setShowSearch(show: boolean) {
+        _search.show = show;
     },
 
     setShowSettings(show: boolean) {
@@ -102,10 +104,6 @@ export const storage = {
 
     getShowSettings(): boolean {
         return _showSettings;
-    },
-
-    setSearch(search: Search) {
-        _search = search;
     },
 
     getClipboardItems(): ClipItem[] {
@@ -124,8 +122,6 @@ export const storage = {
             _clipboardItems.splice(index, 1);
         }
         _clipboardItems.unshift(item);
-
-        item;
     },
 
     replaceItems(items: ClipItem[]) {
@@ -145,13 +141,20 @@ export const storage = {
     },
 };
 
-async function loadStorage() {
-    const { storageFile } = storagePaths.get();
-    if (fileExists(storageFile)) {
-        const storage = await readJsonFile<Storage>(storageFile);
-        return Object.assign({}, configDefault, storage);
+async function readStateFile() {
+    const { stateFile } = storagePaths.get();
+    if (fileExists(stateFile)) {
+        const state = await readJsonFile<StorageState>(stateFile);
+        return { ...stateDefault, ...state };
     }
-    return Object.assign({}, configDefault);
+    return { ...stateDefault };
+}
+
+function saveStateFile() {
+    const { stateFile } = storagePaths.get();
+    writeJsonFile(stateFile, _state).catch((error) => {
+        showErrorNotification("Failed to save storage", error);
+    });
 }
 
 async function readItemsFromDisk(): Promise<ClipItem[]> {
@@ -164,13 +167,6 @@ async function readItemsFromDisk(): Promise<ClipItem[]> {
     const items = await Promise.all(promises);
     items.sort((a, b) => b.created - a.created);
     return items;
-}
-
-function saveStorage() {
-    const { storageFile } = storagePaths.get();
-    writeJsonFile(storageFile, _storage).catch((error) => {
-        showErrorNotification("Failed to save storage", error);
-    });
 }
 
 function writeClipItemToDisk(item: ClipItem) {
@@ -191,12 +187,13 @@ function getFilePath(item: ClipItem) {
 }
 
 function applyLengthLimit() {
-    if (_clipboardItems.length > _storage.config.limit) {
+    while (_clipboardItems.length > _state.config.limit) {
         const index = _clipboardItems.findLastIndex((i) => i.list == null);
         // Index 0 is the most recent item, so we don't want to remove that.
-        if (index > 0) {
-            const removedItem = _clipboardItems.splice(index, 1)[0];
-            deleteClipItemFromDisk(removedItem);
+        if (index < 1) {
+            break;
         }
+        const removedItem = _clipboardItems.splice(index, 1)[0];
+        deleteClipItemFromDisk(removedItem);
     }
 }

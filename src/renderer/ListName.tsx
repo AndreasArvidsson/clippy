@@ -1,33 +1,32 @@
-import type { List } from "../types/types";
 import { apiRenderer } from "../api";
+import type { List } from "../types/types";
+import InputText from "./InputText";
 
 export type ListNameType = "createList" | "renameList";
 
 interface Props {
-    type: ListNameType;
+    type: ListNameType | undefined;
     activeList: List;
     done: () => void;
 }
-export function ListName({ type, activeList, done }: Props): JSX.Element {
+export function ListName({ type, activeList, done }: Props): JSX.Element | null {
+    if (type == null) {
+        return null;
+    }
+
     const isCreate = type === "createList";
     const defaultValue = isCreate ? undefined : activeList.name;
     return (
         <div>
-            <input
+            <InputText
+                className="form-control-sm"
                 autoFocus
-                className="form-control form-control-sm"
-                type="search"
-                defaultValue={defaultValue}
-                onClick={(e) => e.stopPropagation()}
+                placeholder="List name"
+                value={defaultValue}
                 onBlur={() => done()}
-                onKeyDown={(e) => {
-                    e.stopPropagation();
-                    if (e.key === "Enter") {
-                        done();
-                        apiRenderer.command({ id: type, name: e.currentTarget.value });
-                    } else if (e.key === "Escape") {
-                        done();
-                    }
+                onChange={(value) => {
+                    done();
+                    apiRenderer.command({ id: type, name: value });
                 }}
             />
         </div>

@@ -1,41 +1,30 @@
-import { useEffect, useState } from "react";
-import type { ClipItemType, Search } from "../types/types";
 import { apiRenderer } from "../api";
+import type { ClipItemType, Search } from "../types/types";
+import InputText from "./InputText";
 
 interface Props {
-    value: Search;
+    search: Search;
 }
 
-export function Search({ value }: Props): JSX.Element {
-    const [search, setSearch] = useState<Search>({});
-
-    useEffect(() => {
-        setSearch(value);
-    }, [value]);
-
+export function Search({ search }: Props): JSX.Element | null {
     function onChange(change: Partial<Search>) {
         const value = { ...search, ...change };
-        setSearch(value);
         apiRenderer.command({ id: "searchItems", text: value.text, type: value.type });
+    }
+
+    if (!search.show) {
+        return null;
     }
 
     return (
         <div className="search input-group">
-            <input
+            <InputText
                 type="search"
-                className="form-control form-control-sm"
-                value={search.text ?? ""}
-                autoFocus
+                className="form-control-sm"
                 placeholder="Search"
-                onKeyDown={(e) => {
-                    if (e.key === "Escape") {
-                        e.currentTarget.blur();
-                    }
-                    e.stopPropagation();
-                }}
-                onChange={(e) => {
-                    onChange({ text: e.target.value });
-                }}
+                autoFocus
+                value={search.text}
+                onChange={(value) => onChange({ text: value })}
             />
 
             <span>

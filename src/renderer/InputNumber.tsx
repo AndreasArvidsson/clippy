@@ -10,7 +10,8 @@ export interface Props {
     disabled?: boolean;
     invalid?: boolean;
     autoFocus?: boolean;
-    onChange?: (value: number) => void;
+    onChange: (value: number) => void;
+    onBlur?: () => void;
     children?: React.ReactNode;
 }
 
@@ -24,6 +25,7 @@ export default function InputNumber({
     invalid,
     autoFocus,
     onChange,
+    onBlur,
     children,
 }: Props) {
     const [currentValue, setCurrentValue] = useState("");
@@ -32,13 +34,15 @@ export default function InputNumber({
         setCurrentValue(value.toString());
     }, [value]);
 
-    const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-        const num = isInteger ? parseInt(e.target.value) : parseFloat(e.target.value);
+    const myOnChange = () => {
+        const num = isInteger ? parseInt(currentValue) : parseFloat(currentValue);
         if (isNaN(num)) {
             setCurrentValue(value.toString());
         } else {
             setCurrentValue(num.toString());
-            onChange!(num);
+            if (value !== num) {
+                onChange(num);
+            }
         }
     };
 
@@ -59,8 +63,19 @@ export default function InputNumber({
                 disabled={disabled}
                 autoFocus={autoFocus}
                 onChange={(e) => setCurrentValue(e.target.value)}
-                onBlur={onChange ? onBlur : undefined}
-                onKeyDown={(e) => e.stopPropagation()}
+                onBlur={() => {
+                    setCurrentValue(value.toString());
+                    onBlur?.();
+                }}
+                onKeyDown={(e) => {
+                    e.stopPropagation();
+                    if (e.key === "Enter") {
+                        myOnChange();
+                    } else if (e.key === "Escape") {
+                        e.preventDefault();
+                        e.currentTarget.blur();
+                    }
+                }}
             />
         </div>
     );

@@ -5,6 +5,7 @@ import { StarredList, type ClipItem } from "../types/types";
 import { getCommandForHints, hintsToPrimitiveTargets } from "../util/getCommandForHints";
 import { indexToHint } from "../util/hints";
 import classNames from "./classNames";
+import InputText from "./InputText";
 import { isNormal } from "./keybinds";
 
 interface Props {
@@ -35,25 +36,20 @@ export function ClipboardList({ items }: Props): JSX.Element {
     function renderRenameName(item: ClipItem, hint: string) {
         return (
             <div className="clip-name">
-                <input
-                    autoFocus
-                    className="form-control form-control-sm"
+                <InputText
                     type="search"
-                    defaultValue={item.name}
-                    onClick={(e) => e.stopPropagation()}
+                    className="form-control-sm"
+                    autoFocus
+                    placeholder="Item name"
+                    value={item.name}
                     onBlur={() => setRenameItemId(undefined)}
-                    onKeyDown={(e) => {
-                        e.stopPropagation();
-                        if (e.key === "Enter") {
-                            setRenameItemId(undefined);
-                            apiRenderer.command({
-                                id: "renameItems",
-                                targets: hintsToPrimitiveTargets([hint]),
-                                name: e.currentTarget.value,
-                            });
-                        } else if (e.key === "Escape") {
-                            setRenameItemId(undefined);
-                        }
+                    onChange={(value) => {
+                        setRenameItemId(undefined);
+                        apiRenderer.command({
+                            id: "renameItems",
+                            targets: hintsToPrimitiveTargets([hint]),
+                            name: value,
+                        });
                     }}
                 />
             </div>

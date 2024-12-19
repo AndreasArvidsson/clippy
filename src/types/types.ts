@@ -40,7 +40,6 @@ export interface Config {
     readonly startWithOS: boolean;
     readonly alwaysOnTop: boolean;
     readonly pinned: boolean;
-    readonly showSearch: boolean;
     readonly paused: boolean;
     readonly autoStar: boolean;
     readonly limit: number;
@@ -52,13 +51,14 @@ export interface List {
     name: string;
 }
 
-export interface Storage {
+export interface StorageState {
     windowBounds?: Electron.Rectangle;
     config: Config;
     lists: List[];
 }
 
 export interface Search {
+    show: boolean;
     readonly text?: string;
     readonly type?: ClipItemType;
 }

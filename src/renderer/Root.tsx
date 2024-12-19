@@ -33,15 +33,13 @@ export function Root(): JSX.Element | null {
 
         return (
             <>
-                {listNameType != null && (
-                    <ListName
-                        type={listNameType}
-                        activeList={data.config.activeList}
-                        done={() => setListNameType(undefined)}
-                    />
-                )}
+                <ListName
+                    type={listNameType}
+                    activeList={data.config.activeList}
+                    done={() => setListNameType(undefined)}
+                />
 
-                {data.config.showSearch && <Search value={data.search} />}
+                <Search search={data.search} />
 
                 <ClipboardList items={data.items} />
             </>
@@ -55,7 +53,7 @@ export function Root(): JSX.Element | null {
                 itemsCount={data.items.length}
                 totalCount={data.totalCount}
                 pinned={data.config.pinned}
-                showSearch={data.config.showSearch}
+                showSearch={data.search.show}
                 showSettings={data.showSettings}
             />
 

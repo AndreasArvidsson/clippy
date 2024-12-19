@@ -1,5 +1,5 @@
 import { storage } from "../storage";
-import { patchConfig } from "../util/patchConfig";
+import { patchConfig } from "./patchConfig";
 
 export function toggleAutoStar(enabled?: boolean) {
     const config = storage.getConfig();
