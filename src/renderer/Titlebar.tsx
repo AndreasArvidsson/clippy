@@ -3,6 +3,7 @@ import { apiRenderer } from "../api";
 import type { List } from "../types/types";
 import { isMacOS } from "../util/isMacOS";
 import classNames from "./classNames";
+import { getText } from "./texts";
 
 interface Props {
     activeList: List;
@@ -26,6 +27,7 @@ export function Titlebar({
     function renderPinned() {
         return (
             <button
+                title={getText("pinned")}
                 className={classNames("icon-btn", { active: pinned })}
                 onClick={() => apiRenderer.command({ id: "togglePinned" })}
             >
@@ -37,6 +39,7 @@ export function Titlebar({
     function renderSearch() {
         return (
             <button
+                title={getText("search")}
                 className={classNames("icon-btn", { active: showSearch })}
                 onClick={() => apiRenderer.command({ id: "toggleSearch" })}
             >
@@ -48,6 +51,7 @@ export function Titlebar({
     function renderClose() {
         return (
             <button
+                title={getText("close")}
                 className="icon-btn"
                 id="close-btn"
                 onClick={() => apiRenderer.command({ id: "toggleShowHide" })}

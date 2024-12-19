@@ -1,8 +1,8 @@
-import { Question, QuestionCircleFill } from "react-bootstrap-icons";
 import { apiRenderer } from "../api";
 import type { Config } from "../types/types";
 import InputCheckbox from "./InputCheckbox";
 import InputNumber from "./InputNumber";
+import { texts } from "./texts";
 
 interface Props {
     config: Config;
@@ -16,42 +16,52 @@ export function Settings({ config }: Props): JSX.Element {
     return (
         <main className="container-fluid">
             <InputCheckbox
-                title="Run at operating system start"
+                title={texts.startWithOS.desc}
                 checked={config.startWithOS}
                 onChange={(openAtLogin) => patchConfig({ startWithOS: openAtLogin })}
             >
-                Start with OS
-            </InputCheckbox>
-
-            <InputCheckbox checked={config.pinned} onChange={(pinned) => patchConfig({ pinned })}>
-                Pinned
+                {texts.startWithOS.title}
             </InputCheckbox>
 
             <InputCheckbox
+                title={texts.pinned.desc}
+                checked={config.pinned}
+                onChange={(pinned) => patchConfig({ pinned })}
+            >
+                {texts.pinned.title}
+            </InputCheckbox>
+
+            <InputCheckbox
+                title={texts.search.desc}
                 checked={config.showSearch}
                 onChange={(showSearch) => patchConfig({ showSearch })}
             >
-                Show search
-            </InputCheckbox>
-
-            <InputCheckbox checked={config.paused} onChange={(paused) => patchConfig({ paused })}>
-                Paused
+                {texts.search.title}
             </InputCheckbox>
 
             <InputCheckbox
+                title={texts.paused.desc}
+                checked={config.paused}
+                onChange={(paused) => patchConfig({ paused })}
+            >
+                {texts.paused.title}
+            </InputCheckbox>
+
+            <InputCheckbox
+                title={texts.autoStar.desc}
                 checked={config.autoStar}
                 onChange={(autoStar) => patchConfig({ autoStar })}
             >
-                Auto star
+                {texts.autoStar.title}
             </InputCheckbox>
 
             <InputNumber
+                title={texts.limit.desc}
                 isInteger
-                title="hello"
                 value={config.limit}
                 onChange={(limit) => patchConfig({ limit })}
             >
-                Limit
+                {texts.limit.title}
             </InputNumber>
         </main>
     );

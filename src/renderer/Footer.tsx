@@ -1,6 +1,7 @@
 import { GearFill, PauseFill, StarFill } from "react-bootstrap-icons";
 import { apiRenderer } from "../api";
 import classNames from "./classNames";
+import { getText } from "./texts";
 
 interface Props {
     paused: boolean;
@@ -12,6 +13,7 @@ export function Footer({ paused, autoStar, showSettings }: Props): JSX.Element {
     return (
         <footer>
             <button
+                title={getText("paused")}
                 className={classNames("icon-btn", { active: paused })}
                 onClick={() => apiRenderer.command({ id: "togglePaused" })}
             >
@@ -19,6 +21,7 @@ export function Footer({ paused, autoStar, showSettings }: Props): JSX.Element {
             </button>
 
             <button
+                title={getText("autoStar")}
                 className={classNames("icon-btn", { active: autoStar })}
                 onClick={() => apiRenderer.command({ id: "toggleAutoStar" })}
             >
@@ -28,6 +31,7 @@ export function Footer({ paused, autoStar, showSettings }: Props): JSX.Element {
             <div className="title" />
 
             <button
+                title={getText("showSettings")}
                 className={classNames("icon-btn", { active: showSettings })}
                 onClick={() => apiRenderer.command({ id: "toggleSettings" })}
             >
