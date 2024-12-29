@@ -4,7 +4,7 @@ import { showMenu } from "./Menu";
 import { apiMain } from "./api";
 import * as clipboardList from "./clipboardList";
 import { runCommand, runCommandWithThrow } from "./commands/runCommand";
-import { getIconPath, RPC_COMMUNICATION_DIR } from "./constants";
+import { getIconPath, RPC_COMMAND, RPC_COMMUNICATION_DIR } from "./constants";
 import { storage } from "./storage";
 import { createTray } from "./tray";
 import type { Command } from "./types/Command";
@@ -28,12 +28,12 @@ void app.whenReady().then(async () => {
     apiMain.onCommand(runCommand);
 
     const io = new NodeIo(RPC_COMMUNICATION_DIR);
-    const rpc = new TalonRpcServer(io);
+    const rpc = new TalonRpcServer(io, executeRequest);
 
     await io.initialize();
 
     const success = globalShortcut.register(keybind, () => {
-        void rpc.executeRequest(executeRequest).catch(handleError);
+        void rpc.executeRequest().catch(handleError);
     });
 
     if (!success) {
@@ -52,6 +52,9 @@ void app.whenReady().then(async () => {
 });
 
 function executeRequest(commandId: string, args: unknown[]) {
+    if (commandId !== RPC_COMMAND) {
+        throw Error(`Unknown command id '${commandId}'`);
+    }
     const command = args[0] as Command;
     return runCommandWithThrow(command);
 }
