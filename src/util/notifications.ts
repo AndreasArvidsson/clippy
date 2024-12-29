@@ -1,15 +1,16 @@
 import { Notification } from "electron";
 
 export function showErrorNotification(message: string, error?: unknown) {
-    console.error(message, error);
+    let body: string;
 
-    const body = (() => {
-        if (error == null) {
-            return message;
-        }
-        const errorString = error instanceof Error ? error.message : String(error);
-        return `${message}\n${errorString}`;
-    })();
+    if (error != null) {
+        console.error(message, error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        body = `${message}\n${errorMessage}`;
+    } else {
+        console.error(message);
+        body = message;
+    }
 
     new Notification({ title: "Error", body }).show();
 }
