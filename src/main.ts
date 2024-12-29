@@ -4,7 +4,7 @@ import { showMenu } from "./Menu";
 import { apiMain } from "./api";
 import * as clipboardList from "./clipboardList";
 import { runCommand, runCommandWithThrow } from "./commands/runCommand";
-import { getIconPath, RPC_COMMAND, RPC_COMMUNICATION_DIR } from "./constants";
+import { getIconPath, RPC_COMMAND, RPC_DIR_NAME } from "./constants";
 import { storage } from "./storage";
 import { createTray } from "./tray";
 import type { Command } from "./types/Command";
@@ -27,7 +27,7 @@ void app.whenReady().then(async () => {
     apiMain.onMenu(showMenu);
     apiMain.onCommand(runCommand);
 
-    const io = new NodeIo(RPC_COMMUNICATION_DIR);
+    const io = new NodeIo(RPC_DIR_NAME);
     const rpc = new TalonRpcServer(io, executeRequest);
 
     await io.initialize();

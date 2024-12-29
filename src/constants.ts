@@ -2,8 +2,8 @@ import { nativeTheme } from "electron";
 import path from "node:path";
 
 export const NAME = "Clippy";
-export const RPC_COMMAND = "clippy-command";
-export const RPC_COMMUNICATION_DIR = "clippy-command-server";
+export const RPC_COMMAND = "clippyCommand";
+export const RPC_DIR_NAME = "clippy-command-server";
 
 const imagesDir = path.resolve(__dirname, "images");
 
