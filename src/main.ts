@@ -52,11 +52,18 @@ void app.whenReady().then(async () => {
 });
 
 function executeRequest(commandId: string, args: unknown[]) {
+    const command = extractCommand(commandId, args);
+    return runCommandWithThrow(command);
+}
+
+function extractCommand(commandId: string, args: unknown[]): Command {
     if (commandId !== RPC_COMMAND) {
         throw Error(`Unknown command id '${commandId}'`);
     }
-    const command = args[0] as Command;
-    return runCommandWithThrow(command);
+    if (args.length !== 1) {
+        throw Error(`Expected 1 argument, got ${args.length}`);
+    }
+    return args[0] as Command;
 }
 
 function handleError(error: unknown) {
