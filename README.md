@@ -2,16 +2,22 @@
 
 Clipboard manager with RPC. Support keyboard, mouse and excellent Talon Voice integration.
 
-## Run
+## Releases
+
+Latest prepackaged releases available at [GitHub](https://github.com/AndreasArvidsson/clippy/releases)
+
+For now prepackaged releases are only available for Windows. For other platforms you need to run or package the source code yourself. See instructions below.
+
+## Run source code
 
 ```
 $ npm install
 $ npm start
 ```
 
-## Package app
+## Package app from source code
 
-Creates `dist` folder with executable
+Creates `dist` directory with executable
 
 ```
 $ npm install
@@ -20,19 +26,13 @@ $ npm package
 
 ## Talon user scripts
 
+If you are going to use Clippy together with Talon you need a Talon user scripts.
+
 -   [Clippy Talon](https://github.com/AndreasArvidsson/andreas-talon/tree/master/apps/clippy)
 
-### Usage example
+### Usage
 
 [Available commands](./src/types/Command.ts)
-
-```
-rpc = RpcClient("Clippy", "ctrl-shift-alt-o")
-
-def clippy_show_hide():
-    command = {"id": "toggleShowHide"}
-    rpc.send(command, wait_for_finish=True)
-```
 
 ## Images
 
