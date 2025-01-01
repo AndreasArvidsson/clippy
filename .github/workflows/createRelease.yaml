@@ -63,10 +63,10 @@ jobs:
           node-version-file: .nvmrc
 
       - name: Install dependencies
-        run: npm install
+        run: npm --color install
 
       - name: Package artifact
-        run: npm run package
+        run: npm --color run package
 
       - name: Compress artifact
         run: powershell.exe Compress-Archive -Path 'dist/*' -DestinationPath 'artifact.zip'
@@ -83,5 +83,5 @@ jobs:
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
           asset_path: ./artifact.zip
-          asset_name: clippy-${RUNNER_OS}-${{ needs.create-release.outputs.version }}.zip
+          asset_name: clippy-$RUNNER_OS-${{ needs.create-release.outputs.version }}.zip
           asset_content_type: application/zip
