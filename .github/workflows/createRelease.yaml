@@ -8,8 +8,7 @@ on:
 jobs:
   create-release:
     runs-on: ubuntu-latest
-    outputs:
-      upload_url ${{ steps.create_release.outputs.upload_url }}
+    outputs: upload_url ${{ steps.create_release.outputs.upload_url }}
 
     steps:
       - name: Checkout repository
@@ -50,8 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo upload url in another job
-      - name: Use the version from job1
-        run: echo "Version passed from job1: ${{ needs.create-release.outputs.upload_url }}"
+      - run: echo ${{ needs.create-release.outputs.upload_url }}
 
         #   - name: Upload Release Asset
         # id: upload-release-asset
