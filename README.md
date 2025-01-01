@@ -6,8 +6,6 @@ Clipboard manager with RPC. Support keyboard, mouse and excellent Talon Voice in
 
 Latest prepackaged releases available at [GitHub](https://github.com/AndreasArvidsson/clippy/releases)
 
-For now prepackaged releases are only available for Windows. For other platforms you need to run or package the source code yourself. See instructions below.
-
 ## Run source code
 
 ```
