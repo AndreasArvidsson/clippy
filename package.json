@@ -13,7 +13,7 @@
         "build": "npm run compile && npm run prepareAssets",
         "compile": "tsc -p .",
         "prepareAssets": "tsx prepareAssets.ts",
-        "package": "npm run build && tsx packager.ts",
+        "package": "npm run build && tsx package.ts",
         "test": "eslint src && prettier --check .",
         "fix": "prettier --write ."
     },

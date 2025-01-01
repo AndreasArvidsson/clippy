@@ -62,10 +62,11 @@ jobs:
         with:
           node-version-file: .nvmrc
 
-      - run: echo upload url in another job
-      - run: echo "${{ needs.create-release.outputs.upload_url }}"
+      - name: Package artifact
+        run: npm run package
 
-      - run: echo "some text" > my-artifact.txt
+      - name: Compress artifact
+        run: zip -r my-artifact.zip dist/*
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
@@ -73,106 +74,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: ./my-artifact.txt
-          asset_name: my-artifact-${{ needs.create-release.outputs.version }}.txt
-          asset_content_type: text/plain
-          # asset_path: ./my-artifact.zip
-          # asset_name: my-artifact.zip
-          # asset_content_type: application/zip
-
-  # deploy:
-  #   name: Deploy
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       os: [windows-latest]
-  #   runs-on: ${{ matrix.os }}
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-node@v4
-  #       with:
-  #         node-version-file: .nvmrc
-  #     - run: npm --color install
-  #     - run: npm --color run compile
-  #     - run: xvfb-run -a npm --color run test:ci
-  #       if: runner.os == 'Linux'
-  #     - run: npm --color run test:ci
-  #       if: runner.os != 'Linux'
-# name: Create Release with Platform-Specific Assets
-
-# on:
-#   push:
-#     branches:
-#       - main
-
-# permissions:
-#   contents: write  # Grants write permissions for creating tags and releases
-
-# jobs:
-#   build-and-release:
-#     runs-on: ubuntu-latest
-
-#     strategy:
-#       matrix:
-#         platform: [linux, macos, windows]
-#     name: Build on ${{ matrix.platform }}
-
-#     steps:
-#       # Step 1: Checkout repository
-#       - name: Checkout repository
-#         uses: actions/checkout@v3
-
-#       # Step 2: Set up Node.js
-#       - name: Set up Node.js
-#         uses: actions/setup-node@v3
-#         with:
-#           node-version: '16'
-
-#       # Step 3: Read version from package.json (only runs once across the matrix)
-#       - name: Read version from package.json
-#         id: get_version
-#         if: ${{ matrix.platform == 'linux' }} # Runs only once on Linux
-#         run: |
-#           VERSION=$(node -p "require('./package.json').version")
-#           echo "version=$VERSION" >> $GITHUB_ENV
-
-#       # Step 4: Build the assets for each platform
-#       - name: Build assets
-#         run: |
-#           echo "Building for ${{ matrix.platform }}"
-#           mkdir -p dist
-#           echo "Sample artifact for ${{ matrix.platform }}" > dist/${{ matrix.platform }}-artifact.txt
-#         env:
-#           VERSION: ${{ env.version }}
-
-#       # Step 5: Upload release assets for each platform
-#       - name: Configure Git
-#         run: |
-#           git config user.name "github-actions[bot]"
-#           git config user.email "github-actions[bot]@users.noreply.github.com"
-
-#       - name: Create GitHub release (only first platform creates it)
-#         if: ${{ matrix.platform == 'linux' }}
-#         uses: actions/create-release@v1
-#         id: create_release
-#         with:
-#           tag_name: "v${{ env.version }}"
-#           release_name: "Release v${{ env.version }}"
-#           body: "This release includes platform-specific assets."
-#           draft: false
-#           prerelease: false
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-#       - name: Upload release asset for ${{ matrix.platform }}
-#         uses: actions/upload-release-asset@v1
-#         with:
-#           upload_url: ${{ steps.create_release.outputs.upload_url || 'https://api.github.com/repos/${{ github.repository }}/releases/latest/assets' }}
-#           asset_path: dist/${{ matrix.platform }}-artifact.txt
-#           asset_name: ${{ matrix.platform }}-artifact.txt
-#           asset_content_type: text/plain
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-#  'https://api.github.com/repos/${{ github.repository }}/releases/latest/assets'
-#  https://api.github.com/repos/AndreasArvidsson/clippy//releases/latest/assets
+          asset_path: ./my-artifact.zip
+          asset_name: my-artifact.zip
+          asset_content_type: application/zip
