@@ -26,6 +26,11 @@ export function indexToHint(index: number): string {
 }
 
 export function hintToIndex(hint: string): number {
+    // Special case for first item
+    if (hint === "first") {
+        return 0;
+    }
+
     const index = parseInt(hint, 10);
 
     if (!isNaN(index)) {
