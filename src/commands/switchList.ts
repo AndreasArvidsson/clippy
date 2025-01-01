@@ -1,5 +1,5 @@
 import { storage } from "../storage";
-import type { SwitchListCommand } from "../types/Command";
+import type { SwitchListCommand } from "../types/command";
 import { defaultLists } from "../types/types";
 import { updateRenderer } from "../util/updateRenderer";
 

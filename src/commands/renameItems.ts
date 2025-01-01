@@ -1,6 +1,6 @@
 import { apiMain } from "../api";
 import { storage } from "../storage";
-import type { RenameItemsCommand } from "../types/Command";
+import type { RenameItemsCommand } from "../types/command";
 import type { ClipItem } from "../types/types";
 import { processTargets } from "../util/processTargets";
 import { updateRenderer } from "../util/updateRenderer";

@@ -1,25 +1,5 @@
-import type { ClipItemType, Config, SearchType, Visibility } from "./types";
-
-export interface PrimitiveTarget {
-    type: "primitive";
-    hint: string;
-    count?: number;
-}
-
-export interface RangeTarget {
-    type: "range";
-    start: string;
-    end: string;
-}
-
-export interface SearchTarget {
-    type: "search";
-    offset: number;
-    itemType?: SearchType;
-    itemText?: string;
-}
-
-export type Target = PrimitiveTarget | RangeTarget | SearchTarget;
+import type { Target } from "./targets";
+import type { ClipItemType, Config, Visibility } from "./types";
 
 interface SimpleCommand {
     id:

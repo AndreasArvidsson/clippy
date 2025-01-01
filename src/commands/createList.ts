@@ -1,7 +1,7 @@
 import * as uuid from "uuid";
 import { apiMain } from "../api";
 import { storage } from "../storage";
-import type { CreateListCommand } from "../types/Command";
+import type { CreateListCommand } from "../types/command";
 import { defaultLists, type List } from "../types/types";
 import { updateRenderer } from "../util/updateRenderer";
 

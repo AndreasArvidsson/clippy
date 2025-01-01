@@ -1,5 +1,5 @@
 import { storage } from "../storage";
-import type { SearchItemsCommand } from "../types/Command";
+import type { SearchItemsCommand } from "../types/command";
 import { updateRenderer } from "../util/updateRenderer";
 
 export function searchItems(command: SearchItemsCommand) {

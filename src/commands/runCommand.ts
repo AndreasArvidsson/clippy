@@ -1,5 +1,5 @@
 import { app } from "electron";
-import type { Command } from "../types/Command";
+import type { Command } from "../types/command";
 import type { ClipItem, Visibility } from "../types/types";
 import { showErrorNotification } from "../util/notifications";
 import { assignItemsToList } from "./assignItemsToList";

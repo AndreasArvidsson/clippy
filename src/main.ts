@@ -7,7 +7,7 @@ import { runCommand, runCommandWithThrow } from "./commands/runCommand";
 import { getIconPath, RPC_COMMAND, RPC_DIR_NAME } from "./constants";
 import { storage } from "./storage";
 import { createTray } from "./tray";
-import type { Command } from "./types/Command";
+import type { Command } from "./types/command";
 import { getRendererData } from "./util/getRendererData";
 import { isMacOS } from "./util/isMacOS";
 import { showErrorNotification } from "./util/notifications";

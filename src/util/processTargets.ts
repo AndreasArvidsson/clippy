@@ -1,4 +1,4 @@
-import type { PrimitiveTarget, RangeTarget, SearchTarget, Target } from "../types/Command";
+import type { PrimitiveTarget, RangeTarget, SearchTarget, Target } from "../types/targets";
 import type { ClipItem, SearchType } from "../types/types";
 import { isWindowVisible } from "../window";
 import { applySearchFilters, getListItems } from "./filterItems";

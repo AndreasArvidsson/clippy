@@ -1,10 +1,10 @@
 import type {
     Command,
     CopyItemsCommand,
-    PrimitiveTarget,
     RemoveItemsCommand,
     RenameItemsCommand,
-} from "../types/Command";
+} from "../types/command";
+import type { PrimitiveTarget } from "../types/targets";
 
 export function getCommandForHints(
     id: CopyItemsCommand["id"] | RemoveItemsCommand["id"] | RenameItemsCommand["id"],

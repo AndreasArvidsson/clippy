@@ -1,5 +1,5 @@
 import { clipboard } from "../clipboard";
-import type { CopyItemsCommand } from "../types/Command";
+import type { CopyItemsCommand } from "../types/command";
 import { processTargets } from "../util/processTargets";
 
 export function copyItems(command: CopyItemsCommand) {

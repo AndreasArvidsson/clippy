@@ -1,5 +1,5 @@
 import { storage } from "../storage";
-import type { AssignItemsToListCommand } from "../types/Command";
+import type { AssignItemsToListCommand } from "../types/command";
 import { StarredList } from "../types/types";
 import { processTargets } from "../util/processTargets";
 import { updateRenderer } from "../util/updateRenderer";

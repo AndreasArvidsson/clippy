@@ -1,6 +1,6 @@
 import { apiMain } from "../api";
 import { storage } from "../storage";
-import type { RenameListCommand } from "../types/Command";
+import type { RenameListCommand } from "../types/command";
 import { defaultLists } from "../types/types";
 import { updateRenderer } from "../util/updateRenderer";
 

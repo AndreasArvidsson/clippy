@@ -1,6 +1,6 @@
 import { clipboard } from "./clipboard";
 import { storage } from "./storage";
-import type { Target } from "./types/Command";
+import type { Target } from "./types/targets";
 import { AllList, StarredList, UnstarredList, type ClipItem } from "./types/types";
 import { processTargets } from "./util/processTargets";
 

@@ -1,5 +1,5 @@
 import { ipcMain, ipcRenderer } from "electron";
-import type { Command } from "./types/Command";
+import type { Command } from "./types/command";
 import type { MenuType, RendererData } from "./types/types";
 import { getWindow } from "./window";
 
