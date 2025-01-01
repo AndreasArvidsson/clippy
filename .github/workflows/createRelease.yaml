@@ -62,6 +62,9 @@ jobs:
         with:
           node-version-file: .nvmrc
 
+      - name: Install dependencies
+        run: npm install
+
       - name: Package artifact
         run: npm run package
 
