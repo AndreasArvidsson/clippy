@@ -42,9 +42,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - run: echo upload url in same job
-      - run: echo ${{ steps.create_release.outputs.upload_url }}
-
   upload-assets:
     needs: create-release
     name: Build on ${{ matrix.os }}
@@ -55,7 +52,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - run: echo upload url in another job
-      - run: echo ${{ needs.create-release.outputs.upload_url }}
+      - run: echo "${{ needs.create-release.outputs.upload_url }}"
 
         #   - name: Upload Release Asset
         # id: upload-release-asset
