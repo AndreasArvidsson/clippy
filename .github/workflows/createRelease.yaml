@@ -48,11 +48,12 @@ jobs:
   upload-assets:
     name: Build on ${{ matrix.os }}
     needs: create-release
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest]
-    runs-on: ${{ matrix.os }}
+        os: [macos-latest, ubuntu-latest, windows-latest]
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -68,11 +69,11 @@ jobs:
       - name: Package artifact
         run: npm --color run package
 
-      - name: Compress artifact Windows
+      - name: Compress artifact [Windows]
         run: powershell.exe Compress-Archive -Path 'dist/*' -DestinationPath 'artifact.zip'
         if: runner.os == 'Windows'
 
-      - name: Compress artifact Linux
+      - name: Compress artifact [Linux]
         run: zip -r artifact.zip dist/*
         if: runner.os != 'Windows'
 
@@ -83,5 +84,5 @@ jobs:
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
           asset_path: ./artifact.zip
-          asset_name: clippy-${{ runner.os }}-${{ needs.create-release.outputs.version }}.zip
+          asset_name: Clippy-${{ needs.create-release.outputs.version }}-${{ runner.os }}.zip
           asset_content_type: application/zip
