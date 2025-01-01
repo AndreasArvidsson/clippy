@@ -70,11 +70,11 @@ jobs:
       - name: Package artifact
         run: npm --color run package
 
-      - name: Compress artifact [Windows]
+      - name: Compress artifact (Windows)
         run: powershell.exe Compress-Archive -Path 'dist/*' -DestinationPath 'artifact.zip'
         if: runner.os == 'Windows'
 
-      - name: Compress artifact [Linux]
+      - name: Compress artifact (Linux)
         run: zip -r artifact.zip dist/*
         if: runner.os != 'Windows'
 
