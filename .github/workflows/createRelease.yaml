@@ -7,9 +7,11 @@ on:
 
 jobs:
   create-release:
+    name: Create Release
     runs-on: ubuntu-latest
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
+      version: ${{ steps.get_version.outputs.version }}
 
     steps:
       - name: Checkout repository
@@ -26,10 +28,10 @@ jobs:
           VERSION=$(node -p "require('./package.json').version")
           echo "version=$VERSION" >> $GITHUB_ENV
 
-      - name: Create Git tag
-        run: |
-          git tag v${{ env.version }}
-          git push origin v${{ env.version }}
+      # - name: Create Git tag
+      #   run: |
+      #     git tag v${{ env.version }}
+      #     git push origin v${{ env.version }}
 
       - name: Create GitHub release
         id: create_release
@@ -43,27 +45,40 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   upload-assets:
-    needs: create-release
     name: Build on ${{ matrix.os }}
+    needs: create-release
     strategy:
       fail-fast: false
       matrix:
         os: [windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
       - run: echo upload url in another job
       - run: echo "${{ needs.create-release.outputs.upload_url }}"
 
-        #   - name: Upload Release Asset
-        # id: upload-release-asset
-        # uses: actions/upload-release-asset@v1
-        # env:
-        #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        # with:
-        #   upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-        #   asset_path: ./my-artifact.zip
-        #   asset_name: my-artifact.zip
-        #   asset_content_type: application/zip
+      - run: touch my-artifact.txt
+
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: ./my-artifact.txt
+          asset_name: my-artifact-${{ needs.create-release.outputs.version }}.txt
+          asset_content_type: text/plain
+          # asset_path: ./my-artifact.zip
+          # asset_name: my-artifact.zip
+          # asset_content_type: application/zip
 
   # deploy:
   #   name: Deploy
