@@ -47,7 +47,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   upload-assets:
-    name: Upload asset ${{ matrix.os }}
+    name: Upload asset
     needs: create-release
     runs-on: ${{ matrix.os }}
     strategy:
