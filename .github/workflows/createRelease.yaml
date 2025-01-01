@@ -69,12 +69,12 @@ jobs:
         run: npm run package
 
       - name: Compress artifact
-        run: |
-          if [ "${{ runner.os }}" = "Windows" ]; then
-            powershell.exe Compress-Archive -Path 'dist/*' -DestinationPath 'artifact.zip'
-          else
-             zip -r artifact.zip dist/*
-          fi
+        run: powershell.exe Compress-Archive -Path 'dist/*' -DestinationPath 'artifact.zip'
+        if: runner.os == 'Windows'
+
+      - name: Compress artifact
+        run: zip -r artifact.zip dist/*
+        if: runner.os != 'Windows'
 
       - name: Trim `-latest` from the matrix OS name
         run: |
