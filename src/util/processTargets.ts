@@ -6,8 +6,9 @@ import { hintToIndex } from "./hints";
 import { constructSearchRegexp, urlRegex } from "./regex";
 
 export function processTargets(targets: Target[]): ClipItem[] {
-    const listItems = getListItems();
-    const items = applySearchFilters(listItems, isWindowVisible());
+    const isVisible = isWindowVisible();
+    const listItems = getListItems(isVisible);
+    const items = applySearchFilters(listItems, isVisible);
     const results: ClipItem[] = [];
     for (const target of targets) {
         results.push(...processTarget(items, target));

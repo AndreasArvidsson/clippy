@@ -1,9 +1,9 @@
 import { storage } from "../storage";
 import { AllList, UnstarredList, type ClipItem } from "../types/types";
 
-export function getListItems(): ClipItem[] {
+export function getListItems(isVisible: boolean): ClipItem[] {
     const items = storage.getClipboardItems();
-    const { activeList } = storage.getConfig();
+    const activeList = isVisible ? storage.getConfig().activeList : AllList;
 
     switch (activeList.id) {
         case AllList.id:
