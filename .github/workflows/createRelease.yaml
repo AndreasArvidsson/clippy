@@ -28,8 +28,8 @@ jobs:
 
       - name: Create Git tag
         run: |
-          git tag "v$VERSION"
-          git push origin "v$VERSION"
+          git tag v$VERSION
+          git push origin v$VERSION
 
       - name: Create GitHub release
         id: create_release
@@ -45,9 +45,14 @@ jobs:
       - run: echo upload url in same job
       - run: echo ${{ steps.create_release.outputs.upload_url }}
 
-  job2:
+  upload-assets:
     needs: create-release
-    runs-on: ubuntu-latest
+    name: Build on ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - run: echo upload url in another job
       - run: echo ${{ needs.create-release.outputs.upload_url }}
