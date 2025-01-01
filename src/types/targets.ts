@@ -4,6 +4,7 @@ export interface PrimitiveTarget {
     type: "primitive";
     hint: string;
     count?: number;
+    reverse?: boolean;
 }
 
 export interface RangeTarget {

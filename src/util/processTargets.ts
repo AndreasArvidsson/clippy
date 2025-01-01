@@ -27,30 +27,42 @@ function processTarget(items: ClipItem[], target: Target): ClipItem[] {
 }
 
 function processesPrimitiveTarget(items: ClipItem[], target: PrimitiveTarget): ClipItem[] {
-    const index = hintToIndex(target.hint);
+    const { hint, count = 1, reverse = false } = target;
+    const start = processHint(items, hint);
 
-    if (index < 0 || index >= items.length) {
-        throw Error(`Item '${target.hint}' not found`);
-    }
-
-    const count = target.count ?? 1;
     if (count === 1) {
-        return [items[index]];
+        return [items[start]];
     }
-    const end = index + count - 1;
-    if (end < 0 || end >= items.length) {
-        throw Error(`Invalid range: ${target.hint} + ${count}`);
-    }
-    return items.slice(index, end + 1);
+
+    const end = start + count - 1;
+    const results = getItemsRange(items, start, end);
+
+    return reverse ? results.reverse() : results;
 }
 
 function processRangeTarget(items: ClipItem[], target: RangeTarget): ClipItem[] {
-    const start = hintToIndex(target.start);
-    const end = hintToIndex(target.end);
-    if (start < 0 || start >= items.length || end < 0 || end >= items.length) {
-        throw Error(`Invalid range: ${target.start}-${target.end}`);
+    const start = processHint(items, target.start);
+    const end = processHint(items, target.end);
+    return getItemsRange(items, start, end);
+}
+
+export function processHint(items: ClipItem[], hint: string): number {
+    const index = hintToIndex(hint);
+    if (index < 0 || index >= items.length) {
+        throw Error(`Item '${hint}' not found`);
     }
-    return items.slice(start, end + 1);
+    return index;
+}
+
+function getItemsRange(items: ClipItem[], start: number, end: number): ClipItem[] {
+    if (start < 0 || start >= items.length || end < 0 || end >= items.length) {
+        throw Error(`Invalid range: ${start}-${end}`);
+    }
+    const min = Math.min(start, end);
+    const max = Math.max(start, end);
+    const isReversed = start > end;
+    const results = items.slice(min, max + 1);
+    return isReversed ? results.reverse() : results;
 }
 
 function processSearchTarget(items: ClipItem[], target: SearchTarget): ClipItem[] {
