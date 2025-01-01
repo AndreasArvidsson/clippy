@@ -8,6 +8,8 @@ on:
 jobs:
   create-release:
     runs-on: ubuntu-latest
+    outputs:
+      upload_url ${{ steps.create_release.outputs.upload_url }}
 
     steps:
       - name: Checkout repository
@@ -25,12 +27,12 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_ENV
 
       - name: Create Git tag
-        id: create_tag
         run: |
           git tag "v$VERSION"
           git push origin "v$VERSION"
 
       - name: Create GitHub release
+        id: create_release
         uses: actions/create-release@v1
         with:
           tag_name: "v${{ env.version }}"
@@ -39,6 +41,28 @@ jobs:
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: echo upload url in same job
+      - run: echo ${{ steps.create_release.outputs.upload_url }}
+
+  job2:
+    needs: create-release
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo upload url in another job
+      - name: Use the version from job1
+        run: echo "Version passed from job1: ${{ needs.create-release.outputs.upload_url }}"
+
+        #   - name: Upload Release Asset
+        # id: upload-release-asset
+        # uses: actions/upload-release-asset@v1
+        # env:
+        #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # with:
+        #   upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        #   asset_path: ./my-artifact.zip
+        #   asset_name: my-artifact.zip
+        #   asset_content_type: application/zip
 
   # deploy:
   #   name: Deploy
@@ -58,3 +82,81 @@ jobs:
   #       if: runner.os == 'Linux'
   #     - run: npm --color run test:ci
   #       if: runner.os != 'Linux'
+# name: Create Release with Platform-Specific Assets
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+# permissions:
+#   contents: write  # Grants write permissions for creating tags and releases
+
+# jobs:
+#   build-and-release:
+#     runs-on: ubuntu-latest
+
+#     strategy:
+#       matrix:
+#         platform: [linux, macos, windows]
+#     name: Build on ${{ matrix.platform }}
+
+#     steps:
+#       # Step 1: Checkout repository
+#       - name: Checkout repository
+#         uses: actions/checkout@v3
+
+#       # Step 2: Set up Node.js
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '16'
+
+#       # Step 3: Read version from package.json (only runs once across the matrix)
+#       - name: Read version from package.json
+#         id: get_version
+#         if: ${{ matrix.platform == 'linux' }} # Runs only once on Linux
+#         run: |
+#           VERSION=$(node -p "require('./package.json').version")
+#           echo "version=$VERSION" >> $GITHUB_ENV
+
+#       # Step 4: Build the assets for each platform
+#       - name: Build assets
+#         run: |
+#           echo "Building for ${{ matrix.platform }}"
+#           mkdir -p dist
+#           echo "Sample artifact for ${{ matrix.platform }}" > dist/${{ matrix.platform }}-artifact.txt
+#         env:
+#           VERSION: ${{ env.version }}
+
+#       # Step 5: Upload release assets for each platform
+#       - name: Configure Git
+#         run: |
+#           git config user.name "github-actions[bot]"
+#           git config user.email "github-actions[bot]@users.noreply.github.com"
+
+#       - name: Create GitHub release (only first platform creates it)
+#         if: ${{ matrix.platform == 'linux' }}
+#         uses: actions/create-release@v1
+#         id: create_release
+#         with:
+#           tag_name: "v${{ env.version }}"
+#           release_name: "Release v${{ env.version }}"
+#           body: "This release includes platform-specific assets."
+#           draft: false
+#           prerelease: false
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+#       - name: Upload release asset for ${{ matrix.platform }}
+#         uses: actions/upload-release-asset@v1
+#         with:
+#           upload_url: ${{ steps.create_release.outputs.upload_url || 'https://api.github.com/repos/${{ github.repository }}/releases/latest/assets' }}
+#           asset_path: dist/${{ matrix.platform }}-artifact.txt
+#           asset_name: ${{ matrix.platform }}-artifact.txt
+#           asset_content_type: text/plain
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+#  'https://api.github.com/repos/${{ github.repository }}/releases/latest/assets'
+#  https://api.github.com/repos/AndreasArvidsson/clippy//releases/latest/assets
