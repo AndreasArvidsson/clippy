@@ -76,11 +76,11 @@ jobs:
              zip -r artifact.zip dist/*
           fi
 
-    - name: Trim `-latest` from the matrix OS name
-      run: |
-        OS_NAME="${{ matrix.os }}"
-        OS_NAME=${OS_NAME%-latest}
-        echo "os-name=$OS_NAME" >> $GITHUB_ENV
+      - name: Trim `-latest` from the matrix OS name
+        run: |
+          OS_NAME="${{ matrix.os }}"
+          OS_NAME=${OS_NAME%-latest}
+          echo "os-name=$OS_NAME" >> $GITHUB_ENV
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
