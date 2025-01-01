@@ -29,20 +29,22 @@ function changePermissionOfClipboardEventHandlerMac() {
     if (os.platform() === "darwin") {
         const filename = "node_modules/clipboard-event/platform/clipboard-event-handler-mac";
         const filePath = path.join(__dirname, filename);
-        const existingMode = fs.statSync(filePath).mode;
-        const newMode = existingMode | 0o111;
-        if (existingMode !== newMode) {
+        let currentMode = fs.statSync(filePath).mode;
+        // 0o111 is the same as +x
+        const desiredMode = currentMode | 0o111;
+
+        if (currentMode !== desiredMode) {
             console.log(
-                `Changing mode of ${filename} from ${formatMode(existingMode)} to ${formatMode(newMode)}`,
+                `Changing mode of ${filename} from ${formatMode(currentMode)} to ${formatMode(desiredMode)}`,
             );
-            fs.chmodSync(filePath, newMode);
 
-            const updatedMode = fs.statSync(filePath).mode;
+            fs.chmodSync(filePath, desiredMode);
+            currentMode = fs.statSync(filePath).mode;
 
-            if (updatedMode !== newMode) {
+            if (currentMode !== desiredMode) {
                 console.error(
-                    `ERROR: Failed to change mode of ${filePath} to ${formatMode(newMode)}. Current mode: ${formatMode(
-                        updatedMode,
+                    `ERROR: Failed to change mode of ${filePath} to ${formatMode(desiredMode)}. Current mode: ${formatMode(
+                        currentMode,
                     )}`,
                 );
                 console.log(`Please run: chmod +x ${filename}`);
