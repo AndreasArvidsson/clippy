@@ -9,6 +9,6 @@ const imagesDir = path.resolve(__dirname, "images");
 
 export function getIconPath(): string {
     return nativeTheme.shouldUseDarkColors
-        ? path.resolve(imagesDir, "icon_dark.png")
-        : path.resolve(imagesDir, "icon_light.png");
+        ? path.resolve(imagesDir, "icon_light.png")
+        : path.resolve(imagesDir, "icon_dark.png");
 }

@@ -29,10 +29,10 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_ENV
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      # - name: Create Git tag
-      #   run: |
-      #     git tag v${{ env.version }}
-      #     git push origin v${{ env.version }}
+      - name: Create Git tag
+        run: |
+          git tag v${{ env.version }}
+          git push origin v${{ env.version }}
 
       - name: Create GitHub release
         id: create-release
@@ -52,7 +52,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [windows-latest, ubuntu-latest, macos-latest]
 
     steps:
       - name: Checkout repository
