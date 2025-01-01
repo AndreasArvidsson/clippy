@@ -25,20 +25,34 @@ function copyAssets() {
 function changePermissionOfClipboardEventHandlerMac() {
     // clipboard-event-handler-mac is missing executable permission on macOS.
     // https://github.com/AndreasArvidsson/clippy/issues/3
+
     if (os.platform() === "darwin") {
-        const filePath = path.join(
-            __dirname,
-            "node_modules/clipboard-event/platform/clipboard-event-handler-mac",
-        );
+        const filename = "node_modules/clipboard-event/platform/clipboard-event-handler-mac";
+        const filePath = path.join(__dirname, filename);
         const existingMode = fs.statSync(filePath).mode;
-        const newMode = existingMode | 0o001;
+        const newMode = existingMode | 0o111;
         if (existingMode !== newMode) {
             console.log(
-                `Changing mode of ${filePath} from ${existingMode.toString(8)} to ${newMode.toString(8)}`,
+                `Changing mode of ${filename} from ${formatMode(existingMode)} to ${formatMode(newMode)}`,
             );
             fs.chmodSync(filePath, newMode);
+
+            const updatedMode = fs.statSync(filePath).mode;
+
+            if (updatedMode !== newMode) {
+                console.error(
+                    `ERROR: Failed to change mode of ${filePath} to ${formatMode(newMode)}. Current mode: ${formatMode(
+                        updatedMode,
+                    )}`,
+                );
+                console.log(`Please run: chmod +x ${filename}`);
+            }
         }
     }
+}
+
+function formatMode(mode: number) {
+    return (mode & 0o777).toString(8);
 }
 
 (() => {
