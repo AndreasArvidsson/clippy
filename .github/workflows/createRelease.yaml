@@ -69,7 +69,18 @@ jobs:
         run: npm run package
 
       - name: Compress artifact
-        run: zip -r my-artifact.zip dist/*
+        run: |
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            powershell.exe Compress-Archive -Path 'dist/*' -DestinationPath 'artifact.zip'
+          else
+             zip -r artifact.zip dist/*
+          fi
+
+    - name: Trim `-latest` from the matrix OS name
+      run: |
+        OS_NAME="${{ matrix.os }}"
+        OS_NAME=${OS_NAME%-latest}
+        echo "os-name=$OS_NAME" >> $GITHUB_ENV
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
@@ -77,6 +88,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: ./my-artifact.zip
-          asset_name: my-artifact.zip
+          asset_path: ./artifact.zip
+          asset_name: clippy-${${ env.os-name }}-${{ needs.create-release.outputs.version }}.zip
           asset_content_type: application/zip
