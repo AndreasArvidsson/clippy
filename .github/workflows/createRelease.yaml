@@ -28,8 +28,8 @@ jobs:
 
       - name: Create Git tag
         run: |
-          git tag v$VERSION
-          git push origin v$VERSION
+          git tag v${{ env.version }}
+          git push origin v${{ env.version }}
 
       - name: Create GitHub release
         id: create_release
