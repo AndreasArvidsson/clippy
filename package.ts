@@ -8,7 +8,8 @@ import { packager } from "@electron/packager";
         out: "dist",
         overwrite: true,
         icon: "images/icon_dark",
-        ignore: [whitelistToIgnore(["out", "node_modules", "package.json"]), ".map$"]
+        appBundleId: "com.github.andreasarvidsson.clippy",
+        ignore: [whitelistToIgnore(["out", "node_modules", "package.json"]), ".map$"],
     });
 })();
 
