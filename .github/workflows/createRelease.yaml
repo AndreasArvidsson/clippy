@@ -74,7 +74,10 @@ jobs:
         if: runner.os == 'Windows'
 
       - name: Compress artifact (Linux)
-        run: zip -r artifact.zip dist/*
+        run: |
+          cd dist
+          zip -r ../artifact.zip *
+
         if: runner.os != 'Windows'
 
       - name: Upload release asset
