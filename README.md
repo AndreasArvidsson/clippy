@@ -24,9 +24,9 @@ $ npm package
 
 ## Talon user scripts
 
-If you are going to use Clippy together with Talon you need a Talon user scripts.
+If you are going to use Clippy together with Talon you need the Talon user scripts.
 
--   [Clippy Talon](https://github.com/AndreasArvidsson/andreas-talon/tree/master/apps/clippy)
+[Clippy Talon](https://github.com/AndreasArvidsson/clippy-talon)
 
 ### Usage
 
