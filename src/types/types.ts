@@ -73,7 +73,7 @@ export interface RendererData {
 
 interface ClipItemContextMenu {
     readonly type: "clipItemContext";
-    readonly hint: string;
+    readonly hints: string[];
 }
 
 interface SimpleMenu {

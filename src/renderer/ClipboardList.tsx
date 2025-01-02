@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { StarFill } from "react-bootstrap-icons";
 import { apiRenderer } from "../api";
-import { StarredList, type ClipItem } from "../types/types";
+import { StarredList, UnstarredList, type ClipItem } from "../types/types";
 import { getCommandForHints, hintsToPrimitiveTargets } from "../util/getCommandForHints";
 import { indexToHint } from "../util/hints";
 import classNames from "./classNames";
 import InputText from "./InputText";
-import { isNormal } from "./keybinds";
+import { keyListeners } from "./keyListeners";
+import { parseHintKey } from "./parseHintKey";
 
 interface Props {
     items: ClipItem[];
@@ -14,26 +15,99 @@ interface Props {
 
 export function ClipboardList({ items }: Props): JSX.Element {
     const ref = useRef<string[]>([]);
-    const [selected, setSelected] = useState<string[]>(ref.current);
+    const [_selected, _setSelected] = useState<string[]>(ref.current);
     const [renameItemId, setRenameItemId] = useState<string>();
 
+    const setSelected = (selected: string[]) => {
+        ref.current = selected;
+        _setSelected(ref.current);
+    };
+
     useEffect(() => {
-        apiRenderer.onRenameItem(setRenameItemId);
+        setSelected([]);
+    }, [items]);
 
-        function onKeyDown(e: KeyboardEvent) {
-            if (isNormal(e) && e.key === "Enter") {
-                const hints = [...ref.current];
-                hints.sort();
-                apiRenderer.command(getCommandForHints("copyItems", hints));
+    useEffect(() => {
+        const unregisterRenameListener = apiRenderer.onRenameItem(setRenameItemId);
+
+        const listener = (key: string): boolean => {
+            switch (key) {
+                case "Enter": {
+                    copySelected();
+                    break;
+                }
+                case "Delete":
+                    removeSelected();
+                    break;
+                case "F2":
+                    renameSelected();
+                    break;
+                case "Escape": {
+                    setSelected([]);
+                    break;
+                }
+                default: {
+                    const hint = parseHintKey(key);
+                    if (hint != null) {
+                        clickItem(hint.hint, hint.superKey);
+                        return true;
+                    }
+                    return false;
+                }
             }
-        }
+            return true;
+        };
 
-        window.addEventListener("keydown", onKeyDown);
+        keyListeners.register(listener);
 
-        return () => window.removeEventListener("keydown", onKeyDown);
+        return () => {
+            unregisterRenameListener();
+            keyListeners.unregister(listener);
+        };
     }, []);
 
-    function renderRenameName(item: ClipItem, hint: string) {
+    const copySelected = () => {
+        const hints = ref.current.slice();
+        hints.sort();
+        apiRenderer.command(getCommandForHints("copyItems", hints));
+        setSelected([]);
+    };
+
+    const removeSelected = () => {
+        const hints = ref.current.slice();
+        apiRenderer.command(getCommandForHints("removeItems", hints));
+        setSelected([]);
+    };
+
+    const renameSelected = () => {
+        const hints = ref.current.slice();
+        apiRenderer.command({
+            id: "renameItems",
+            targets: hintsToPrimitiveTargets(hints),
+        });
+        setSelected([]);
+    };
+
+    const clickItem = (hint: string, superKey: boolean) => {
+        const selected = ref.current;
+        // ctrl + hint key: Toggle item selection
+        // If we already have selection we always toggle selection
+        if (superKey || selected.length > 0) {
+            const isSelected = selected.includes(hint);
+            if (isSelected) {
+                selected.splice(selected.indexOf(hint), 1);
+            } else {
+                selected.push(hint);
+            }
+            setSelected([...selected]);
+        }
+        // hint key: Copy item
+        else {
+            apiRenderer.command(getCommandForHints("copyItems", [hint]));
+        }
+    };
+
+    const renderRenameName = (item: ClipItem, hint: string): JSX.Element => {
         return (
             <div className="clip-name">
                 <InputText
@@ -54,9 +128,9 @@ export function ClipboardList({ items }: Props): JSX.Element {
                 />
             </div>
         );
-    }
+    };
 
-    const renderName = (item: ClipItem, hint: string) => {
+    const renderName = (item: ClipItem, hint: string): JSX.Element | undefined => {
         if (item.id === renameItemId) {
             return renderRenameName(item, hint);
         }
@@ -66,58 +140,61 @@ export function ClipboardList({ items }: Props): JSX.Element {
         return <div className="clip-name">{item.name}</div>;
     };
 
+    const renderItem = (item: ClipItem, hint: string): JSX.Element => {
+        const isSelected = _selected.includes(hint);
+
+        return (
+            <div
+                className={classNames("row clip-item", { selected: isSelected })}
+                onClick={(e) => clickItem(hint, e.ctrlKey || e.metaKey)}
+                onContextMenu={(e) => {
+                    e.preventDefault();
+                    if (!isSelected) {
+                        setSelected([]);
+                    }
+                    const hints = isSelected ? _selected.slice() : [hint];
+                    apiRenderer.menu({
+                        type: "clipItemContext",
+                        hints,
+                    });
+                }}
+            >
+                <div className="col-auto clip-hint">{hint}</div>
+
+                <div className="col clip-content">
+                    {renderName(item, hint)}
+                    {renderItemContent(item)}
+                </div>
+
+                <div className="col-auto">
+                    <button
+                        className={classNames("icon-btn star-btn", {
+                            active: item.list != null,
+                        })}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            apiRenderer.command({
+                                id: "assignItemsToList",
+                                targets: hintsToPrimitiveTargets([hint]),
+                                name: item.list != null ? UnstarredList.id : StarredList.id,
+                            });
+                        }}
+                    >
+                        <StarFill />
+                    </button>
+                </div>
+            </div>
+        );
+    };
+
     return (
         <main className="container-fluid clip-list">
             {items.map((item, i) => {
                 const hint = indexToHint(i);
-                const isSelected = selected.includes(hint);
-
                 return (
                     <React.Fragment key={item.id}>
                         {i > 0 && <hr />}
-                        <div
-                            className={classNames("row clip-item", { selected: isSelected })}
-                            onClick={(e) => {
-                                if (e.ctrlKey) {
-                                    if (isSelected) {
-                                        selected.splice(selected.indexOf(hint), 1);
-                                    } else {
-                                        selected.push(hint);
-                                    }
-                                    ref.current = [...selected];
-                                    setSelected(ref.current);
-                                } else {
-                                    apiRenderer.command(getCommandForHints("copyItems", [hint]));
-                                }
-                            }}
-                            onContextMenu={(e) => {
-                                e.preventDefault();
-                                apiRenderer.menu({ type: "clipItemContext", hint });
-                            }}
-                        >
-                            <div className="col-auto clip-number">{hint}</div>
-                            <div className="col clip-content">
-                                {renderName(item, hint)}
-                                {renderClipItem(item)}
-                            </div>
-                            <div className="col-auto">
-                                <button
-                                    className={classNames("icon-btn star-btn", {
-                                        active: item.list != null,
-                                    })}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        apiRenderer.command({
-                                            id: "assignItemsToList",
-                                            targets: hintsToPrimitiveTargets([hint]),
-                                            name: item.list != null ? undefined : StarredList.name,
-                                        });
-                                    }}
-                                >
-                                    <StarFill />
-                                </button>
-                            </div>
-                        </div>
+                        {renderItem(item, hint)}
                     </React.Fragment>
                 );
             })}
@@ -125,7 +202,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
     );
 }
 
-function renderClipItem(item: ClipItem): JSX.Element {
+function renderItemContent(item: ClipItem): JSX.Element {
     if (item.image != null) {
         return (
             <div className="clip-content-image" title={item.meta?.alt}>

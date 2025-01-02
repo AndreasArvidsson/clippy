@@ -69,23 +69,6 @@ function _createWindow(icon: string): BrowserWindow {
         },
     });
 
-    win.webContents.on("before-input-event", (e, input) => {
-        if (input.type !== "keyDown") {
-            return;
-        }
-
-        const key = parseInput(input);
-
-        switch (key) {
-            case "F12":
-                win.webContents.isDevToolsOpened()
-                    ? win.webContents.closeDevTools()
-                    : win.webContents.openDevTools();
-                e.preventDefault();
-                break;
-        }
-    });
-
     let timeout: NodeJS.Timeout;
 
     function updateBounds() {
@@ -102,31 +85,4 @@ function _createWindow(icon: string): BrowserWindow {
     void win.loadFile(path.resolve(__dirname, "index.html"));
 
     return win;
-}
-
-function parseInput(input: Electron.Input) {
-    const parts: string[] = [];
-    if (input.control) {
-        parts.push("Ctrl");
-    }
-    if (input.shift) {
-        parts.push("Shift");
-    }
-    if (input.alt) {
-        parts.push("Alt");
-    }
-    if (input.meta) {
-        parts.push("Meta");
-    }
-    switch (input.key) {
-        case "Control":
-        case "Alt":
-        case "Shift":
-        case "Meta":
-            // Do nothing
-            break;
-        default:
-            parts.push(input.key);
-    }
-    return parts.join("+");
 }

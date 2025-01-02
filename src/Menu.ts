@@ -1,9 +1,8 @@
 import { Menu, type MenuItemConstructorOptions } from "electron";
 import { runCommand } from "./commands/runCommand";
 import { storage } from "./storage";
-import { StarredList, defaultLists, type List, type MenuType } from "./types/types";
+import { StarredList, UnstarredList, defaultLists, type List, type MenuType } from "./types/types";
 import { getCommandForHints, hintsToPrimitiveTargets } from "./util/getCommandForHints";
-import { processTargets } from "./util/processTargets";
 
 Menu.setApplicationMenu(null);
 
@@ -15,43 +14,50 @@ const removeMenu = Menu.buildFromTemplate([
     },
 ]);
 
-function clipItemContextMenu(hint: string) {
-    const item = processTargets(hintsToPrimitiveTargets([hint]))[0];
-    const lists = [StarredList, ...storage.getLists()];
+function clipItemContextMenu(hints: string[]) {
+    const lists = [StarredList, UnstarredList, ...storage.getLists()];
+    const singleItem = hints.length === 1;
+    const itemsLabel = singleItem ? "item" : `${hints.length} items`;
 
     const menu = Menu.buildFromTemplate([
         {
             label: "Rename item",
             type: "normal",
-            click: () => runCommand(getCommandForHints("renameItems", [hint])),
+            enabled: singleItem,
+            click: () => {
+                runCommand(getCommandForHints("renameItems", [hints[0]]));
+            },
         },
         {
             type: "separator",
         },
         {
-            label: "Move item",
+            label: `Move ${itemsLabel}`,
             type: "submenu",
             submenu: lists.map((list) => ({
                 label: list.name,
                 type: "normal",
-                enabled: list.id !== item.list,
-                click: () =>
+                click: () => {
                     runCommand({
                         id: "assignItemsToList",
-                        name: list.name,
-                        targets: hintsToPrimitiveTargets([hint]),
-                    }),
+                        name: list.id,
+                        targets: hintsToPrimitiveTargets(hints),
+                    });
+                },
             })),
         },
         {
             type: "separator",
         },
         {
-            label: "Remove item",
+            label: `Remove ${itemsLabel}`,
             type: "normal",
-            click: () => runCommand(getCommandForHints("removeItems", [hint])),
+            click: () => {
+                runCommand(getCommandForHints("removeItems", hints));
+            },
         },
     ]);
+
     menu.popup();
 }
 
@@ -110,7 +116,7 @@ function listsMenu() {
 export function showMenu(menuType: MenuType) {
     switch (menuType.type) {
         case "clipItemContext":
-            clipItemContextMenu(menuType.hint);
+            clipItemContextMenu(menuType.hints);
             break;
         case "remove":
             removeMenu.popup();

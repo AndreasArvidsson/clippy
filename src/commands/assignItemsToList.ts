@@ -1,6 +1,6 @@
 import { storage } from "../storage";
 import type { AssignItemsToListCommand } from "../types/command";
-import { StarredList } from "../types/types";
+import { StarredList, UnstarredList } from "../types/types";
 import { processTargets } from "../util/processTargets";
 import { updateRenderer } from "../util/updateRenderer";
 
@@ -22,7 +22,10 @@ function getListId(listName: string | undefined): string | undefined {
     if (listName == null) {
         return undefined;
     }
-    if (listName === StarredList.name) {
+    if (listName === UnstarredList.id) {
+        return undefined;
+    }
+    if (listName === StarredList.id) {
         return StarredList.id;
     }
     const list = storage.getLists().find((l) => l.name === listName);

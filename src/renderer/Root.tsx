@@ -8,7 +8,7 @@ import { ListName } from "./ListName";
 import { Search } from "./Search";
 import { Settings } from "./Settings";
 import { Titlebar } from "./Titlebar";
-import { registerKeybindings } from "./keybinds";
+import { keyListeners } from "./keyListeners";
 
 export function Root(): JSX.Element | null {
     const [data, setData] = useState<RendererData>();
@@ -19,7 +19,7 @@ export function Root(): JSX.Element | null {
         apiRenderer.onUpdate(setData);
         apiRenderer.onCreateList(() => setListNameType("createList"));
         apiRenderer.onRenameList(() => setListNameType("renameList"));
-        registerKeybindings();
+        keyListeners.initialize();
     }, []);
 
     if (data == null) {

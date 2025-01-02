@@ -30,11 +30,13 @@ main {
 }
 
 .clip-item:hover {
-    border: 0.25rem solid #86b7fe !important;
+    border: 0.25rem solid #b5d4ff;
 }
 
 .clip-item.selected {
-    border: 0.25rem solid #86b7fe !important;
+    border: 0.25rem solid #86b7fe;
+    outline: 1px solid black;
+    outline-offset: -1px;
 }
 
 .clip-item > div {
@@ -42,7 +44,7 @@ main {
     align-items: center;
 }
 
-.clip-number {
+.clip-hint {
     font-weight: bold;
 }
 
