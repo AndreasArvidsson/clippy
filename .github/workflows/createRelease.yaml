@@ -38,8 +38,8 @@ jobs:
         id: create-release
         uses: softprops/action-gh-release@v2
         with:
+          name: "${{ env.version }}"
           tag_name: "v${{ env.version }}"
-          release_name: "${{ env.version }}"
           body: "Release for version ${{ env.version }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
