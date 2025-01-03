@@ -31,11 +31,11 @@ function addNewItem(item: ClipItem) {
     const { autoStar, activeList } = storage.getConfig();
 
     if (autoStar) {
-        switch (activeList) {
-            case AllList:
+        switch (activeList.id) {
+            case AllList.id:
                 item.list = StarredList.id;
                 break;
-            case UnstarredList:
+            case UnstarredList.id:
                 // Do nothing
                 break;
             default:
