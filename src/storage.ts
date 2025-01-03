@@ -129,6 +129,8 @@ export const storage = {
             }
         }
     },
+
+    saveStateFile,
 };
 
 async function readStateFile() {
@@ -140,7 +142,7 @@ async function readStateFile() {
     return { ...stateDefault };
 }
 
-function saveStateFile() {
+export function saveStateFile() {
     const { stateFile } = storagePaths.get();
     writeJsonFile(stateFile, _state).catch((error) => {
         showErrorNotification("Failed to save storage", error);

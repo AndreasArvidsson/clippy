@@ -9,7 +9,7 @@ export function getRendererData(): RendererData {
     const items = getListItems(isVisible);
     return {
         totalCount: items.length,
-        activeListName: getActiveList().name,
+        activeListName: getActiveList().activeList.name,
         config: storage.getConfig(),
         search: storage.getSearch(),
         showSettings: storage.getShowSettings(),

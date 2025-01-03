@@ -11,17 +11,17 @@ export function renameList(command: RenameListCommand) {
     }
 
     const name = command.name.trim();
-    const activeList = getActiveList();
-
-    if (!name) {
-        throw Error("Can't rename list: Name can't be empty");
-    }
+    const { activeList, activeListIsDefault } = getActiveList();
 
     if (activeList.name === name) {
         return;
     }
 
-    if (activeList.isDefault) {
+    if (!name) {
+        throw Error("Can't rename list: Name can't be empty");
+    }
+
+    if (activeListIsDefault) {
         throw Error(`Can't rename default list '${activeList.name}'`);
     }
 
@@ -32,7 +32,8 @@ export function renameList(command: RenameListCommand) {
     }
 
     activeList.name = name;
-    storage.setLists(storage.getLists());
+
+    storage.saveStateFile();
 
     updateRenderer();
 }

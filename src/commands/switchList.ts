@@ -4,7 +4,7 @@ import { getActiveList, getListByNameIgnoreCase } from "../util/getList";
 import { updateRenderer } from "../util/updateRenderer";
 
 export function switchList(command: SwitchListCommand) {
-    const activeList = getActiveList();
+    const { activeList } = getActiveList();
     const namedList = getListByNameIgnoreCase(command.name);
 
     if (namedList.id === activeList.id) {

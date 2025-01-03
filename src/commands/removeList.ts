@@ -5,9 +5,9 @@ import { updateRenderer } from "../util/updateRenderer";
 import { removeAllItems } from "./removeAllItems";
 
 export function removeList() {
-    const activeList = getActiveList();
+    const { activeList, activeListIsDefault } = getActiveList();
 
-    if (activeList.isDefault) {
+    if (activeListIsDefault) {
         throw Error(`Can't remove default list '${activeList.name}'`);
     }
 

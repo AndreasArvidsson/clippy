@@ -1,25 +1,9 @@
 import { storage } from "../storage";
-import { type EnrichedList, type List, defaultLists } from "../types/types";
+import { type List, defaultLists } from "../types/types";
 
-export function getList(id: string): EnrichedList {
-    const defaultList = defaultLists.find((l) => l.id === id);
-
-    if (defaultList != null) {
-        return { ...defaultList, isDefault: true };
-    }
-
-    const userList = storage.getLists().find((l) => l.id === id);
-
-    if (userList != null) {
-        return { ...userList, isDefault: false };
-    }
-
-    throw Error(`Can't find list '${id}'`);
-}
-
-export function getActiveList(): EnrichedList {
-    const { activeList } = storage.getConfig();
-    return getList(activeList);
+export function getActiveList(): { activeList: List; activeListIsDefault: boolean } {
+    const [activeList, activeListIsDefault] = getListInternal(storage.getConfig().activeList);
+    return { activeList, activeListIsDefault };
 }
 
 export function tryGetListByNameIgnoreCase(name: string): List | undefined {
@@ -38,4 +22,20 @@ export function getListByNameIgnoreCase(name: string): List {
     }
 
     return list;
+}
+
+function getListInternal(id: string): [List, boolean] {
+    const defaultList = defaultLists.find((l) => l.id === id);
+
+    if (defaultList != null) {
+        return [defaultList, true];
+    }
+
+    const userList = storage.getLists().find((l) => l.id === id);
+
+    if (userList != null) {
+        return [userList, false];
+    }
+
+    throw Error(`Can't find list '${id}'`);
 }

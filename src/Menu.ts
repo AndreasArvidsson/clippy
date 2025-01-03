@@ -63,7 +63,7 @@ function clipItemContextMenu(hints: string[]) {
 }
 
 function listsMenu() {
-    const activeList = getActiveList();
+    const { activeList, activeListIsDefault } = getActiveList();
     const lists = defaultLists.concat(storage.getLists());
 
     const getOptions = (list: List): MenuItemConstructorOptions => ({
@@ -87,7 +87,7 @@ function listsMenu() {
             label: "Rename list",
             type: "normal",
             click: () => runCommand({ id: "renameList" }),
-            enabled: !activeList.isDefault,
+            enabled: !activeListIsDefault,
         },
         {
             type: "separator",
@@ -105,11 +105,12 @@ function listsMenu() {
                     label: "Delete list and all items",
                     type: "normal",
                     click: () => runCommand({ id: "removeList" }),
-                    enabled: !activeList.isDefault,
+                    enabled: !activeListIsDefault,
                 },
             ],
         },
     ]);
+
     menu.popup();
 }
 

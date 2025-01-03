@@ -52,10 +52,6 @@ export interface List {
     name: string;
 }
 
-export interface EnrichedList extends List {
-    isDefault: boolean;
-}
-
 export interface StorageState {
     windowBounds?: Electron.Rectangle;
     config: Config;

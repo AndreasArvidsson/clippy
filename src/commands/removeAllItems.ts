@@ -4,7 +4,7 @@ import { getActiveList } from "../util/getList";
 import { updateRenderer } from "../util/updateRenderer";
 
 export function removeAllItems(render = true) {
-    const activeList = getActiveList();
+    const { activeList } = getActiveList();
     const allItems = storage.getClipboardItems();
 
     const itemsToRemove = (() => {
