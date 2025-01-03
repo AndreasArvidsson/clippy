@@ -17,23 +17,23 @@ export type Visibility =
     // Hide window if not pinned. If pinned, blur window
     | "hideOrBlurIfPinned";
 
-export interface ClipItemMeta {
-    readonly src?: string;
-    readonly alt?: string;
+export interface ClipItemImage {
+    readonly src: string | undefined;
+    readonly alt: string | undefined;
+    readonly data: string;
 }
 
 export interface ClipItem {
     readonly id: string;
     readonly created: number;
     readonly type: ClipItemType;
-    name?: string;
-    list?: string;
-    readonly text?: string;
-    readonly rtf?: string;
-    readonly html?: string;
-    readonly image?: string;
-    readonly bookmark?: ReadBookmark;
-    readonly meta?: ClipItemMeta;
+    name: string | undefined;
+    list: string | undefined;
+    readonly text: string | undefined;
+    readonly rtf: string | undefined;
+    readonly html: string | undefined;
+    readonly bookmark: ReadBookmark | undefined;
+    readonly image: ClipItemImage | undefined;
 }
 
 export interface Config {
