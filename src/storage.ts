@@ -184,7 +184,7 @@ function applySizeLimit() {
 
         if (item.list == null) {
             deleteClipItemFromDisk(item);
-            _clipboardItems.splice(index, 1)[0];
+            _clipboardItems.splice(index, 1);
         }
 
         --index;
