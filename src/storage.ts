@@ -124,8 +124,8 @@ export const storage = {
         for (const item of items) {
             const index = _clipboardItems.findIndex((i) => i.id === item.id);
             if (index > -1) {
-                _clipboardItems.splice(index, 1);
                 deleteClipItemFromDisk(item);
+                _clipboardItems.splice(index, 1);
             }
         }
     },
