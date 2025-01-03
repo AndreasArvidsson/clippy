@@ -15,6 +15,7 @@ import {
     readJsonFile,
     writeJsonFile,
 } from "./util/io";
+import { normalizeStorageState } from "./util/normalizeStorageState";
 import { showErrorNotification } from "./util/notifications";
 import { storagePaths } from "./util/storagePaths";
 import { updateStartWithOS } from "./util/updateStartWithOS";
@@ -133,24 +134,10 @@ export const storage = {
 async function readStateFile() {
     const { stateFile } = storagePaths.get();
     if (fileExists(stateFile)) {
-        const state = updateStateFile(await readJsonFile<StorageState>(stateFile));
+        const state = normalizeStorageState(await readJsonFile<StorageState>(stateFile));
         return { ...stateDefault, ...state };
     }
     return { ...stateDefault };
-}
-
-// FIXME 2025-01-03: Remove this when people have had time to update
-function updateStateFile(state: StorageState): StorageState {
-    if (typeof state.config.activeList !== "string") {
-        return {
-            ...state,
-            config: {
-                ...state.config,
-                activeList: AllList.id,
-            },
-        };
-    }
-    return state;
 }
 
 function saveStateFile() {
