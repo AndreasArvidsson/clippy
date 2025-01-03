@@ -44,12 +44,16 @@ export interface Config {
     readonly paused: boolean;
     readonly autoStar: boolean;
     readonly limit: number;
-    readonly activeList: List;
+    readonly activeList: string;
 }
 
 export interface List {
     readonly id: string;
     name: string;
+}
+
+export interface EnrichedList extends List {
+    isDefault: boolean;
 }
 
 export interface StorageState {
@@ -67,6 +71,7 @@ export interface Search {
 export interface RendererData {
     readonly totalCount: number;
     readonly config: Config;
+    readonly activeListName: string;
     readonly search: Search;
     readonly showSettings: boolean;
     readonly items: ClipItem[];

@@ -1,24 +1,20 @@
 import { storage } from "../storage";
-import { AllList, defaultLists } from "../types/types";
+import { AllList } from "../types/types";
+import { getActiveList } from "../util/getList";
 import { updateRenderer } from "../util/updateRenderer";
 import { removeAllItems } from "./removeAllItems";
 
 export function removeList() {
-    const { activeList } = storage.getConfig();
-    const lists = storage.getLists();
+    const activeList = getActiveList();
 
-    if (defaultLists.some((l) => l.id === activeList.id)) {
+    if (activeList.isDefault) {
         throw Error(`Can't remove default list '${activeList.name}'`);
-    }
-
-    if (!lists.some((l) => l.id === activeList.id)) {
-        throw Error(`Can't remove unknown list '${activeList.name}'`);
     }
 
     removeAllItems(false);
 
-    storage.setLists(lists.filter((l) => l.id !== activeList.id));
-    storage.patchConfig({ activeList: AllList });
+    storage.setLists(storage.getLists().filter((list) => list.id !== activeList.id));
+    storage.patchConfig({ activeList: AllList.id });
 
     updateRenderer();
 }

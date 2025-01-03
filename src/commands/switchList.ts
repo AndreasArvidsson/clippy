@@ -1,25 +1,17 @@
 import { storage } from "../storage";
 import type { SwitchListCommand } from "../types/command";
-import { defaultLists } from "../types/types";
+import { getActiveList, getListByNameIgnoreCase } from "../util/getList";
 import { updateRenderer } from "../util/updateRenderer";
 
 export function switchList(command: SwitchListCommand) {
-    const config = storage.getConfig();
-    const listName = command.name;
+    const activeList = getActiveList();
+    const namedList = getListByNameIgnoreCase(command.name);
 
-    if (listName === config.activeList.name) {
+    if (namedList.id === activeList.id) {
         return;
     }
 
-    const list =
-        defaultLists.find((l) => l.name === listName) ??
-        storage.getLists().find((l) => l.name === listName);
-
-    if (list == null) {
-        throw Error(`Can't switch to unknown list '${listName}'`);
-    }
-
-    storage.patchConfig({ activeList: list });
+    storage.patchConfig({ activeList: namedList.id });
 
     updateRenderer();
 }

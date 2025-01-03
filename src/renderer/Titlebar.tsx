@@ -1,12 +1,11 @@
 import { CaretDownFill, PinAngleFill, Search, XCircleFill, XLg } from "react-bootstrap-icons";
 import { apiRenderer } from "../api";
-import type { List } from "../types/types";
 import { isMacOS } from "../util/isMacOS";
 import classNames from "./classNames";
 import { getText } from "./texts";
 
 interface Props {
-    activeList: List;
+    activeListName: string;
     itemsCount: number;
     totalCount: number;
     pinned: boolean;
@@ -17,7 +16,7 @@ interface Props {
 const isMac = isMacOS();
 
 export function Titlebar({
-    activeList,
+    activeListName,
     itemsCount,
     totalCount,
     pinned,
@@ -81,7 +80,7 @@ export function Titlebar({
         return (
             <div className={className}>
                 <button className="icon-btn" onClick={() => apiRenderer.menu({ type: "lists" })}>
-                    {activeList.name} ({count}) <CaretDownFill />
+                    {activeListName} ({count}) <CaretDownFill />
                 </button>
             </div>
         );

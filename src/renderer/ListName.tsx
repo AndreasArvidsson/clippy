@@ -1,21 +1,20 @@
 import { apiRenderer } from "../api";
-import type { List } from "../types/types";
 import InputText from "./InputText";
 
 export type ListNameType = "createList" | "renameList";
 
 interface Props {
     type: ListNameType | undefined;
-    activeList: List;
+    activeListName: string;
     done: () => void;
 }
-export function ListName({ type, activeList, done }: Props): JSX.Element | null {
+export function ListName({ type, activeListName, done }: Props): JSX.Element | null {
     if (type == null) {
         return null;
     }
 
     const isCreate = type === "createList";
-    const defaultValue = isCreate ? undefined : activeList.name;
+    const defaultValue = isCreate ? undefined : activeListName;
     return (
         <div>
             <InputText

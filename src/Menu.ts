@@ -3,6 +3,7 @@ import { runCommand } from "./commands/runCommand";
 import { storage } from "./storage";
 import { StarredList, UnstarredList, defaultLists, type List, type MenuType } from "./types/types";
 import { getCommandForHints, hintsToPrimitiveTargets } from "./util/getCommandForHints";
+import { getActiveList } from "./util/getList";
 
 Menu.setApplicationMenu(null);
 
@@ -62,9 +63,8 @@ function clipItemContextMenu(hints: string[]) {
 }
 
 function listsMenu() {
-    const { activeList } = storage.getConfig();
+    const activeList = getActiveList();
     const lists = defaultLists.concat(storage.getLists());
-    const activeIsDefault = defaultLists.some((l) => l.id === activeList.id);
 
     const getOptions = (list: List): MenuItemConstructorOptions => ({
         label: list.name,
@@ -87,7 +87,7 @@ function listsMenu() {
             label: "Rename list",
             type: "normal",
             click: () => runCommand({ id: "renameList" }),
-            enabled: !activeIsDefault,
+            enabled: !activeList.isDefault,
         },
         {
             type: "separator",
@@ -105,7 +105,7 @@ function listsMenu() {
                     label: "Delete list and all items",
                     type: "normal",
                     click: () => runCommand({ id: "removeList" }),
-                    enabled: !activeIsDefault,
+                    enabled: !activeList.isDefault,
                 },
             ],
         },

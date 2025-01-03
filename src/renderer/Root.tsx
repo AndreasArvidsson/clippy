@@ -35,7 +35,7 @@ export function Root(): JSX.Element | null {
             <>
                 <ListName
                     type={listNameType}
-                    activeList={data.config.activeList}
+                    activeListName={data.activeListName}
                     done={() => setListNameType(undefined)}
                 />
 
@@ -49,7 +49,7 @@ export function Root(): JSX.Element | null {
     return (
         <>
             <Titlebar
-                activeList={data.config.activeList}
+                activeListName={data.activeListName}
                 itemsCount={data.items.length}
                 totalCount={data.totalCount}
                 pinned={data.config.pinned}

@@ -3,15 +3,15 @@ import { AllList, UnstarredList, type ClipItem } from "../types/types";
 
 export function getListItems(isVisible: boolean): ClipItem[] {
     const items = storage.getClipboardItems();
-    const activeList = isVisible ? storage.getConfig().activeList : AllList;
+    const activeList = isVisible ? storage.getConfig().activeList : AllList.id;
 
-    switch (activeList.id) {
+    switch (activeList) {
         case AllList.id:
             return items;
         case UnstarredList.id:
             return items.filter((item) => item.list == null);
         default:
-            return items.filter((item) => item.list === activeList.id);
+            return items.filter((item) => item.list === activeList);
     }
 }
 

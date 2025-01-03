@@ -31,7 +31,7 @@ function addNewItem(item: ClipItem) {
     const { autoStar, activeList } = storage.getConfig();
 
     if (autoStar) {
-        switch (activeList.id) {
+        switch (activeList) {
             case AllList.id:
                 item.list = StarredList.id;
                 break;
@@ -39,7 +39,7 @@ function addNewItem(item: ClipItem) {
                 // Do nothing
                 break;
             default:
-                item.list = activeList.id;
+                item.list = activeList;
         }
     }
 
