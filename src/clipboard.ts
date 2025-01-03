@@ -3,6 +3,7 @@ import * as electron from "electron";
 import { storage } from "./storage";
 import type { ClipItem, ClipItemImage, ClipItemType } from "./types/types";
 import { getNextClipItemId } from "./util/clipItemId";
+import { createHash } from "./util/createHash";
 import { toMarkdownImageLink } from "./util/transformations";
 
 // Clipboards containing any of these formats should not be saved
@@ -33,10 +34,12 @@ function read(): ClipItem | null {
     const image = redImage(html);
     const bookmark = readBookmark();
     const type: ClipItemType = image != null ? "image" : "text";
+    const hash = createHash(image?.data ?? text ?? rtf ?? html ?? "");
 
     return {
         id,
         created,
+        hash,
         type,
         name: undefined,
         list: undefined,
@@ -105,7 +108,7 @@ function writeItem(item: ClipItem) {
     });
 }
 
-function onChange(callback: (item: ClipItem) => void) {
+function onChange(listener: (item: ClipItem) => void) {
     clipboardEvent.startListening();
 
     clipboardEvent.on("change", () => {
@@ -116,13 +119,12 @@ function onChange(callback: (item: ClipItem) => void) {
         const item = read();
 
         if (item != null) {
-            callback(item);
+            listener(item);
         }
     });
 }
 
 export const clipboard = {
-    read,
     write,
     onChange,
 };

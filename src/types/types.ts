@@ -26,6 +26,7 @@ export interface ClipItemImage {
 export interface ClipItem {
     readonly id: string;
     readonly created: number;
+    readonly hash: string;
     readonly type: ClipItemType;
     name: string | undefined;
     list: string | undefined;

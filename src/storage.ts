@@ -116,14 +116,6 @@ export const storage = {
         applyLengthLimit();
     },
 
-    addExistingItem(item: ClipItem) {
-        const index = _clipboardItems.findIndex((i) => i.id === item.id);
-        if (index > -1) {
-            _clipboardItems.splice(index, 1);
-        }
-        _clipboardItems.unshift(item);
-    },
-
     replaceItems(items: ClipItem[]) {
         for (const item of items) {
             writeClipItemToDisk(item);
