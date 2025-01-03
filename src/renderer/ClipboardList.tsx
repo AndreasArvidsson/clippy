@@ -211,22 +211,19 @@ function renderItemContent(item: ClipItem): JSX.Element {
         );
     }
 
-    const text = item.text ?? item.rtf;
+    const text = item.text ?? item.rtf ?? item.html ?? "";
 
-    if (text != null) {
-        if (text.includes("\n")) {
-            return (
-                <pre className="clip-content-text" title={text}>
-                    {text}
-                </pre>
-            );
-        }
+    if (text.includes("\n")) {
         return (
-            <div className="clip-content-text" title={text}>
+            <pre className="clip-content-text" title={text}>
                 {text}
-            </div>
+            </pre>
         );
     }
 
-    return <div>[FAILED TO RENDER]</div>;
+    return (
+        <div className="clip-content-text" title={text}>
+            {text}
+        </div>
+    );
 }

@@ -81,10 +81,10 @@ function writeItems(items: ClipItem[]) {
     for (const item of items) {
         switch (item.type) {
             case "text":
-                texts.push(item.text ?? "[TEXT]");
+                texts.push(item.text ?? item.rtf ?? item.html ?? "");
                 break;
             case "image": {
-                const name = item.name ?? item.image?.alt ?? "[IMAGE]";
+                const name = item.name ?? item.image?.alt ?? "IMAGE";
                 if (item.image?.src) {
                     texts.push(toMarkdownImageLink(name, item.image.src));
                 } else {
