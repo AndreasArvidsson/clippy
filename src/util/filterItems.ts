@@ -31,7 +31,7 @@ export function applySearchFilters(items: ClipItem[], isVisible: boolean): ClipI
                     (item.text ?? item.rtf)?.toLowerCase().includes(searchText) ||
                     item.html?.toLowerCase().includes(searchText) ||
                     item.bookmark?.title?.toLowerCase().includes(searchText) ||
-                    item.meta?.alt?.toLowerCase().includes(searchText),
+                    item.image?.alt?.toLowerCase().includes(searchText),
             );
         }
     }

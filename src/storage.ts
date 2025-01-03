@@ -72,9 +72,6 @@ export const storage = {
         if (config.alwaysOnTop != null) {
             getWindow().setAlwaysOnTop(config.alwaysOnTop);
         }
-        if (config.limit != null) {
-            applyLengthLimit();
-        }
     },
 
     getLists(): List[] {
@@ -113,15 +110,7 @@ export const storage = {
     addNewItem(item: ClipItem) {
         _clipboardItems.unshift(item);
         writeClipItemToDisk(item);
-        applyLengthLimit();
-    },
-
-    addExistingItem(item: ClipItem) {
-        const index = _clipboardItems.findIndex((i) => i.id === item.id);
-        if (index > -1) {
-            _clipboardItems.splice(index, 1);
-        }
-        _clipboardItems.unshift(item);
+        applySizeLimit();
     },
 
     replaceItems(items: ClipItem[]) {
@@ -186,14 +175,18 @@ function getFilePath(item: ClipItem) {
     return path.join(clipItemsDir, `${item.id}.json`);
 }
 
-function applyLengthLimit() {
-    while (_clipboardItems.length > _state.config.limit) {
-        const index = _clipboardItems.findLastIndex((i) => i.list == null);
-        // Index 0 is the most recent item, so we don't want to remove that.
-        if (index < 1) {
-            break;
+function applySizeLimit() {
+    let index = _clipboardItems.length - 1;
+
+    // Index 0 is the most recent item and we don't want to remove that.
+    while (index > 0 && _clipboardItems.length > _state.config.limit) {
+        const item = _clipboardItems[index];
+
+        if (item.list == null) {
+            deleteClipItemFromDisk(item);
+            _clipboardItems.splice(index, 1);
         }
-        const removedItem = _clipboardItems.splice(index, 1)[0];
-        deleteClipItemFromDisk(removedItem);
+
+        --index;
     }
 }

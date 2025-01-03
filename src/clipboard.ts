@@ -1,8 +1,9 @@
 import clipboardEvent from "clipboard-event";
 import * as electron from "electron";
 import { storage } from "./storage";
-import type { ClipItem, ClipItemMeta, ClipItemType } from "./types/types";
-import { hash } from "./util/hash";
+import type { ClipItem, ClipItemImage, ClipItemType } from "./types/types";
+import { getNextClipItemId } from "./util/clipItemId";
+import { createHash } from "./util/createHash";
 import { toMarkdownImageLink } from "./util/transformations";
 
 // Clipboards containing any of these formats should not be saved
@@ -25,57 +26,46 @@ function read(): ClipItem | null {
         return null;
     }
 
+    const created = Date.now();
+    const id = getNextClipItemId(created);
     const text = electron.clipboard.readText() || undefined;
     const rtf = electron.clipboard.readRTF() || undefined;
     const html = electron.clipboard.readHTML() || undefined;
-    const bookmark = (() => {
-        const bookmark = electron.clipboard.readBookmark();
-        return bookmark.title || bookmark.url ? bookmark : undefined;
-    })();
-    const image = (() => {
-        const nativeImage = electron.clipboard.readImage();
-        return nativeImage.isEmpty() ? undefined : nativeImage.toDataURL();
-    })();
-    const type: ClipItemType = image ? "image" : "text";
-    let id: string | undefined;
-    let meta: ClipItemMeta | undefined;
+    const image = redImage(html);
+    const bookmark = readBookmark();
+    const type: ClipItemType = image != null ? "image" : "text";
+    const hash = createHash(image?.data ?? text ?? rtf ?? html ?? "");
 
-    if (image) {
-        id = `image_${hash(image)}`;
-
-        if (html) {
-            meta = {
-                src: /<img.*?src=(?:"(.+?)"|'(.+?)').*?>/g.exec(html)?.[1],
-                alt: /<img.*?alt=(?:"(.+?)"|'(.+?)').*?>/g.exec(html)?.[1],
-            };
-        }
-    } else {
-        const value = text ?? rtf ?? html;
-        if (value) {
-            id = `text_${hash(value)}`;
-        }
-    }
-
-    const item = {
+    return {
+        id,
+        created,
+        hash,
         type,
+        name: undefined,
+        list: undefined,
         text,
         rtf,
         html,
         bookmark,
-        meta,
         image,
     };
+}
 
-    if (id == null) {
-        console.error("Missing id", formats, item);
-        return null;
+function redImage(html: string | undefined): ClipItemImage | undefined {
+    const nativeImage = electron.clipboard.readImage();
+    if (nativeImage.isEmpty()) {
+        return undefined;
     }
-
     return {
-        id,
-        created: Date.now(),
-        ...item,
+        src: html != null ? /<img.*?src=(?:"(.+?)"|'(.+?)').*?>/g.exec(html)?.[1] : undefined,
+        alt: html != null ? /<img.*?alt=(?:"(.+?)"|'(.+?)').*?>/g.exec(html)?.[1] : undefined,
+        data: nativeImage.toDataURL(),
     };
+}
+
+function readBookmark(): electron.ReadBookmark | undefined {
+    const bookmark = electron.clipboard.readBookmark();
+    return bookmark.title || bookmark.url ? bookmark : undefined;
 }
 
 function write(items: ClipItem[]) {
@@ -91,12 +81,12 @@ function writeItems(items: ClipItem[]) {
     for (const item of items) {
         switch (item.type) {
             case "text":
-                texts.push(item.text ?? "[TEXT]");
+                texts.push(item.text ?? item.rtf ?? item.html ?? "");
                 break;
             case "image": {
-                const name = item.name ?? item.meta?.alt ?? "[IMAGE]";
-                if (item.meta?.src) {
-                    texts.push(toMarkdownImageLink(name, item.meta.src));
+                const name = item.name ?? item.image?.alt ?? "IMAGE";
+                if (item.image?.src) {
+                    texts.push(toMarkdownImageLink(name, item.image.src));
                 } else {
                     texts.push(name);
                 }
@@ -114,11 +104,11 @@ function writeItem(item: ClipItem) {
         rtf,
         html,
         bookmark: bookmark?.title,
-        image: image != null ? electron.nativeImage.createFromDataURL(image) : undefined,
+        image: image != null ? electron.nativeImage.createFromDataURL(image.data) : undefined,
     });
 }
 
-function onChange(callback: (item: ClipItem) => void) {
+function onChange(listener: (item: ClipItem) => void) {
     clipboardEvent.startListening();
 
     clipboardEvent.on("change", () => {
@@ -129,13 +119,12 @@ function onChange(callback: (item: ClipItem) => void) {
         const item = read();
 
         if (item != null) {
-            callback(item);
+            listener(item);
         }
     });
 }
 
 export const clipboard = {
-    read,
     write,
     onChange,
 };
