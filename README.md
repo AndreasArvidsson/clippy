@@ -68,7 +68,7 @@ Creates `dist` directory with executable
 
 ```
 $ npm install
-$ npm package
+$ npm run package
 ```
 
 ## Images
