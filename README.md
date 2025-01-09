@@ -6,6 +6,10 @@ Clipboard manager with RPC. Support keyboard, mouse and excellent Talon Voice in
 
 Latest prepackaged releases available at [GitHub](https://github.com/AndreasArvidsson/clippy/releases)
 
+### MacOS
+
+On MacOS applications not downloaded from the apple store gets tagged with a quarantine attribute. When you try to run the file you get a message that the file is damaged and can't be opened. To fix this run `xattr -c /Applications/Clippy.app`
+
 ## Talon user scripts
 
 If you are going to use Clippy together with Talon you need the Talon user scripts.
