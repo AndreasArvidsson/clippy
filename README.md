@@ -8,7 +8,7 @@ Latest prepackaged releases available at [GitHub](https://github.com/AndreasArvi
 
 ### MacOS
 
-On MacOS applications not downloaded from the apple store gets tagged with a quarantine attribute. When you try to run the file you get a message that the file is damaged and can't be opened. To fix this run `xattr -c /Applications/Clippy.app`
+On MacOS applications not downloaded from the app store gets tagged with a quarantine attribute. When you try to run the file you get a message that the file is damaged and can't be opened. To circumvent this you can run `xattr -c /Applications/Clippy.app`. Note that this is not recommended by Apple, but the only way to run the mac release at the moment. The other option would be to compile the source code yourself.
 
 ## Talon user scripts
 
@@ -19,6 +19,11 @@ If you are going to use Clippy together with Talon you need the Talon user scrip
 ## Usage
 
 ### Keyboard and mouse control
+
+#### Show / hide Clippy
+
+-   Keyboard (Win): Press `Win+c`
+-   Keyboard (Mac): Press `Option+c`
 
 #### Copy items
 
