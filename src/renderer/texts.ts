@@ -17,7 +17,6 @@ export const texts: Record<TextId, Text> = {
     },
     close: {
         title: "Close window",
-        desc: "Closes the window",
     },
     paused: {
         title: "Pause",
@@ -39,7 +38,7 @@ export const texts: Record<TextId, Text> = {
 
 export function getText(id: TextId): string {
     const text = texts[id];
-    return `${text.title}: ${text.desc}`;
+    return text.desc ? `${text.title}: ${text.desc}` : text.title;
 }
 
 type TextId =
@@ -55,5 +54,5 @@ type TextId =
 
 interface Text {
     title: string;
-    desc: string;
+    desc?: string;
 }
