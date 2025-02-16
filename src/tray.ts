@@ -11,7 +11,7 @@ export async function createTray(iconPath: string) {
 
     const contextMenu = Menu.buildFromTemplate([
         {
-            label: "Exit",
+            label: `Exit ${NAME}`,
             type: "normal",
             click: () => runCommand({ id: "exit" }),
         },
