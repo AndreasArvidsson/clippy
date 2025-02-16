@@ -64,6 +64,14 @@ export function Settings({ config }: Props): JSX.Element {
             >
                 {texts.limit.title}
             </InputNumber>
+
+            <button
+                className="btn btn-sm btn-primary mt-3"
+                title={texts.hideSettings.desc}
+                onClick={() => apiRenderer.command({ id: "hideSettings" })}
+            >
+                {texts.hideSettings.title}
+            </button>
         </main>
     );
 }

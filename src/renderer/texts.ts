@@ -30,6 +30,10 @@ export const texts: Record<TextId, Text> = {
         title: "Settings",
         desc: "When enabled, show settings panel",
     },
+    hideSettings: {
+        title: "Hide settings",
+        desc: "Hide settings panel",
+    },
     limit: {
         title: "Limit",
         desc: "Maximum number of clipboard items to store",
@@ -50,6 +54,7 @@ type TextId =
     | "paused"
     | "autoStar"
     | "showSettings"
+    | "hideSettings"
     | "limit";
 
 interface Text {
