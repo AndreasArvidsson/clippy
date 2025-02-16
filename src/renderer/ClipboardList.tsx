@@ -117,6 +117,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
                     placeholder="Item name"
                     value={item.name}
                     onBlur={() => setRenameItemId(undefined)}
+                    onEscape={() => setRenameItemId(undefined)}
                     onChange={(value) => {
                         setRenameItemId(undefined);
                         apiRenderer.command({

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import classNames from "./classNames";
 
 export interface Props {
@@ -11,7 +11,7 @@ export interface Props {
     invalid?: boolean;
     autoFocus?: boolean;
     onChange: (value: number) => void;
-    onBlur?: () => void;
+    onBlur?: (value: number) => void;
     children?: React.ReactNode;
 }
 
@@ -29,21 +29,15 @@ export default function InputNumber({
     children,
 }: Props) {
     const [currentValue, setCurrentValue] = useState("");
+    const escapeBlurRef = useRef(false);
 
     useEffect(() => {
         setCurrentValue(value.toString());
     }, [value]);
 
-    const myOnChange = () => {
+    const parseCurrentValue = () => {
         const num = isInteger ? parseInt(currentValue) : parseFloat(currentValue);
-        if (isNaN(num)) {
-            setCurrentValue(value.toString());
-        } else {
-            setCurrentValue(num.toString());
-            if (value !== num) {
-                onChange(num);
-            }
-        }
+        return isNaN(num) ? value : num;
     };
 
     return (
@@ -64,15 +58,26 @@ export default function InputNumber({
                 autoFocus={autoFocus}
                 onChange={(e) => setCurrentValue(e.target.value)}
                 onBlur={() => {
-                    setCurrentValue(value.toString());
-                    onBlur?.();
+                    if (onBlur != null && !escapeBlurRef.current) {
+                        const num = parseCurrentValue();
+                        setCurrentValue(num.toString());
+                        onBlur(num);
+                    } else {
+                        setCurrentValue(value.toString());
+                    }
+                    escapeBlurRef.current = false;
                 }}
                 onKeyDown={(e) => {
                     e.stopPropagation();
                     if (e.key === "Enter") {
-                        myOnChange();
+                        const num = parseCurrentValue();
+                        setCurrentValue(num.toString());
+                        if (value !== num) {
+                            onChange(num);
+                        }
                     } else if (e.key === "Escape") {
                         e.preventDefault();
+                        escapeBlurRef.current = true;
                         e.currentTarget.blur();
                     }
                 }}

@@ -23,6 +23,7 @@ export function ListName({ type, activeListName, done }: Props): JSX.Element | n
                 placeholder="List name"
                 value={defaultValue}
                 onBlur={() => done()}
+                onEscape={() => done()}
                 onChange={(value) => {
                     done();
                     apiRenderer.command({ id: type, name: value });

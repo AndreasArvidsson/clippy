@@ -60,6 +60,7 @@ export function Settings({ config }: Props): JSX.Element {
                 isInteger
                 value={config.limit}
                 onChange={(limit) => patchConfig({ limit })}
+                onBlur={(limit) => patchConfig({ limit })}
             >
                 {texts.limit.title}
             </InputNumber>

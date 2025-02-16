@@ -23,8 +23,11 @@ export function Search({ search }: Props): JSX.Element | null {
                 className="form-control-sm"
                 placeholder="Search"
                 autoFocus
+                timeout
                 value={search.text}
                 onChange={(value) => onChange({ text: value })}
+                onBlur={() => {}} // Do nothing
+                onEscape={() => apiRenderer.command({ id: "hideSearch" })}
             />
 
             <span>

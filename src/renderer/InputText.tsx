@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import classNames from "./classNames";
 
 interface Props {
@@ -10,8 +10,10 @@ interface Props {
     disabled?: boolean;
     invalid?: boolean;
     autoFocus?: boolean;
+    timeout?: boolean;
     onChange: (value: string) => void;
     onBlur?: () => void;
+    onEscape?: () => void;
 }
 
 export default function InputText({
@@ -23,10 +25,14 @@ export default function InputText({
     title,
     invalid,
     autoFocus,
+    timeout,
     onChange,
     onBlur,
+    onEscape,
 }: Props) {
     const [currentValue, setCurrentValue] = useState("");
+    const [timeoutHandle, setTimeoutHandle] = useState<NodeJS.Timeout>();
+    const escapeBlurRef = useRef(false);
 
     useEffect(() => {
         setCurrentValue(value ?? "");
@@ -47,10 +53,20 @@ export default function InputText({
             placeholder={placeholder}
             disabled={disabled}
             autoFocus={autoFocus}
-            onChange={(e) => setCurrentValue(e.target.value)}
+            onChange={(e) => {
+                setCurrentValue(e.target.value);
+                if (timeout) {
+                    clearTimeout(timeoutHandle);
+                    setTimeoutHandle(setTimeout(() => onChange(e.target.value.trim()), 500));
+                }
+            }}
             onBlur={() => {
-                setCurrentValue(value ?? "");
-                onBlur?.();
+                if (onBlur != null && !escapeBlurRef.current) {
+                    onBlur();
+                } else {
+                    setCurrentValue(value ?? "");
+                }
+                escapeBlurRef.current = false;
             }}
             onKeyDown={(e) => {
                 e.stopPropagation();
@@ -58,7 +74,12 @@ export default function InputText({
                     onChange(currentValue.trim());
                 } else if (e.key === "Escape") {
                     e.preventDefault();
-                    e.currentTarget.blur();
+                    if (onEscape != null) {
+                        onEscape();
+                    } else {
+                        escapeBlurRef.current = true;
+                        e.currentTarget.blur();
+                    }
                 }
             }}
         />
