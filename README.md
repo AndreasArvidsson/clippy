@@ -8,7 +8,7 @@ Latest prepackaged releases available at [GitHub](https://github.com/AndreasArvi
 
 ### MacOS
 
-On MacOS applications not downloaded from the app store gets tagged with a quarantine attribute. When you try to run the file you get a message that the file is damaged and can't be opened. To circumvent this you can run `xattr -c /Applications/Clippy.app`. Note that this is not recommended by Apple, but the only way to run the mac release at the moment. The other option would be to compile the source code yourself.
+On MacOS applications not downloaded from the app store gets tagged with a quarantine attribute. When you try to run the file you get a message that the file is damaged and can't be opened. Mac users needs to compile the source code themself for now.
 
 ## Talon user scripts
 
