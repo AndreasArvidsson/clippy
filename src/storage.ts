@@ -162,15 +162,29 @@ async function readItemsFromDisk(): Promise<ClipItem[]> {
 }
 
 function writeClipItemToDisk(item: ClipItem) {
-    writeJsonFile(getFilePath(item), item).catch((error) => {
+    void writeJsonFile(getFilePath(item), item).catch((error) => {
         showErrorNotification("Failed to save clipboard item to disk", error);
     });
 }
 
 function deleteClipItemFromDisk(item: ClipItem) {
-    deleteFile(getFilePath(item)).catch((error) => {
-        showErrorNotification("Failed to delete clipboard item from disk", error);
-    });
+    const path = getFilePath(item);
+    void deleteFileFromDiskWithRetry(path);
+}
+
+async function deleteFileFromDiskWithRetry(path: string) {
+    try {
+        return await deleteFile(path);
+    } catch (error) {
+        console.warn("Failed to delete clipboard item from disk. Retry...", error);
+        if (fileExists(path)) {
+            try {
+                return await deleteFile(path);
+            } catch (error) {
+                showErrorNotification("Failed to delete clipboard item from disk", error);
+            }
+        }
+    }
 }
 
 function getFilePath(item: ClipItem) {

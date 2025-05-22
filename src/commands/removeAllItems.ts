@@ -10,7 +10,8 @@ export function removeAllItems(render = true) {
     const itemsToRemove = (() => {
         switch (activeList.id) {
             case AllList.id:
-                return allItems;
+                // Important to make a copy since the original item list will be updated
+                return allItems.slice();
             case UnstarredList.id:
                 return allItems.filter((item) => item.list == null);
             default:
