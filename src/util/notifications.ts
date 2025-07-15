@@ -5,8 +5,7 @@ export function showErrorNotification(message: string, error?: unknown) {
 
     if (error != null) {
         console.error(message, error);
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        body = `${message}\n${errorMessage}`;
+        body = error instanceof Error ? `${message}\n${error.message}` : message;
     } else {
         console.error(message);
         body = message;

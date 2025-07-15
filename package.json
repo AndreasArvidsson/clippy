@@ -3,7 +3,7 @@
     "displayName": "Clippy",
     "productName": "Clippy",
     "description": "Clipboard manager with RPC",
-    "version": "0.17.1",
+    "version": "0.18.0",
     "author": "AndreasArvidsson",
     "license": "MIT",
     "main": "out/main.js",
@@ -15,29 +15,31 @@
         "prepareAssets": "tsx prepareAssets.ts",
         "package": "npm run build && tsx package.ts",
         "test": "eslint src && prettier --check .",
-        "fix": "prettier --write ."
+        "fix": "eslint src --fix && prettier --write ."
     },
     "dependencies": {
-        "bootstrap": "5.3.3",
+        "bootstrap": "5.3.7",
         "clipboard-event": "1.6.0",
-        "react": "18.2.0",
-        "react-bootstrap-icons": "1.11.4",
-        "react-dom": "18.2.0",
-        "talon-rpc": "2.1.0",
-        "uuid": "9.0.1"
+        "react": "19.1.0",
+        "react-bootstrap-icons": "1.11.6",
+        "react-dom": "19.1.0",
+        "talon-rpc": "2.2.0",
+        "uuid": "11.1.0"
     },
     "devDependencies": {
-        "@electron/packager": "18.3.2",
-        "@types/node": "20.12.7",
-        "@types/react-dom": "18.2.25",
-        "@types/uuid": "9.0.8",
-        "@typescript-eslint/eslint-plugin": "7.7.1",
-        "@typescript-eslint/parser": "7.7.1",
-        "electron": "30.0.1",
-        "eslint": "8.56.0",
-        "eslint-plugin-react": "7.34.1",
-        "prettier": "3.2.5",
-        "tsx": "4.17.0",
-        "typescript": "5.4.5"
+        "@electron/packager": "^18.3.6",
+        "@eslint/js": "^9.31.0",
+        "@types/node": "^24.0.14",
+        "@types/react-dom": "^19.1.6",
+        "@types/uuid": "^10.0.0",
+        "electron": "^37.2.2",
+        "eslint-config-prettier": "^10.1.5",
+        "eslint-plugin-react": "^7.37.5",
+        "eslint": "^9.31.0",
+        "jiti": "^2.4.2",
+        "prettier": "3.5.3",
+        "tsx": "^4.20.3",
+        "typescript-eslint": "^8.37.0",
+        "typescript": "^5.8.3"
     }
 }

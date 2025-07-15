@@ -1,5 +1,4 @@
-const runModes = ["production", "development", "test"] as const;
-type RunMode = (typeof runModes)[number];
+type RunMode = "production" | "development" | "test";
 
 const mode = ((): RunMode => {
     switch (process.env.CLIPPY_MODE) {

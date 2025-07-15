@@ -1,18 +1,18 @@
-import { BrowserWindow, app, nativeTheme, screen } from "electron";
+import { BrowserWindow, app, nativeTheme, screen, type Rectangle } from "electron";
 import path from "node:path";
 import { NAME } from "./constants";
 import { storage } from "./storage";
 import { isMacOS } from "./util/isMacOS";
 
 let _window: BrowserWindow | null = null;
-let _bounds: Electron.Rectangle | undefined = undefined;
+let _bounds: Rectangle | undefined = undefined;
 
 export function createWindow(iconPath: string) {
     _bounds = storage.getWindowBounds();
     _window = _createWindow(iconPath);
 
     if (isMacOS()) {
-        app.dock.hide();
+        app.dock?.hide();
     }
 
     return {
@@ -33,7 +33,7 @@ export function isWindowVisible(): boolean {
     return getWindow().isVisible();
 }
 
-function getBounds(): Partial<Electron.Rectangle> {
+function getBounds(): Partial<Rectangle> {
     if (_bounds != null) {
         return _bounds;
     }

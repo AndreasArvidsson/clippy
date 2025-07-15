@@ -1,3 +1,4 @@
+import type { JSX } from "react";
 import { GearFill, PauseFill, StarFill } from "react-bootstrap-icons";
 import { apiRenderer } from "../api";
 import classNames from "./classNames";

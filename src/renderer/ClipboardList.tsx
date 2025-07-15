@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, type JSX } from "react";
 import { StarFill } from "react-bootstrap-icons";
 import { apiRenderer } from "../api";
 import { StarredList, UnstarredList, type ClipItem } from "../types/types";

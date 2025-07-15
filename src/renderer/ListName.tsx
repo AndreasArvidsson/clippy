@@ -1,3 +1,4 @@
+import type { JSX } from "react";
 import { apiRenderer } from "../api";
 import InputText from "./InputText";
 
