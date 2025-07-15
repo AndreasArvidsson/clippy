@@ -3,7 +3,7 @@
     "displayName": "Clippy",
     "productName": "Clippy",
     "description": "Clipboard manager with RPC",
-    "version": "0.18.0",
+    "version": "0.19.0",
     "author": "AndreasArvidsson",
     "license": "MIT",
     "main": "out/main.js",
@@ -14,7 +14,7 @@
         "compile": "tsc -p .",
         "prepareAssets": "tsx prepareAssets.ts",
         "package": "npm run build && tsx package.ts",
-        "test": "eslint src && prettier --check .",
+        "lint": "eslint src && prettier --check .",
         "fix": "eslint src --fix && prettier --write ."
     },
     "dependencies": {

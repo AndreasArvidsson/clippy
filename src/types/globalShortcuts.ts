@@ -11,7 +11,7 @@ export function registerGlobalShortcuts(rpc: TalonRpcServer) {
         () => void rpc.executeRequest().catch(handleRequestError),
     );
 
-    registerGlobalShortcut("Super+c", "Option+c", () =>
+    registerGlobalShortcut("Super+Alt+C", "Super+Alt+C", () =>
         runCommandWithThrow({ id: "toggleShowHide" }),
     );
 }

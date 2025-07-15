@@ -22,8 +22,8 @@ If you are going to use Clippy together with Talon you need the Talon user scrip
 
 #### Show / hide Clippy
 
-- Keyboard (Win): Press `Win+c`
-- Keyboard (Mac): Press `Option+c`
+- Keyboard (Win): Press `Win+Alt+C`
+- Keyboard (Mac): Press `Cmd+Alt+C`
 
 #### Copy items
 
