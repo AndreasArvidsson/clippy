@@ -29,7 +29,6 @@
         "@preact/preset-vite": "^2.10.2",
         "@types/node": "^24.3.0",
         "@types/react": "^19.1.11",
-        "@types/uuid": "^10.0.0",
         "electron-vite": "^4.0.0",
         "electron": "^37.3.1",
         "eslint-config-prettier": "^10.1.8",
