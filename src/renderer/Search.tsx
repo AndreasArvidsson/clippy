@@ -1,5 +1,5 @@
 import type { JSX } from "preact";
-import { apiRenderer } from "../api";
+import { apiRenderer } from "./apiRenderer";
 import type { ClipItemType, Search } from "../types/types";
 import InputText from "./InputText";
 

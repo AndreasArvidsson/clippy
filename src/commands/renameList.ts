@@ -1,4 +1,4 @@
-import { apiMain } from "../api";
+import { apiMain } from "../apiMain";
 import { storage } from "../storage";
 import type { RenameListCommand } from "../types/command";
 import { getActiveList, tryGetListByNameIgnoreCase } from "../util/getList";

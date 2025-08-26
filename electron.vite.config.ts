@@ -2,22 +2,22 @@ import preact from "@preact/preset-vite";
 import { defineConfig } from "electron-vite";
 import * as path from "node:path";
 import purgeCss from "vite-plugin-purgecss";
-import electronRenderer from "vite-plugin-electron-renderer";
 
 export default defineConfig(({ mode }) => {
     // electron 37 uses node 22 and chromium 138
     const nodeTarget = "node22";
     const chromeTarget = "chrome138";
     const isProduction = mode === "production";
+    const outDir = path.join(__dirname, "out");
 
     return {
         main: {
             build: {
-                outDir: path.join(__dirname, "out"),
+                outDir: outDir,
                 target: nodeTarget,
-                sourcemap: true,
                 minify: isProduction,
-                emptyOutDir: true,
+                sourcemap: true,
+                emptyOutDir: false,
 
                 rollupOptions: {
                     input: path.join(__dirname, "src/main.ts"),
@@ -30,21 +30,33 @@ export default defineConfig(({ mode }) => {
             },
         },
 
-        // preload: {
-        //     build: {
-        //         target: nodeTarget,
-        //     },
-        // },
+        preload: {
+            build: {
+                outDir,
+                target: nodeTarget,
+                minify: isProduction,
+                sourcemap: true,
+                emptyOutDir: false,
+
+                rollupOptions: {
+                    input: path.join(__dirname, "src/preload.ts"),
+                    output: {
+                        entryFileNames: "[name].js",
+                        assetFileNames: "assets/[name][extname]",
+                    },
+                },
+            },
+        },
 
         renderer: {
             base: "./",
             root: path.join(__dirname, "src/renderer"),
 
             build: {
-                outDir: path.join(__dirname, "out"),
+                outDir,
                 target: chromeTarget,
-                sourcemap: true,
                 minify: isProduction,
+                sourcemap: true,
                 emptyOutDir: false,
                 // Always emit separate files
                 assetsInlineLimit: 0,
@@ -59,7 +71,7 @@ export default defineConfig(({ mode }) => {
                 },
             },
 
-            plugins: [preact(), { ...purgeCss({}), enforce: "post" }, electronRenderer()],
+            plugins: [preact(), { ...purgeCss({}), enforce: "post" }],
 
             optimizeDeps: {
                 exclude: ["electron"],

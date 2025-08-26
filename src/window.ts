@@ -64,8 +64,9 @@ function _createWindow(icon: string): BrowserWindow {
         height: bounds?.height,
 
         webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false,
+            preload: path.resolve(__dirname, "preload.js"),
+            // nodeIntegration: true,
+            // contextIsolation: false,
         },
     });
 

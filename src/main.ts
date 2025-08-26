@@ -1,7 +1,7 @@
 import { app } from "electron";
 import { NodeIo, TalonRpcServer } from "talon-rpc";
 import { showMenu } from "./Menu";
-import { apiMain } from "./api";
+import { apiMain } from "./apiMain";
 import * as clipboardList from "./clipboardList";
 import { runCommand, runCommandWithThrow } from "./commands/runCommand";
 import { RPC_COMMAND, RPC_DIR_NAME } from "./constants";

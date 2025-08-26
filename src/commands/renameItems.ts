@@ -1,4 +1,4 @@
-import { apiMain } from "../api";
+import { apiMain } from "../apiMain";
 import { storage } from "../storage";
 import type { RenameItemsCommand } from "../types/command";
 import type { ClipItem } from "../types/types";

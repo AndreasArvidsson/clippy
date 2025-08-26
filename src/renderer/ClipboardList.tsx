@@ -2,7 +2,7 @@ import type { JSX } from "preact";
 import { Fragment } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
 import { StarFill } from "react-bootstrap-icons";
-import { apiRenderer } from "../api";
+import { apiRenderer } from "./apiRenderer";
 import { StarredList, UnstarredList, type ClipItem } from "../types/types";
 import { getCommandForHints, hintsToPrimitiveTargets } from "../util/getCommandForHints";
 import { indexToHint } from "../util/hints";

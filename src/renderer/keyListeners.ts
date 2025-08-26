@@ -1,4 +1,4 @@
-import { apiRenderer } from "../api";
+import { apiRenderer } from "./apiRenderer";
 
 type Listener = (key: string) => boolean;
 

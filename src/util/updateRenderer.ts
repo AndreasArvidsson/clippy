@@ -1,4 +1,4 @@
-import { apiMain } from "../api";
+import { apiMain } from "../apiMain";
 import { isWindowVisible } from "../window";
 import { getRendererData } from "./getRendererData";
 

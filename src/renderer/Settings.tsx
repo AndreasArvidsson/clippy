@@ -1,5 +1,5 @@
 import type { JSX } from "preact";
-import { apiRenderer } from "../api";
+import { apiRenderer } from "./apiRenderer";
 import type { Config } from "../types/types";
 import InputCheckbox from "./InputCheckbox";
 import InputNumber from "./InputNumber";

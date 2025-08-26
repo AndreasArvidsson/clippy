@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid";
-import { apiMain } from "../api";
+import { apiMain } from "../apiMain";
 import { storage } from "../storage";
 import type { CreateListCommand } from "../types/command";
 import { type List } from "../types/types";

@@ -1,5 +1,5 @@
 import type { JSX } from "preact";
-import { apiRenderer } from "../api";
+import { apiRenderer } from "./apiRenderer";
 import InputText from "./InputText";
 
 export type ListNameType = "createList" | "renameList";

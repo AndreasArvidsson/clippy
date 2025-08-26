@@ -1,6 +1,6 @@
 import type { JSX } from "preact";
 import { useEffect, useState } from "preact/hooks";
-import { apiRenderer } from "../api";
+import { apiRenderer } from "./apiRenderer";
 import type { RendererData } from "../types/types";
 import { ClipboardList } from "./ClipboardList";
 import { Footer } from "./Footer";

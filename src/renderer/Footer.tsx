@@ -1,6 +1,6 @@
 import type { JSX } from "preact";
 import { GearFill, PauseFill, StarFill } from "react-bootstrap-icons";
-import { apiRenderer } from "../api";
+import { apiRenderer } from "./apiRenderer";
 import classNames from "./classNames";
 import { getText } from "./texts";
 
