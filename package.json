@@ -11,11 +11,8 @@
         "clean": "rm -rf out dist",
         "start": "electron-vite dev",
         "build": "electron-vite build",
-        "build_old": "npm run compile && npm run prepareAssets",
-        "compile_old": "npm run compile:tsc && npm run compile:main && npm run compile:renderer",
-        "prepareAssets": "tsx scripts/prepareAssets.ts",
         "package": "npm run build && tsx scripts/package.ts",
-        "lint": "eslint src && prettier --check .",
+        "lint": "tsc && eslint src && prettier --check .",
         "fix": "eslint src --fix && prettier --write ."
     },
     "dependencies": {

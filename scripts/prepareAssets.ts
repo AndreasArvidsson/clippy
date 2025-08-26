@@ -2,7 +2,7 @@ import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
 
-function changePermissionOfClipboardEventHandlerMac() {
+export function changePermissionOfClipboardEventHandlerMac() {
     // clipboard-event-handler-mac is missing executable permission on macOS.
     // https://github.com/AndreasArvidsson/clippy/issues/3
 
@@ -36,11 +36,3 @@ function changePermissionOfClipboardEventHandlerMac() {
 function formatMode(mode: number) {
     return (mode & 0o777).toString(8);
 }
-
-(() => {
-    console.log("Preparing assets...");
-
-    changePermissionOfClipboardEventHandlerMac();
-
-    console.log("Assets prepared!");
-})();
