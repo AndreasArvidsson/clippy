@@ -11,7 +11,7 @@
         "clean": "rm -rf out dist",
         "start": "electron-vite dev",
         "build": "electron-vite build",
-        "package": "npm run build && tsx scripts/package.ts",
+        "package": "npm run clean && npm run build && jiti scripts/package.ts",
         "lint": "tsc && eslint src && prettier --check .",
         "fix": "eslint src --fix && prettier --write ."
     },
@@ -37,7 +37,6 @@
         "eslint": "^9.34.0",
         "jiti": "^2.5.1",
         "prettier": "^3.6.2",
-        "tsx": "^4.20.5",
         "typescript-eslint": "^8.37.0",
         "typescript": "^5.8.3",
         "vite-plugin-electron-renderer": "^0.14.6",
