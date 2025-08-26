@@ -12,8 +12,8 @@
         "start": "npm run build && electron .",
         "build": "npm run compile && npm run prepareAssets",
         "compile": "tsc -p .",
-        "prepareAssets": "tsx prepareAssets.ts",
-        "package": "npm run build && tsx package.ts",
+        "prepareAssets": "tsx script/prepareAssets.ts",
+        "package": "npm run build && tsx script/package.ts",
         "lint": "eslint src && prettier --check .",
         "fix": "eslint src --fix && prettier --write ."
     },
@@ -40,6 +40,7 @@
         "prettier": "^3.6.2",
         "tsx": "^4.20.5",
         "typescript-eslint": "^8.37.0",
-        "typescript": "^5.8.3"
+        "typescript": "^5.8.3",
+        "vite": "^7.1.3"
     }
 }

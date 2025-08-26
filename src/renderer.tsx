@@ -1,6 +1,4 @@
-import { createRoot } from "react-dom/client";
+import { render } from "preact";
 import { Root } from "./renderer/Root";
 
-const domNode = document.getElementById("root")!;
-const root = createRoot(domNode);
-root.render(<Root />);
+render(<Root />, document.getElementById("root")!);
