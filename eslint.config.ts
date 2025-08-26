@@ -1,11 +1,9 @@
 import eslintJs from "@eslint/js";
 import eslintPrettier from "eslint-config-prettier/flat";
 import reactPlugin from "eslint-plugin-react";
-import path from "node:path";
 import eslintTs from "typescript-eslint";
 
 export default eslintTs.config(
-    { ignores: ["src/typings", "eslint.config.mts"] },
     eslintJs.configs.recommended,
     eslintTs.configs.recommendedTypeChecked,
     reactPlugin.configs.flat.recommended,
@@ -17,7 +15,7 @@ export default eslintTs.config(
             ecmaVersion: "latest",
             sourceType: "module",
             parserOptions: {
-                project: "./tsconfig.json",
+                projectService: true,
                 ecmaFeatures: {
                     jsx: true,
                 },
@@ -31,22 +29,7 @@ export default eslintTs.config(
         },
 
         rules: {
-            "@typescript-eslint/no-explicit-any": "off",
-            curly: "error",
-            "no-throw-literal": "error",
-            eqeqeq: [
-                "error",
-                "always",
-                {
-                    null: "never",
-                },
-            ],
-            "no-warning-comments": [
-                "warn",
-                {
-                    terms: ["todo"],
-                },
-            ],
+            "@typescript-eslint/consistent-type-imports": "error",
             "@typescript-eslint/no-unused-vars": [
                 "warn",
                 {
@@ -55,6 +38,25 @@ export default eslintTs.config(
                     caughtErrorsIgnorePattern: "^_",
                 },
             ],
+            "no-throw-literal": "error",
+            "no-warning-comments": [
+                "warn",
+                {
+                    terms: ["todo"],
+                },
+            ],
+            curly: "error",
+            eqeqeq: [
+                "error",
+                "always",
+                {
+                    null: "never",
+                },
+            ],
         },
+    },
+    {
+        files: ["eslint.config.ts", "src/typings/**/*"],
+        extends: [eslintTs.configs.disableTypeChecked],
     },
 );

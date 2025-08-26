@@ -2,15 +2,17 @@
     "compilerOptions": {
         "module": "CommonJS",
         "target": "ESNext",
-        "moduleResolution": "node",
+        "moduleResolution": "node10",
         "jsx": "react-jsx",
-        "noImplicitAny": true,
-        "sourceMap": true,
         "rootDir": "src",
-        "strict": true,
+        "outDir": "out",
         "esModuleInterop": true,
+        "sourceMap": true,
+        "noEmitOnError": true,
+        "strict": true,
+        "noImplicitAny": true,
         "forceConsistentCasingInFileNames": true,
-        "outDir": "out"
+        "noImplicitReturns": true
     },
     "include": ["src"]
 }
