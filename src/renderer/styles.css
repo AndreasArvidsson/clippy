@@ -94,7 +94,12 @@ button.star-btn.active {
 }
 
 @media (prefers-color-scheme: dark) {
-    body {
+    body,
+    input.form-control,
+    input.form-control:focus,
+    input.form-control::placeholder,
+    select.form-select,
+    .input-group-text {
         background: #333;
         color: #f0f0f0;
     }
