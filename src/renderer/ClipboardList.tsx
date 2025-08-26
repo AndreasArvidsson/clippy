@@ -1,4 +1,6 @@
-import React, { useEffect, useRef, useState, type JSX } from "react";
+import type { JSX } from "preact";
+import { Fragment } from "preact";
+import { useEffect, useRef, useState } from "preact/hooks";
 import { StarFill } from "react-bootstrap-icons";
 import { apiRenderer } from "../api";
 import { StarredList, UnstarredList, type ClipItem } from "../types/types";
@@ -193,10 +195,10 @@ export function ClipboardList({ items }: Props): JSX.Element {
             {items.map((item, i) => {
                 const hint = indexToHint(i);
                 return (
-                    <React.Fragment key={item.id}>
+                    <Fragment key={item.id}>
                         {i > 0 && <hr />}
                         {renderItem(item, hint)}
-                    </React.Fragment>
+                    </Fragment>
                 );
             })}
         </main>

@@ -1,4 +1,4 @@
-import type { JSX } from "react";
+import type { JSX } from "preact";
 import { apiRenderer } from "../api";
 import type { ClipItemType, Search } from "../types/types";
 import InputText from "./InputText";
@@ -36,7 +36,7 @@ export function Search({ search }: Props): JSX.Element | null {
                     className="form-select form-select-sm"
                     value={search.type}
                     onChange={(e) => {
-                        const value = e.target.value || undefined;
+                        const value = e.currentTarget.value || undefined;
                         onChange({ type: value as ClipItemType });
                     }}
                 >

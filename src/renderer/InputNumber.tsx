@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import type { ComponentChildren } from "preact";
+import { useEffect, useRef, useState } from "preact/hooks";
 import classNames from "./classNames";
 
 export interface Props {
@@ -12,7 +13,7 @@ export interface Props {
     autoFocus?: boolean;
     onChange: (value: number) => void;
     onBlur?: (value: number) => void;
-    children?: React.ReactNode;
+    children?: ComponentChildren;
 }
 
 export default function InputNumber({
@@ -56,7 +57,7 @@ export default function InputNumber({
                 placeholder={placeholder}
                 disabled={disabled}
                 autoFocus={autoFocus}
-                onChange={(e) => setCurrentValue(e.target.value)}
+                onChange={(e) => setCurrentValue(e.currentTarget.value)}
                 onBlur={() => {
                     if (onBlur != null && !escapeBlurRef.current) {
                         const num = parseCurrentValue();

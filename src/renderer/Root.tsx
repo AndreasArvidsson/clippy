@@ -1,4 +1,5 @@
-import { useEffect, useState, type JSX } from "react";
+import type { JSX } from "preact";
+import { useEffect, useState } from "preact/hooks";
 import { apiRenderer } from "../api";
 import type { RendererData } from "../types/types";
 import { ClipboardList } from "./ClipboardList";

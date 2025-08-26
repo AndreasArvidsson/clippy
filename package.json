@@ -18,19 +18,18 @@
     "dependencies": {
         "bootstrap": "^5.3.7",
         "clipboard-event": "^1.6.0",
-        "react": "^19.1.1",
+        "preact": "^10.27.1",
         "react-bootstrap-icons": "^1.11.6",
-        "react-dom": "^19.1.1",
         "talon-rpc": "^2.2.0",
         "uuid": "^11.1.0"
     },
     "devDependencies": {
         "@electron/packager": "^18.4.2",
         "@eslint/js": "^9.31.0",
+        "@preact/preset-vite": "^2.10.2",
         "@types/node": "^24.3.0",
-        "@types/react-dom": "^19.1.8",
+        "@types/react": "^19.1.11",
         "@types/uuid": "^10.0.0",
-        "@vitejs/plugin-react": "^5.0.1",
         "electron-vite": "^4.0.0",
         "electron": "^37.3.1",
         "eslint-config-prettier": "^10.1.8",
