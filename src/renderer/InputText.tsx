@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "preact/hooks";
 import classNames from "./classNames";
 
 interface Props {
@@ -54,10 +54,10 @@ export default function InputText({
             disabled={disabled}
             autoFocus={autoFocus}
             onChange={(e) => {
-                setCurrentValue(e.target.value);
+                setCurrentValue(e.currentTarget.value);
                 if (timeout) {
                     clearTimeout(timeoutHandle);
-                    setTimeoutHandle(setTimeout(() => onChange(e.target.value.trim()), 500));
+                    setTimeoutHandle(setTimeout(() => onChange(e.currentTarget.value.trim()), 500));
                 }
             }}
             onBlur={() => {

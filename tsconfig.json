@@ -4,6 +4,7 @@
         "target": "ESNext",
         "moduleResolution": "bundler",
         "jsx": "react-jsx",
+        "jsxImportSource": "preact",
         "rootDir": "src",
         "esModuleInterop": true,
         "noEmit": true,

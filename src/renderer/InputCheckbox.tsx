@@ -1,4 +1,4 @@
-import type { JSX } from "react";
+import type { ComponentChildren, JSX } from "preact";
 import classNames from "./classNames";
 
 interface Props {
@@ -7,7 +7,7 @@ interface Props {
     title?: string;
     disabled?: boolean;
     onChange?: (checked: boolean) => void;
-    children?: React.ReactNode;
+    children?: ComponentChildren;
 }
 
 export default function InputCheckbox({
@@ -26,7 +26,7 @@ export default function InputCheckbox({
                     className="form-check-input"
                     checked={checked}
                     disabled={disabled}
-                    onChange={onChange ? (e) => onChange(e.target.checked) : undefined}
+                    onChange={onChange ? (e) => onChange(e.currentTarget.checked) : undefined}
                 />
                 {children}
             </label>

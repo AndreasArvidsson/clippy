@@ -1,4 +1,4 @@
-import type { JSX } from "react";
+import type { JSX } from "preact";
 import { apiRenderer } from "../api";
 import type { Config } from "../types/types";
 import InputCheckbox from "./InputCheckbox";

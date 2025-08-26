@@ -1,4 +1,4 @@
-import react from "@vitejs/plugin-react";
+import preact from "@preact/preset-vite";
 import { defineConfig } from "electron-vite";
 import * as path from "node:path";
 import purgeCss from "vite-plugin-purgecss";
@@ -59,7 +59,7 @@ export default defineConfig(({ mode }) => {
                 },
             },
 
-            plugins: [react(), { ...purgeCss({}), enforce: "post" }, electronRenderer()],
+            plugins: [preact(), { ...purgeCss({}), enforce: "post" }, electronRenderer()],
 
             optimizeDeps: {
                 exclude: ["electron"],
