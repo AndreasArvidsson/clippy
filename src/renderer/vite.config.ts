@@ -1,6 +1,7 @@
 import react from "@vitejs/plugin-react";
 import * as path from "node:path";
 import { defineConfig, type PluginOption, type UserConfig } from "vite";
+import electronRenderer from "vite-plugin-electron-renderer";
 import purgeCss from "vite-plugin-purgecss";
 
 export default defineConfig((): UserConfig => {
@@ -23,6 +24,10 @@ export default defineConfig((): UserConfig => {
             },
         },
 
-        plugins: [react(), purgeCss({}) as PluginOption],
+        plugins: [react(), purgeCss({}) as PluginOption, electronRenderer()],
+
+        optimizeDeps: {
+            exclude: ["electron"],
+        },
     };
 });
