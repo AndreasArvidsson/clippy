@@ -9,7 +9,7 @@
     "main": "out/main.js",
     "scripts": {
         "clean": "rm -rf out dist",
-        "start": "npm run build && electron .",
+        "start": "cross-env NODE_ENV=development npm run build && electron .",
         "build": "npm run compile && npm run prepareAssets",
         "compile": "npm run compile:tsc && npm run compile:main && npm run compile:renderer",
         "compile:tsc": "tsc -p .",
@@ -36,6 +36,7 @@
         "@types/react-dom": "^19.1.8",
         "@types/uuid": "^10.0.0",
         "@vitejs/plugin-react": "^5.0.1",
+        "cross-env": "^10.0.0",
         "electron": "^37.3.1",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-react": "^7.37.5",

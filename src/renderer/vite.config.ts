@@ -4,8 +4,9 @@ import { defineConfig, type PluginOption, type UserConfig } from "vite";
 import electronRenderer from "vite-plugin-electron-renderer";
 import purgeCss from "vite-plugin-purgecss";
 
-export default defineConfig((): UserConfig => {
+export default defineConfig(({ mode }): UserConfig => {
     return {
+        mode: process.env.NODE_ENV || mode,
         root: __dirname,
         base: "./",
 

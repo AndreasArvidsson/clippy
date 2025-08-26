@@ -1,8 +1,10 @@
 import * as path from "node:path";
 import { defineConfig, type UserConfig } from "vite";
 
-export default defineConfig((): UserConfig => {
+export default defineConfig(({ mode }): UserConfig => {
     return {
+        mode: process.env.NODE_ENV || mode,
+
         build: {
             ssr: path.join(__dirname, "src/main.ts"),
             outDir: path.join(__dirname, "out"),
