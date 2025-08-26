@@ -9,12 +9,10 @@
     "main": "out/main.js",
     "scripts": {
         "clean": "rm -rf out dist",
-        "start": "npm run build && electron .",
-        "build": "npm run compile && npm run prepareAssets",
-        "compile": "tsc -p .",
-        "prepareAssets": "tsx prepareAssets.ts",
-        "package": "npm run build && tsx package.ts",
-        "lint": "eslint src && prettier --check .",
+        "start": "electron-vite dev",
+        "build": "electron-vite build",
+        "package": "npm run build && tsx scripts/package.ts",
+        "lint": "tsc && eslint src && prettier --check .",
         "fix": "eslint src --fix && prettier --write ."
     },
     "dependencies": {
@@ -32,6 +30,8 @@
         "@types/node": "^24.3.0",
         "@types/react-dom": "^19.1.8",
         "@types/uuid": "^10.0.0",
+        "@vitejs/plugin-react": "^5.0.1",
+        "electron-vite": "^4.0.0",
         "electron": "^37.3.1",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-react": "^7.37.5",
@@ -40,6 +40,8 @@
         "prettier": "^3.6.2",
         "tsx": "^4.20.5",
         "typescript-eslint": "^8.37.0",
-        "typescript": "^5.8.3"
+        "typescript": "^5.8.3",
+        "vite-plugin-electron-renderer": "^0.14.6",
+        "vite-plugin-purgecss": "^0.2.13"
     }
 }

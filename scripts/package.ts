@@ -1,10 +1,14 @@
 import { packager } from "@electron/packager";
+import * as path from "node:path";
+import { changePermissionOfClipboardEventHandlerMac } from "./prepareAssets";
 
 (async () => {
     console.log("Packaging...");
 
+    changePermissionOfClipboardEventHandlerMac();
+
     await packager({
-        dir: __dirname,
+        dir: path.join(__dirname, ".."),
         out: "dist",
         overwrite: true,
         icon: "images/icon_dark",

@@ -82,7 +82,19 @@ function _createWindow(icon: string): BrowserWindow {
     win.on("move", updateBounds);
     win.on("resize", updateBounds);
 
-    void win.loadFile(path.resolve(__dirname, "index.html"));
+    // Set by electron-vite dev
+    const devUrl = process.env.ELECTRON_RENDERER_URL;
+
+    // DEV: served from Vite dev server (no files on disk)
+    if (devUrl != null) {
+        void win.loadURL(devUrl);
+    }
+    // PROD: load the built HTML from disk
+    else {
+        void win.loadFile(path.resolve(__dirname, "index.html"));
+    }
+
+    // win.webContents.openDevTools();
 
     return win;
 }
