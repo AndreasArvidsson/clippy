@@ -89,6 +89,7 @@ button.icon-btn {
 button.star-btn {
     color: #dddddd;
 }
+
 button.star-btn.active {
     color: gold;
 }
@@ -102,6 +103,10 @@ button.star-btn.active {
     .input-group-text {
         background: #333;
         color: #f0f0f0;
+    }
+
+    main {
+        scrollbar-color: #f0f0f0 #333;
     }
 
     button.icon-btn {
