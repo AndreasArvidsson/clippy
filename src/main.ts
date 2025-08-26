@@ -15,6 +15,11 @@ import { onDarkModeChange } from "./util/onDarkModeChange";
 import { updateRenderer } from "./util/updateRenderer";
 import { createWindow } from "./window";
 
+// Ensure single instance of the application
+if (!app.requestSingleInstanceLock()) {
+    app.quit();
+}
+
 void app.whenReady().then(async () => {
     await storage.init();
 
