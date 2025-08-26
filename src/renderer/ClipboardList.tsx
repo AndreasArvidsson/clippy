@@ -1,6 +1,6 @@
+import type { JSX } from "preact";
 import { Fragment } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
-import type { JSX } from "preact/jsx-runtime";
 import { StarFill } from "react-bootstrap-icons";
 import { apiRenderer } from "../api";
 import { StarredList, UnstarredList, type ClipItem } from "../types/types";
