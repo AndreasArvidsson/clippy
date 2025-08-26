@@ -1,23 +1,30 @@
 import * as path from "node:path";
 import { defineConfig, type UserConfig } from "vite";
-import preact from "@preact/preset-vite";
 
 export default defineConfig((): UserConfig => {
     return {
         build: {
+            ssr: path.join(__dirname, "src/main.ts"),
+            outDir: path.join(__dirname, "out"),
+            target: "node22",
             sourcemap: true,
-            target: "es2020",
-            minify: "esbuild",
+
+            emptyOutDir: true,
 
             rollupOptions: {
-                input: ,
+                external: (id) => {
+                    return id === "electron" || id.startsWith("node:");
+                },
                 output: {
-                    entryFileNames: `${filename}.js`,
-                    chunkFileNames: `${filename}.js`,
+                    format: "cjs",
+                    entryFileNames: "main.js",
+                    exports: "auto",
                 },
             },
         },
 
-        plugins: [preact()],
+        ssr: {
+            target: "node",
+        },
     };
 });

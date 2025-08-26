@@ -1,11 +1,10 @@
 {
     "compilerOptions": {
-        "module": "CommonJS",
+        "module": "preserve",
         "target": "ESNext",
         "moduleResolution": "bundler",
         "jsx": "react-jsx",
         "rootDir": "src",
-        "outDir": "out",
         "esModuleInterop": true,
         "noEmit": true,
         "strict": true,

@@ -11,9 +11,12 @@
         "clean": "rm -rf out dist",
         "start": "npm run build && electron .",
         "build": "npm run compile && npm run prepareAssets",
-        "compile": "tsc -p .",
-        "prepareAssets": "tsx script/prepareAssets.ts",
-        "package": "npm run build && tsx script/package.ts",
+        "compile": "npm run compile:tsc && npm run compile:main && npm run compile:renderer",
+        "compile:tsc": "tsc -p .",
+        "compile:main": "vite build",
+        "compile:renderer": "vite build -c src/renderer/vite.config.ts",
+        "prepareAssets": "tsx scripts/prepareAssets.ts",
+        "package": "npm run build && tsx scripts/package.ts",
         "lint": "eslint src && prettier --check .",
         "fix": "eslint src --fix && prettier --write ."
     },
@@ -32,6 +35,7 @@
         "@types/node": "^24.3.0",
         "@types/react-dom": "^19.1.8",
         "@types/uuid": "^10.0.0",
+        "@vitejs/plugin-react": "^5.0.1",
         "electron": "^37.3.1",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-react": "^7.37.5",
@@ -41,6 +45,7 @@
         "tsx": "^4.20.5",
         "typescript-eslint": "^8.37.0",
         "typescript": "^5.8.3",
+        "vite-plugin-purgecss": "^0.2.13",
         "vite": "^7.1.3"
     }
 }

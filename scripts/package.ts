@@ -1,10 +1,11 @@
 import { packager } from "@electron/packager";
+import * as path from "node:path";
 
 (async () => {
     console.log("Packaging...");
 
     await packager({
-        dir: __dirname,
+        dir: path.join(__dirname, ".."),
         out: "dist",
         overwrite: true,
         icon: "images/icon_dark",

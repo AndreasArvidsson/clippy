@@ -4,6 +4,7 @@ import { apiRenderer } from "../api";
 import { isMacOS } from "../util/isMacOS";
 import classNames from "./classNames";
 import { getText } from "./texts";
+import "./titlebar.css";
 
 interface Props {
     activeListName: string;

@@ -5,19 +5,19 @@ import * as os from "node:os";
 const targetFolder = "out";
 
 const assetsToCopy = [
-    "node_modules/bootstrap/dist/css/bootstrap.min.css",
-    "src/index.html",
-    "src/renderer/titlebar.css",
-    "src/renderer/styles.css",
+    // "node_modules/bootstrap/dist/css/bootstrap.min.css",
+    // "src/index.html",
+    // "src/renderer/titlebar.css",
+    // "src/renderer/styles.css",
     "images",
 ];
 
 function copyAssets() {
     for (const file of assetsToCopy) {
         console.log(`Copying ${file} to ${targetFolder}`);
-        const src = path.join(__dirname, file);
+        const src = path.join(__dirname, "..", file);
         const fileName = path.basename(file);
-        const dest = path.join(__dirname, targetFolder, fileName);
+        const dest = path.join(__dirname, "..", targetFolder, fileName);
         fs.cpSync(src, dest, { recursive: true });
     }
 }
@@ -28,7 +28,7 @@ function changePermissionOfClipboardEventHandlerMac() {
 
     if (os.platform() === "darwin") {
         const filename = "node_modules/clipboard-event/platform/clipboard-event-handler-mac";
-        const filePath = path.join(__dirname, filename);
+        const filePath = path.join(__dirname, "..", filename);
         let currentMode = fs.statSync(filePath).mode;
         // 0o111 is the same as +x
         const desiredMode = currentMode | 0o111;
