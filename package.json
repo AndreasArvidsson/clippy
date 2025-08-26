@@ -16,7 +16,7 @@
         "fix": "eslint src --fix && prettier --write ."
     },
     "dependencies": {
-        "bootstrap": "^5.3.7",
+        "bootstrap": "^5.3.8",
         "clipboard-event": "^1.6.0",
         "preact": "^10.27.1",
         "react-bootstrap-icons": "^1.11.6",
