@@ -1,4 +1,4 @@
-import * as uuid from "uuid";
+import { v4 as uuid } from "uuid";
 import { apiMain } from "../api";
 import { storage } from "../storage";
 import type { CreateListCommand } from "../types/command";
@@ -25,7 +25,7 @@ export function createList(command: CreateListCommand) {
     }
 
     const list: List = {
-        id: uuid.v4(),
+        id: uuid(),
         name,
     };
 

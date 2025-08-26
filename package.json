@@ -18,27 +18,27 @@
         "fix": "eslint src --fix && prettier --write ."
     },
     "dependencies": {
-        "bootstrap": "5.3.7",
-        "clipboard-event": "1.6.0",
-        "react": "19.1.0",
-        "react-bootstrap-icons": "1.11.6",
-        "react-dom": "19.1.0",
-        "talon-rpc": "2.2.0",
-        "uuid": "11.1.0"
+        "bootstrap": "^5.3.7",
+        "clipboard-event": "^1.6.0",
+        "react": "^19.1.1",
+        "react-bootstrap-icons": "^1.11.6",
+        "react-dom": "^19.1.1",
+        "talon-rpc": "^2.2.0",
+        "uuid": "^11.1.0"
     },
     "devDependencies": {
-        "@electron/packager": "^18.3.6",
+        "@electron/packager": "^18.4.2",
         "@eslint/js": "^9.31.0",
-        "@types/node": "^24.0.14",
-        "@types/react-dom": "^19.1.6",
+        "@types/node": "^24.3.0",
+        "@types/react-dom": "^19.1.8",
         "@types/uuid": "^10.0.0",
-        "electron": "^37.2.2",
-        "eslint-config-prettier": "^10.1.5",
+        "electron": "^37.3.1",
+        "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-react": "^7.37.5",
-        "eslint": "^9.31.0",
-        "jiti": "^2.4.2",
-        "prettier": "3.5.3",
-        "tsx": "^4.20.3",
+        "eslint": "^9.34.0",
+        "jiti": "^2.5.1",
+        "prettier": "^3.6.2",
+        "tsx": "^4.20.5",
         "typescript-eslint": "^8.37.0",
         "typescript": "^5.8.3"
     }
