@@ -59,11 +59,7 @@ export default defineConfig(({ mode }) => {
                 },
             },
 
-            plugins: [
-                react(),
-                // { ...purgeCss({}), enforce: "post" },
-                electronRenderer(),
-            ],
+            plugins: [react(), { ...purgeCss({}), enforce: "post" }, electronRenderer()],
 
             optimizeDeps: {
                 exclude: ["electron"],
