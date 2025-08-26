@@ -1,26 +1,6 @@
 import * as fs from "node:fs";
-import * as path from "node:path";
 import * as os from "node:os";
-
-const targetFolder = "out";
-
-const assetsToCopy = [
-    // "node_modules/bootstrap/dist/css/bootstrap.min.css",
-    // "src/index.html",
-    // "src/renderer/titlebar.css",
-    // "src/renderer/styles.css",
-    "images",
-];
-
-function copyAssets() {
-    for (const file of assetsToCopy) {
-        console.log(`Copying ${file} to ${targetFolder}`);
-        const src = path.join(__dirname, "..", file);
-        const fileName = path.basename(file);
-        const dest = path.join(__dirname, "..", targetFolder, fileName);
-        fs.cpSync(src, dest, { recursive: true });
-    }
-}
+import * as path from "node:path";
 
 function changePermissionOfClipboardEventHandlerMac() {
     // clipboard-event-handler-mac is missing executable permission on macOS.
@@ -60,7 +40,6 @@ function formatMode(mode: number) {
 (() => {
     console.log("Preparing assets...");
 
-    copyAssets();
     changePermissionOfClipboardEventHandlerMac();
 
     console.log("Assets prepared!");

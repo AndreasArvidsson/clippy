@@ -55,7 +55,7 @@ function _createWindow(icon: string): BrowserWindow {
         icon,
         alwaysOnTop,
 
-        show: false,
+        // show: false,
         frame: false,
         center: true,
         x: bounds?.x,
@@ -66,6 +66,7 @@ function _createWindow(icon: string): BrowserWindow {
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
+            sandbox: false,
         },
     });
 
@@ -82,7 +83,23 @@ function _createWindow(icon: string): BrowserWindow {
     win.on("move", updateBounds);
     win.on("resize", updateBounds);
 
-    void win.loadFile(path.resolve(__dirname, "index.html"));
+    // console.log("Loading file:", path.resolve(__dirname, "index.html"));
+
+    // void win.loadFile(path.resolve(__dirname, "index.html"));
+
+    const devUrl = process.env.ELECTRON_RENDERER_URL; // set by electron-vite dev
+
+    console.log("devUrl", devUrl);
+
+    if (devUrl != null) {
+        // DEV: served from Vite dev server (no files on disk)
+        void win.loadURL(devUrl);
+    } else {
+        // PROD: load the built HTML from disk
+        void win.loadFile(path.resolve(__dirname, "index.html"));
+    }
+
+    win.webContents.openDevTools();
 
     return win;
 }

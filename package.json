@@ -9,12 +9,10 @@
     "main": "out/main.js",
     "scripts": {
         "clean": "rm -rf out dist",
-        "start": "cross-env NODE_ENV=development npm run build && electron .",
-        "build": "npm run compile && npm run prepareAssets",
-        "compile": "npm run compile:tsc && npm run compile:main && npm run compile:renderer",
-        "compile:tsc": "tsc -p .",
-        "compile:main": "vite build",
-        "compile:renderer": "vite build -c src/renderer/vite.config.ts",
+        "start": "electron-vite dev",
+        "build": "electron-vite build",
+        "build_old": "npm run compile && npm run prepareAssets",
+        "compile_old": "npm run compile:tsc && npm run compile:main && npm run compile:renderer",
         "prepareAssets": "tsx scripts/prepareAssets.ts",
         "package": "npm run build && tsx scripts/package.ts",
         "lint": "eslint src && prettier --check .",
@@ -36,7 +34,7 @@
         "@types/react-dom": "^19.1.8",
         "@types/uuid": "^10.0.0",
         "@vitejs/plugin-react": "^5.0.1",
-        "cross-env": "^10.0.0",
+        "electron-vite": "^4.0.0",
         "electron": "^37.3.1",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-react": "^7.37.5",
@@ -47,7 +45,6 @@
         "typescript-eslint": "^8.37.0",
         "typescript": "^5.8.3",
         "vite-plugin-electron-renderer": "^0.14.6",
-        "vite-plugin-purgecss": "^0.2.13",
-        "vite": "^7.1.3"
+        "vite-plugin-purgecss": "^0.2.13"
     }
 }

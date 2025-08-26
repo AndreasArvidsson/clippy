@@ -56,7 +56,7 @@ export default eslintTs.config(
         },
     },
     {
-        files: ["eslint.config.ts", "vite.config.ts", "scripts/**/*", "src/typings/**/*"],
+        files: ["eslint.config.ts", "electron.vite.config.ts", "scripts/**/*", "src/typings/**/*"],
         extends: [eslintTs.configs.disableTypeChecked],
     },
 );
