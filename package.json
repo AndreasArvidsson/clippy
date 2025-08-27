@@ -39,8 +39,8 @@
         "eslint": "^9.34.0",
         "jiti": "^2.5.1",
         "prettier": "^3.6.2",
-        "typescript-eslint": "^8.37.0",
-        "typescript": "^5.8.3",
+        "typescript-eslint": "^8.41.0",
+        "typescript": "^5.9.2",
         "vite-plugin-purgecss": "^0.2.13"
     }
 }
