@@ -1,8 +1,8 @@
 import preact from "@preact/preset-vite";
 import { defineConfig } from "electron-vite";
 import * as path from "node:path";
-import purgeCss from "vite-plugin-purgecss";
 import electronRenderer from "vite-plugin-electron-renderer";
+import purgeCss from "vite-plugin-purgecss";
 
 export default defineConfig(({ mode }) => {
     // electron 37 uses node 22 and chromium 138
@@ -21,7 +21,8 @@ export default defineConfig(({ mode }) => {
 
                 rollupOptions: {
                     input: path.join(__dirname, "src/main.ts"),
-
+                    // The clipboard events doesn't work if we roll them up in the same bundle
+                    external: ["clipboard-event"],
                     output: {
                         entryFileNames: "[name].js",
                         assetFileNames: "assets/[name][extname]",
