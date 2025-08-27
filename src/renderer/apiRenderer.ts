@@ -6,7 +6,7 @@ import {
     RENAME_ITEM,
     RENAME_LIST,
     UPDATE,
-} from "../constants";
+} from "../common/constants";
 import type { Command } from "../types/command";
 import type { MenuType, RendererData } from "../types/types";
 

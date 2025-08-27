@@ -1,6 +1,6 @@
 import { BrowserWindow, app, nativeTheme, screen, type Rectangle } from "electron";
 import path from "node:path";
-import { NAME } from "./constants";
+import { NAME } from "./common/constants";
 import { storage } from "./storage";
 import { isMacOS } from "./util/isMacOS";
 
