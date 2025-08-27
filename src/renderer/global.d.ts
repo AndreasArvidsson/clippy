@@ -3,10 +3,13 @@ export {};
 declare global {
     interface Window {
         api: {
-            invoke: (channel: string, ...args: unknown[]) => Promise<unknown>;
-            send: (channel: string, ...args: unknown[]) => void;
-            on: (channel: string, listener: (...args: unknown[]) => void) => () => void;
-            off: (channel: string, listener: (...args: unknown[]) => void) => void;
+            getRendererData(): Promise<RendererData>;
+            command(command: Command): void;
+            menu(menu: MenuType): void;
+            onUpdate(callback: (data: RendererData) => void): void;
+            onCreateList(callback: () => void): void;
+            onRenameList(callback: () => void): void;
+            onRenameItem(callback: (id: string) => void): () => void;
         };
 
         platform: {

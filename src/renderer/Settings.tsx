@@ -1,5 +1,4 @@
 import type { JSX } from "preact";
-import { apiRenderer } from "./apiRenderer";
 import type { Config } from "../types/types";
 import InputCheckbox from "./InputCheckbox";
 import InputNumber from "./InputNumber";
@@ -10,7 +9,7 @@ interface Props {
 }
 
 function patchConfig(config: Partial<Config>) {
-    apiRenderer.command({ id: "patchConfig", config });
+    window.api.command({ id: "patchConfig", config });
 }
 
 export function Settings({ config }: Props): JSX.Element {
@@ -69,7 +68,7 @@ export function Settings({ config }: Props): JSX.Element {
             <button
                 className="btn btn-sm btn-primary mt-3"
                 title={texts.hideSettings.desc}
-                onClick={() => apiRenderer.command({ id: "hideSettings" })}
+                onClick={() => window.api.command({ id: "hideSettings" })}
             >
                 {texts.hideSettings.title}
             </button>

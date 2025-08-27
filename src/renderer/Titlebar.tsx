@@ -1,6 +1,5 @@
 import type { JSX } from "preact";
 import { CaretDownFill, PinAngleFill, Search, XCircleFill, XLg } from "react-bootstrap-icons";
-import { apiRenderer } from "./apiRenderer";
 import classNames from "./classNames";
 import { getText } from "./texts";
 import "./titlebar.css";
@@ -29,7 +28,7 @@ export function Titlebar({
             <button
                 title={getText("pinned")}
                 className={classNames("icon-btn", { active: pinned })}
-                onClick={() => apiRenderer.command({ id: "togglePinned" })}
+                onClick={() => window.api.command({ id: "togglePinned" })}
             >
                 <PinAngleFill />
             </button>
@@ -41,7 +40,7 @@ export function Titlebar({
             <button
                 title={getText("search")}
                 className={classNames("icon-btn", { active: showSearch })}
-                onClick={() => apiRenderer.command({ id: "toggleSearch" })}
+                onClick={() => window.api.command({ id: "toggleSearch" })}
             >
                 <Search />
             </button>
@@ -54,7 +53,7 @@ export function Titlebar({
                 title={getText("close")}
                 className="icon-btn"
                 id="close-btn"
-                onClick={() => apiRenderer.command({ id: "toggleShowHide" })}
+                onClick={() => window.api.command({ id: "toggleShowHide" })}
             >
                 {isMac ? <XCircleFill /> : <XLg />}
             </button>
@@ -80,7 +79,7 @@ export function Titlebar({
 
         return (
             <div className={className}>
-                <button className="icon-btn" onClick={() => apiRenderer.menu({ type: "lists" })}>
+                <button className="icon-btn" onClick={() => window.api.menu({ type: "lists" })}>
                     {activeListName} ({count}) <CaretDownFill />
                 </button>
             </div>

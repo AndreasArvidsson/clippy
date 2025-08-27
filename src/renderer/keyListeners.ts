@@ -1,5 +1,3 @@
-import { apiRenderer } from "./apiRenderer";
-
 type Listener = (key: string) => boolean;
 
 const listeners: Listener[] = [];
@@ -10,7 +8,7 @@ function initialize() {
         let handled = false;
 
         if (key === "F12") {
-            apiRenderer.command({ id: "toggleDevTools" });
+            window.api.command({ id: "toggleDevTools" });
             handled = true;
         } else {
             for (const listener of listeners) {

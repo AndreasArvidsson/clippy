@@ -1,6 +1,5 @@
 import type { JSX } from "preact";
 import { useEffect, useState } from "preact/hooks";
-import { apiRenderer } from "./apiRenderer";
 import type { RendererData } from "../types/types";
 import { ClipboardList } from "./ClipboardList";
 import { Footer } from "./Footer";
@@ -16,10 +15,10 @@ export function Root(): JSX.Element | null {
     const [listNameType, setListNameType] = useState<ListNameType>();
 
     useEffect(() => {
-        apiRenderer.getRendererData().then(setData).catch(console.error);
-        apiRenderer.onUpdate(setData);
-        apiRenderer.onCreateList(() => setListNameType("createList"));
-        apiRenderer.onRenameList(() => setListNameType("renameList"));
+        window.api.getRendererData().then(setData).catch(console.error);
+        window.api.onUpdate(setData);
+        window.api.onCreateList(() => setListNameType("createList"));
+        window.api.onRenameList(() => setListNameType("renameList"));
         keyListeners.initialize();
     }, []);
 

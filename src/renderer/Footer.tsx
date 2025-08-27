@@ -1,6 +1,5 @@
 import type { JSX } from "preact";
 import { GearFill, PauseFill, StarFill } from "react-bootstrap-icons";
-import { apiRenderer } from "./apiRenderer";
 import classNames from "./classNames";
 import { getText } from "./texts";
 
@@ -16,7 +15,7 @@ export function Footer({ paused, autoStar, showSettings }: Props): JSX.Element {
             <button
                 title={getText("paused")}
                 className={classNames("icon-btn", { active: paused })}
-                onClick={() => apiRenderer.command({ id: "togglePaused" })}
+                onClick={() => window.api.command({ id: "togglePaused" })}
             >
                 <PauseFill />
             </button>
@@ -24,7 +23,7 @@ export function Footer({ paused, autoStar, showSettings }: Props): JSX.Element {
             <button
                 title={getText("autoStar")}
                 className={classNames("icon-btn", { active: autoStar })}
-                onClick={() => apiRenderer.command({ id: "toggleAutoStar" })}
+                onClick={() => window.api.command({ id: "toggleAutoStar" })}
             >
                 <StarFill />
             </button>
@@ -34,7 +33,7 @@ export function Footer({ paused, autoStar, showSettings }: Props): JSX.Element {
             <button
                 title={getText("showSettings")}
                 className={classNames("icon-btn", { active: showSettings })}
-                onClick={() => apiRenderer.command({ id: "toggleSettings" })}
+                onClick={() => window.api.command({ id: "toggleSettings" })}
             >
                 <GearFill />
             </button>

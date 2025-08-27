@@ -1,5 +1,4 @@
 import type { JSX } from "preact";
-import { apiRenderer } from "./apiRenderer";
 import type { ClipItemType, Search } from "../types/types";
 import InputText from "./InputText";
 
@@ -10,7 +9,7 @@ interface Props {
 export function Search({ search }: Props): JSX.Element | null {
     function onChange(change: Partial<Search>) {
         const value = { ...search, ...change };
-        apiRenderer.command({ id: "searchItems", text: value.text, type: value.type });
+        window.api.command({ id: "searchItems", text: value.text, type: value.type });
     }
 
     if (!search.show) {
@@ -28,7 +27,7 @@ export function Search({ search }: Props): JSX.Element | null {
                 value={search.text}
                 onChange={(value) => onChange({ text: value })}
                 onBlur={() => {}} // Do nothing
-                onEscape={() => apiRenderer.command({ id: "hideSearch" })}
+                onEscape={() => window.api.command({ id: "hideSearch" })}
             />
 
             <span>
