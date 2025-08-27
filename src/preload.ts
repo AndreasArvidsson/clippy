@@ -26,7 +26,7 @@ contextBridge.exposeInMainWorld("api", {
     },
     // Listen for events from main thread
     onUpdate(callback: (data: RendererData) => void) {
-        ipcRenderer.on(UPDATE, (...args: unknown[]) => callback(args[0] as RendererData));
+        ipcRenderer.on(UPDATE, (_, data: RendererData) => callback(data));
     },
     onCreateList(callback: () => void) {
         ipcRenderer.on(CREATE_LIST, () => callback());
