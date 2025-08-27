@@ -1,3 +1,1 @@
-export function isMacOS() {
-    return process.platform === "darwin";
-}
+export const isMacOS = process.platform === "darwin";

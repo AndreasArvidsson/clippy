@@ -1,7 +1,6 @@
 import type { JSX } from "preact";
 import { CaretDownFill, PinAngleFill, Search, XCircleFill, XLg } from "react-bootstrap-icons";
 import { apiRenderer } from "./apiRenderer";
-import { isMacOS } from "../util/isMacOS";
 import classNames from "./classNames";
 import { getText } from "./texts";
 import "./titlebar.css";
@@ -15,7 +14,7 @@ interface Props {
     showSettings: boolean;
 }
 
-const isMac = isMacOS();
+const isMac = window.platform.isMacOS;
 
 export function Titlebar({
     activeListName,

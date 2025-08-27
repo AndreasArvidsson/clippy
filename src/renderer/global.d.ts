@@ -8,6 +8,9 @@ declare global {
             on: (channel: string, listener: (...args: unknown[]) => void) => () => void;
             off: (channel: string, listener: (...args: unknown[]) => void) => void;
         };
+
+        platform: {
+            isMacOS: boolean;
+        };
     }
 }
-

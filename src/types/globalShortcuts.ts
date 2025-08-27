@@ -17,7 +17,7 @@ export function registerGlobalShortcuts(rpc: TalonRpcServer) {
 }
 
 function registerGlobalShortcut(keyWin: string, keyMac: string, callback: () => void) {
-    const keybind = isMacOS() ? keyMac : keyWin;
+    const keybind = isMacOS ? keyMac : keyWin;
     const success = globalShortcut.register(keybind, callback);
 
     if (!success) {

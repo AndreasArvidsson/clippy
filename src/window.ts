@@ -11,7 +11,7 @@ export function createWindow(iconPath: string) {
     _bounds = storage.getWindowBounds();
     _window = _createWindow(iconPath);
 
-    if (isMacOS()) {
+    if (isMacOS) {
         app.dock?.hide();
     }
 
@@ -65,8 +65,6 @@ function _createWindow(icon: string): BrowserWindow {
 
         webPreferences: {
             preload: path.resolve(__dirname, "preload.js"),
-            // nodeIntegration: true,
-            // contextIsolation: false,
         },
     });
 

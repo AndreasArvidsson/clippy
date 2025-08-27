@@ -1,4 +1,5 @@
 import { contextBridge, ipcRenderer } from "electron";
+import { isMacOS } from "./util/isMacOS";
 
 // Expose a minimal, explicit surface to the renderer
 contextBridge.exposeInMainWorld("api", {
@@ -16,4 +17,8 @@ contextBridge.exposeInMainWorld("api", {
     off: (channel: string, listener: (...args: unknown[]) => void) =>
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
         ipcRenderer.off(channel, listener as any),
+});
+
+contextBridge.exposeInMainWorld("platform", {
+    isMacOS: isMacOS,
 });
