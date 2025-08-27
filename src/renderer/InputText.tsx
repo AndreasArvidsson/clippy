@@ -54,10 +54,11 @@ export default function InputText({
             disabled={disabled}
             autoFocus={autoFocus}
             onChange={(e) => {
-                setCurrentValue(e.currentTarget.value);
+                const value = e.currentTarget.value;
+                setCurrentValue(value);
                 if (timeout) {
                     clearTimeout(timeoutHandle);
-                    setTimeoutHandle(setTimeout(() => onChange(e.currentTarget.value.trim()), 500));
+                    setTimeoutHandle(setTimeout(() => onChange(value.trim()), 500));
                 }
             }}
             onBlur={() => {
