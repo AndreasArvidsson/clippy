@@ -1,7 +1,7 @@
 import { globalShortcut } from "electron";
 import type { TalonRpcServer } from "talon-rpc";
-import { isMacOS } from "../util/isMacOS";
-import { showErrorNotification } from "../util/notifications";
+import { isMacOS } from "./isMacOS";
+import { showErrorNotification } from "./notifications";
 import { runCommandWithThrow } from "../commands/runCommand";
 
 export function registerGlobalShortcuts(rpc: TalonRpcServer) {
@@ -17,7 +17,7 @@ export function registerGlobalShortcuts(rpc: TalonRpcServer) {
 }
 
 function registerGlobalShortcut(keyWin: string, keyMac: string, callback: () => void) {
-    const keybind = isMacOS() ? keyMac : keyWin;
+    const keybind = isMacOS ? keyMac : keyWin;
     const success = globalShortcut.register(keybind, callback);
 
     if (!success) {

@@ -1,5 +1,4 @@
 import type { JSX } from "preact";
-import { apiRenderer } from "../api";
 import InputText from "./InputText";
 
 export type ListNameType = "createList" | "renameList";
@@ -27,7 +26,7 @@ export function ListName({ type, activeListName, done }: Props): JSX.Element | n
                 onEscape={() => done()}
                 onChange={(value) => {
                     done();
-                    apiRenderer.command({ id: type, name: value });
+                    window.api.command({ id: type, name: value });
                 }}
             />
         </div>

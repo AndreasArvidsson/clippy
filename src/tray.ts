@@ -1,6 +1,6 @@
 import { Menu, nativeImage, Tray } from "electron";
 import { runCommand } from "./commands/runCommand";
-import { NAME } from "./constants";
+import { NAME } from "./common/constants";
 
 const ICON_SIZE = 24;
 

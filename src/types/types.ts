@@ -1,5 +1,3 @@
-import type { ReadBookmark } from "electron";
-
 export type ClipItemType = "text" | "image";
 export type SearchType = "text" | "image" | "url";
 
@@ -33,8 +31,13 @@ export interface ClipItem {
     readonly text: string | undefined;
     readonly rtf: string | undefined;
     readonly html: string | undefined;
-    readonly bookmark: ReadBookmark | undefined;
+    readonly bookmark: Bookmark | undefined;
     readonly image: ClipItemImage | undefined;
+}
+
+interface Bookmark {
+    title: string;
+    url: string;
 }
 
 export interface Config {
@@ -53,9 +56,16 @@ export interface List {
 }
 
 export interface StorageState {
-    windowBounds?: Electron.Rectangle;
+    windowBounds?: Rectangle;
     config: Config;
     lists: List[];
+}
+
+interface Rectangle {
+    height: number;
+    width: number;
+    x: number;
+    y: number;
 }
 
 export interface Search {

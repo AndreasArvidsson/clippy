@@ -2,10 +2,9 @@ import type { JSX } from "preact";
 import { Fragment } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
 import { StarFill } from "react-bootstrap-icons";
-import { apiRenderer } from "../api";
 import { StarredList, UnstarredList, type ClipItem } from "../types/types";
-import { getCommandForHints, hintsToPrimitiveTargets } from "../util/getCommandForHints";
-import { indexToHint } from "../util/hints";
+import { getCommandForHints, hintsToPrimitiveTargets } from "../common/getCommandForHints";
+import { indexToHint } from "../common/hints";
 import classNames from "./classNames";
 import InputText from "./InputText";
 import { keyListeners } from "./keyListeners";
@@ -30,7 +29,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
     }, [items]);
 
     useEffect(() => {
-        const unregisterRenameListener = apiRenderer.onRenameItem(setRenameItemId);
+        const unregisterRenameListener = window.api.onRenameItem(setRenameItemId);
 
         const listener = (key: string): boolean => {
             switch (key) {
@@ -71,19 +70,19 @@ export function ClipboardList({ items }: Props): JSX.Element {
     const copySelected = () => {
         const hints = ref.current.slice();
         hints.sort();
-        apiRenderer.command(getCommandForHints("copyItems", hints));
+        window.api.command(getCommandForHints("copyItems", hints));
         setSelected([]);
     };
 
     const removeSelected = () => {
         const hints = ref.current.slice();
-        apiRenderer.command(getCommandForHints("removeItems", hints));
+        window.api.command(getCommandForHints("removeItems", hints));
         setSelected([]);
     };
 
     const renameSelected = () => {
         const hints = ref.current.slice();
-        apiRenderer.command({
+        window.api.command({
             id: "renameItems",
             targets: hintsToPrimitiveTargets(hints),
         });
@@ -105,7 +104,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
         }
         // hint key: Copy item
         else {
-            apiRenderer.command(getCommandForHints("copyItems", [hint]));
+            window.api.command(getCommandForHints("copyItems", [hint]));
         }
     };
 
@@ -122,7 +121,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
                     onEscape={() => setRenameItemId(undefined)}
                     onChange={(value) => {
                         setRenameItemId(undefined);
-                        apiRenderer.command({
+                        window.api.command({
                             id: "renameItems",
                             targets: hintsToPrimitiveTargets([hint]),
                             name: value,
@@ -156,7 +155,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
                         setSelected([]);
                     }
                     const hints = isSelected ? _selected.slice() : [hint];
-                    apiRenderer.menu({
+                    window.api.menu({
                         type: "clipItemContext",
                         hints,
                     });
@@ -176,7 +175,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
                         })}
                         onClick={(e) => {
                             e.stopPropagation();
-                            apiRenderer.command({
+                            window.api.command({
                                 id: "assignItemsToList",
                                 targets: hintsToPrimitiveTargets([hint]),
                                 name: item.list != null ? UnstarredList.id : StarredList.id,

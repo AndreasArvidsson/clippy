@@ -1,8 +1,8 @@
+import { hintToIndex } from "../common/hints";
 import type { PrimitiveTarget, RangeTarget, SearchTarget, Target } from "../types/targets";
 import type { ClipItem, SearchType } from "../types/types";
 import { isWindowVisible } from "../window";
 import { applySearchFilters, getListItems } from "./filterItems";
-import { hintToIndex } from "./hints";
 import { constructSearchRegexp, urlRegex } from "./regex";
 
 export function processTargets(targets: Target[]): ClipItem[] {

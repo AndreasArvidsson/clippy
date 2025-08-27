@@ -1,16 +1,16 @@
 import { app } from "electron";
 import { NodeIo, TalonRpcServer } from "talon-rpc";
 import { showMenu } from "./Menu";
-import { apiMain } from "./api";
+import { api } from "./api";
 import * as clipboardList from "./clipboardList";
 import { runCommand, runCommandWithThrow } from "./commands/runCommand";
-import { RPC_COMMAND, RPC_DIR_NAME } from "./constants";
+import { RPC_COMMAND, RPC_DIR_NAME } from "./common/constants";
 import { storage } from "./storage";
 import { createTray } from "./tray";
 import type { Command } from "./types/command";
-import { registerGlobalShortcuts } from "./types/globalShortcuts";
 import { getIconPath } from "./util/getIconPath";
 import { getRendererData } from "./util/getRendererData";
+import { registerGlobalShortcuts } from "./util/globalShortcuts";
 import { onDarkModeChange } from "./util/onDarkModeChange";
 import { updateRenderer } from "./util/updateRenderer";
 import { createWindow } from "./window";
@@ -25,9 +25,9 @@ void app.whenReady().then(async () => {
 
     clipboardList.onChange(updateRenderer);
 
-    apiMain.onGetRendererData(getRendererData);
-    apiMain.onMenu(showMenu);
-    apiMain.onCommand(runCommand);
+    api.onGetRendererData(getRendererData);
+    api.onMenu(showMenu);
+    api.onCommand(runCommand);
 
     const io = new NodeIo(RPC_DIR_NAME);
     const rpc = new TalonRpcServer(io, executeRequest);

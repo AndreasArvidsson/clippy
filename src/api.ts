@@ -1,30 +1,32 @@
-import { ipcMain, ipcRenderer } from "electron";
+import { ipcMain } from "electron";
+import {
+    COMMAND,
+    type CREATE_LIST,
+    GET_RENDERER_DATA,
+    MENU,
+    RENAME_ITEM,
+    type RENAME_LIST,
+    UPDATE,
+} from "./common/constants";
 import type { Command } from "./types/command";
 import type { MenuType, RendererData } from "./types/types";
 import { getWindow } from "./window";
 
-const GET_RENDERER_DATA = "getRendererData";
-const COMMAND = "command";
-const MENU = "menu";
-const UPDATE = "update";
-const CREATE_LIST = "createList";
-const RENAME_LIST = "renameList";
-const RENAME_ITEM = "renameItem";
-
 type SimpleId = typeof CREATE_LIST | typeof RENAME_LIST;
 
-export const apiMain = {
-    // Send events to renderer
+export const api = {
+    // Send events to renderer process
     simple(id: SimpleId) {
-        mainEmit(id);
+        send(id);
     },
     update(data: RendererData) {
-        mainEmit(UPDATE, data);
+        send(UPDATE, data);
     },
     renameItem(id: string) {
-        mainEmit(RENAME_ITEM, id);
+        send(RENAME_ITEM, id);
     },
-    // Listen for events from renderer
+
+    // Listen for events from renderer process
     onGetRendererData(callback: () => RendererData) {
         ipcMain.handle(GET_RENDERER_DATA, callback);
     },
@@ -36,38 +38,6 @@ export const apiMain = {
     },
 };
 
-export const apiRenderer = {
-    // Send events to main thread
-    getRendererData(): Promise<RendererData> {
-        return ipcRenderer.invoke(GET_RENDERER_DATA) as Promise<RendererData>;
-    },
-    command(command: Command) {
-        rendererEmit(COMMAND, command);
-    },
-    menu(menu: MenuType) {
-        rendererEmit(MENU, menu);
-    },
-    // Listen for events from main thread
-    onUpdate(callback: (data: RendererData) => void) {
-        ipcRenderer.on(UPDATE, (_, data: RendererData) => callback(data));
-    },
-    onCreateList(callback: () => void) {
-        ipcRenderer.on(CREATE_LIST, callback);
-    },
-    onRenameList(callback: () => void) {
-        ipcRenderer.on(RENAME_LIST, callback);
-    },
-    onRenameItem(callback: (id: string) => void) {
-        const listener = (_: Electron.IpcRendererEvent, id: string): void => callback(id);
-        ipcRenderer.on(RENAME_ITEM, listener);
-        return () => ipcRenderer.off(RENAME_ITEM, listener);
-    },
-};
-
-function mainEmit(id: string, ...args: unknown[]) {
+function send(id: string, ...args: unknown[]) {
     getWindow().webContents.send(id, ...args);
-}
-
-function rendererEmit(id: string, ...args: unknown[]) {
-    ipcRenderer.send(id, ...args);
 }

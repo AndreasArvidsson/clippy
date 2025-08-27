@@ -1,4 +1,4 @@
-import { apiMain } from "../api";
+import { api } from "../api";
 import { storage } from "../storage";
 import type { RenameListCommand } from "../types/command";
 import { getActiveList, tryGetListByNameIgnoreCase } from "../util/getList";
@@ -6,7 +6,7 @@ import { updateRenderer } from "../util/updateRenderer";
 
 export function renameList(command: RenameListCommand) {
     if (command.name == null) {
-        apiMain.simple("renameList");
+        api.simple("renameList");
         return;
     }
 

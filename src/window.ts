@@ -1,6 +1,6 @@
 import { BrowserWindow, app, nativeTheme, screen, type Rectangle } from "electron";
 import path from "node:path";
-import { NAME } from "./constants";
+import { NAME } from "./common/constants";
 import { storage } from "./storage";
 import { isMacOS } from "./util/isMacOS";
 
@@ -11,7 +11,7 @@ export function createWindow(iconPath: string) {
     _bounds = storage.getWindowBounds();
     _window = _createWindow(iconPath);
 
-    if (isMacOS()) {
+    if (isMacOS) {
         app.dock?.hide();
     }
 
@@ -64,8 +64,7 @@ function _createWindow(icon: string): BrowserWindow {
         height: bounds?.height,
 
         webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false,
+            preload: path.resolve(__dirname, "preload.js"),
         },
     });
 

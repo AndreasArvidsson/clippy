@@ -31,7 +31,7 @@ export default function InputText({
     onEscape,
 }: Props) {
     const [currentValue, setCurrentValue] = useState("");
-    const [timeoutHandle, setTimeoutHandle] = useState<NodeJS.Timeout>();
+    const [timeoutHandle, setTimeoutHandle] = useState<number>();
     const escapeBlurRef = useRef(false);
 
     useEffect(() => {
