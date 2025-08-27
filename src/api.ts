@@ -14,7 +14,7 @@ import { getWindow } from "./window";
 
 type SimpleId = typeof CREATE_LIST | typeof RENAME_LIST;
 
-export const apiMain = {
+export const api = {
     // Send events to renderer process
     simple(id: SimpleId) {
         send(id);

@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid";
-import { apiMain } from "../apiMain";
+import { api } from "../api";
 import { storage } from "../storage";
 import type { CreateListCommand } from "../types/command";
 import { type List } from "../types/types";
@@ -8,7 +8,7 @@ import { updateRenderer } from "../util/updateRenderer";
 
 export function createList(command: CreateListCommand) {
     if (command.name == null) {
-        apiMain.simple("createList");
+        api.simple("createList");
         return;
     }
 

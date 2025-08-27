@@ -1,4 +1,4 @@
-import { apiMain } from "../apiMain";
+import { api } from "../api";
 import { storage } from "../storage";
 import type { RenameItemsCommand } from "../types/command";
 import type { ClipItem } from "../types/types";
@@ -17,7 +17,7 @@ export function renameItems(command: RenameItemsCommand) {
         updateRenderer();
     } else {
         const item = assertSingleItem(items);
-        apiMain.renameItem(item.id);
+        api.renameItem(item.id);
     }
 }
 

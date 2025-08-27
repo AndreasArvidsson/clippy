@@ -7,25 +7,29 @@ export default defineConfig(({ mode }) => {
     // electron 37 uses node 22 and chromium 138
     const nodeTarget = "node22";
     const chromeTarget = "chrome138";
-    const isProduction = mode === "production";
+    const entryFileNames = "[name].js";
+    const assetFileNames = "assets/[name][extname]";
+    const minify = mode === "production";
     const outDir = path.join(__dirname, "out");
+    const sourcemap = true;
+    const emptyOutDir = false;
 
     return {
         main: {
             build: {
-                outDir: outDir,
                 target: nodeTarget,
-                minify: isProduction,
-                sourcemap: true,
-                emptyOutDir: false,
+                outDir: outDir,
+                minify,
+                sourcemap,
+                emptyOutDir,
 
                 rollupOptions: {
                     input: path.join(__dirname, "src/main.ts"),
                     // The clipboard events doesn't work if we roll them up in the same bundle
                     external: ["clipboard-event"],
                     output: {
-                        entryFileNames: "[name].js",
-                        assetFileNames: "assets/[name][extname]",
+                        entryFileNames,
+                        assetFileNames,
                     },
                 },
             },
@@ -33,17 +37,17 @@ export default defineConfig(({ mode }) => {
 
         preload: {
             build: {
-                outDir,
                 target: nodeTarget,
-                minify: isProduction,
-                sourcemap: true,
-                emptyOutDir: false,
+                outDir,
+                minify,
+                sourcemap,
+                emptyOutDir,
 
                 rollupOptions: {
                     input: path.join(__dirname, "src/preload.ts"),
                     output: {
-                        entryFileNames: "[name].js",
-                        assetFileNames: "assets/[name][extname]",
+                        entryFileNames,
+                        assetFileNames,
                     },
                 },
             },
@@ -54,29 +58,24 @@ export default defineConfig(({ mode }) => {
             root: path.join(__dirname, "src/renderer"),
 
             build: {
-                outDir,
                 target: chromeTarget,
-                minify: isProduction,
-                sourcemap: true,
-                emptyOutDir: false,
+                outDir,
+                minify,
+                sourcemap,
+                emptyOutDir,
                 // Always emit separate files
                 assetsInlineLimit: 0,
 
                 rollupOptions: {
                     input: path.join(__dirname, "src/renderer/index.html"),
-
                     output: {
-                        entryFileNames: "[name].js",
-                        assetFileNames: "assets/[name][extname]",
+                        entryFileNames,
+                        assetFileNames,
                     },
                 },
             },
 
             plugins: [preact(), { ...purgeCss({}), enforce: "post" }],
-
-            optimizeDeps: {
-                exclude: ["electron"],
-            },
         },
     };
 });
