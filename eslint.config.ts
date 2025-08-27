@@ -78,6 +78,16 @@ export default eslintTs.config(
     },
 
     {
+        files: ["src/renderer/**/*"],
+        languageOptions: {
+            parserOptions: {
+                // Needed for ESLint to use the correct tsconfig
+                project: ["./src/renderer/tsconfig.json"],
+            },
+        },
+    },
+
+    {
         files: ["src/{types,common,renderer}/**/*"],
         rules: {
             "import/no-nodejs-modules": "error",

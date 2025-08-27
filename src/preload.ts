@@ -9,12 +9,12 @@ import {
     UPDATE,
 } from "./common/constants";
 import type { Command } from "./types/command";
+import type { PreloadApi, PreloadPlatform } from "./types/preload.types";
 import type { MenuType, RendererData } from "./types/types";
 import { isMacOS } from "./util/isMacOS";
 
-// Expose a minimal, explicit surface to the renderer
-contextBridge.exposeInMainWorld("api", {
-    // Send events to main thread
+const api: PreloadApi = {
+    // Send events to main process
     getRendererData(): Promise<RendererData> {
         return ipcRenderer.invoke(GET_RENDERER_DATA) as Promise<RendererData>;
     },
@@ -24,7 +24,8 @@ contextBridge.exposeInMainWorld("api", {
     menu(menu: MenuType) {
         ipcRenderer.send(MENU, menu);
     },
-    // Listen for events from main thread
+
+    // Listen for events from main process
     onUpdate(callback: (data: RendererData) => void) {
         ipcRenderer.on(UPDATE, (_, data: RendererData) => callback(data));
     },
@@ -39,8 +40,11 @@ contextBridge.exposeInMainWorld("api", {
         ipcRenderer.on(RENAME_ITEM, listener);
         return () => ipcRenderer.off(RENAME_ITEM, listener);
     },
-});
+};
 
-contextBridge.exposeInMainWorld("platform", {
+const platform: PreloadPlatform = {
     isMacOS: isMacOS,
-});
+};
+
+contextBridge.exposeInMainWorld("api", api);
+contextBridge.exposeInMainWorld("platform", platform);

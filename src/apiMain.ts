@@ -15,17 +15,18 @@ import { getWindow } from "./window";
 type SimpleId = typeof CREATE_LIST | typeof RENAME_LIST;
 
 export const apiMain = {
-    // Send events to renderer
+    // Send events to renderer process
     simple(id: SimpleId) {
-        mainEmit(id);
+        send(id);
     },
     update(data: RendererData) {
-        mainEmit(UPDATE, data);
+        send(UPDATE, data);
     },
     renameItem(id: string) {
-        mainEmit(RENAME_ITEM, id);
+        send(RENAME_ITEM, id);
     },
-    // Listen for events from renderer
+
+    // Listen for events from renderer process
     onGetRendererData(callback: () => RendererData) {
         ipcMain.handle(GET_RENDERER_DATA, callback);
     },
@@ -37,6 +38,6 @@ export const apiMain = {
     },
 };
 
-function mainEmit(id: string, ...args: unknown[]) {
+function send(id: string, ...args: unknown[]) {
     getWindow().webContents.send(id, ...args);
 }
