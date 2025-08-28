@@ -36,7 +36,8 @@ const api: PreloadApi = {
         ipcRenderer.on(RENAME_LIST, () => callback());
     },
     onRenameItem(callback: (id: string) => void) {
-        const listener = (_: Electron.IpcRendererEvent, id: string): void => callback(id);
+        const listener = (_: Electron.IpcRendererEvent, id: string): void =>
+            callback(id);
         ipcRenderer.on(RENAME_ITEM, listener);
         return () => ipcRenderer.off(RENAME_ITEM, listener);
     },

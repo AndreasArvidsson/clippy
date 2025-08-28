@@ -57,8 +57,14 @@ function redImage(html: string | undefined): ClipItemImage | undefined {
         return undefined;
     }
     return {
-        src: html != null ? /<img.*?src=(?:"(.+?)"|'(.+?)').*?>/g.exec(html)?.[1] : undefined,
-        alt: html != null ? /<img.*?alt=(?:"(.+?)"|'(.+?)').*?>/g.exec(html)?.[1] : undefined,
+        src:
+            html != null
+                ? /<img.*?src=(?:"(.+?)"|'(.+?)').*?>/g.exec(html)?.[1]
+                : undefined,
+        alt:
+            html != null
+                ? /<img.*?alt=(?:"(.+?)"|'(.+?)').*?>/g.exec(html)?.[1]
+                : undefined,
         data: nativeImage.toDataURL(),
     };
 }
@@ -104,7 +110,10 @@ function writeItem(item: ClipItem) {
         rtf,
         html,
         bookmark: bookmark?.title,
-        image: image != null ? electron.nativeImage.createFromDataURL(image.data) : undefined,
+        image:
+            image != null
+                ? electron.nativeImage.createFromDataURL(image.data)
+                : undefined,
     });
 }
 

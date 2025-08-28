@@ -8,7 +8,11 @@ interface Props {
     activeListName: string;
     done: () => void;
 }
-export function ListName({ type, activeListName, done }: Props): JSX.Element | null {
+export function ListName({
+    type,
+    activeListName,
+    done,
+}: Props): JSX.Element | null {
     if (type == null) {
         return null;
     }

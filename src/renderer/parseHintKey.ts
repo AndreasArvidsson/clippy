@@ -1,4 +1,6 @@
-export function parseHintKey(key: string): { superKey: boolean; hint: string } | null {
+export function parseHintKey(
+    key: string,
+): { superKey: boolean; hint: string } | null {
     let superKey = false;
     if (key.startsWith("super+")) {
         superKey = true;

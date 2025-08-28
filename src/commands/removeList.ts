@@ -13,7 +13,9 @@ export function removeList() {
 
     removeAllItems(false);
 
-    storage.setLists(storage.getLists().filter((list) => list.id !== activeList.id));
+    storage.setLists(
+        storage.getLists().filter((list) => list.id !== activeList.id),
+    );
     storage.patchConfig({ activeList: AllList.id });
 
     updateRenderer();

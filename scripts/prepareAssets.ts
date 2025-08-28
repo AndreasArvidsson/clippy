@@ -7,7 +7,8 @@ export function changePermissionOfClipboardEventHandlerMac() {
     // https://github.com/AndreasArvidsson/clippy/issues/3
 
     if (os.platform() === "darwin") {
-        const filename = "node_modules/clipboard-event/platform/clipboard-event-handler-mac";
+        const filename =
+            "node_modules/clipboard-event/platform/clipboard-event-handler-mac";
         const filePath = path.join(__dirname, "..", filename);
         let currentMode = fs.statSync(filePath).mode;
         // 0o111 is the same as +x

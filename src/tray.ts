@@ -31,5 +31,8 @@ export async function createTray(iconPath: string) {
 }
 
 function getTrayIcon(iconPath: string) {
-    return nativeImage.createThumbnailFromPath(iconPath, { width: ICON_SIZE, height: ICON_SIZE });
+    return nativeImage.createThumbnailFromPath(iconPath, {
+        width: ICON_SIZE,
+        height: ICON_SIZE,
+    });
 }

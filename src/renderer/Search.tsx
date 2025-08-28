@@ -9,7 +9,11 @@ interface Props {
 export function Search({ search }: Props): JSX.Element | null {
     function onChange(change: Partial<Search>) {
         const value = { ...search, ...change };
-        window.api.command({ id: "searchItems", text: value.text, type: value.type });
+        window.api.command({
+            id: "searchItems",
+            text: value.text,
+            type: value.type,
+        });
     }
 
     if (!search.show) {

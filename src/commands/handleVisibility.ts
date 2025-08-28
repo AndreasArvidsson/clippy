@@ -7,7 +7,10 @@ import {
     showWindow,
 } from "./showHide";
 
-export function handleVisibility(preferredVisibility: Visibility, commandVisibility?: Visibility) {
+export function handleVisibility(
+    preferredVisibility: Visibility,
+    commandVisibility?: Visibility,
+) {
     const visibility = commandVisibility ?? preferredVisibility;
 
     switch (visibility) {

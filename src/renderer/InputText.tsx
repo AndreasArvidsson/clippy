@@ -58,7 +58,9 @@ export default function InputText({
                 setCurrentValue(value);
                 if (timeout) {
                     clearTimeout(timeoutHandle);
-                    setTimeoutHandle(setTimeout(() => onChange(value.trim()), 500));
+                    setTimeoutHandle(
+                        setTimeout(() => onChange(value.trim()), 500),
+                    );
                 }
             }}
             onBlur={() => {

@@ -21,7 +21,9 @@ export function createList(command: CreateListCommand) {
     const existingList = tryGetListByNameIgnoreCase(name);
 
     if (existingList != null) {
-        throw Error(`Can't create list: List '${existingList.name}' already exists`);
+        throw Error(
+            `Can't create list: List '${existingList.name}' already exists`,
+        );
     }
 
     const list: List = {

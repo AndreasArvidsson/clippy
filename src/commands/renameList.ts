@@ -28,7 +28,9 @@ export function renameList(command: RenameListCommand) {
     const existingList = tryGetListByNameIgnoreCase(name);
 
     if (existingList != null && existingList.id !== activeList.id) {
-        throw Error(`Can't rename list: List '${existingList.name}' already exists`);
+        throw Error(
+            `Can't rename list: List '${existingList.name}' already exists`,
+        );
     }
 
     activeList.name = name;

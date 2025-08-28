@@ -37,7 +37,9 @@ export default function InputNumber({
     }, [value]);
 
     const parseCurrentValue = () => {
-        const num = isInteger ? parseInt(currentValue) : parseFloat(currentValue);
+        const num = isInteger
+            ? parseInt(currentValue)
+            : parseFloat(currentValue);
         return isNaN(num) ? value : num;
     };
 

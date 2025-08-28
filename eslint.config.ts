@@ -106,7 +106,11 @@ export default eslintTs.config(
                         { target: TYPES, from: NODE_MODULES },
                         { target: COMMON, from: SRC, except: [COMMON, TYPES] },
                         { target: COMMON, from: NODE_MODULES },
-                        { target: RENDERER, from: SRC, except: [RENDERER, TYPES, COMMON] },
+                        {
+                            target: RENDERER,
+                            from: SRC,
+                            except: [RENDERER, TYPES, COMMON],
+                        },
                     ],
                 },
             ],
@@ -114,7 +118,12 @@ export default eslintTs.config(
     },
 
     {
-        files: ["eslint.config.ts", "electron.vite.config.ts", "scripts/**/*", "src/typings/**/*"],
+        files: [
+            "eslint.config.ts",
+            "electron.vite.config.ts",
+            "scripts/**/*",
+            "src/typings/**/*",
+        ],
         extends: [eslintTs.configs.disableTypeChecked],
     },
 );

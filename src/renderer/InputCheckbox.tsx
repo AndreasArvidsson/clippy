@@ -26,7 +26,11 @@ export default function InputCheckbox({
                     className="form-check-input"
                     checked={checked}
                     disabled={disabled}
-                    onChange={onChange ? (e) => onChange(e.currentTarget.checked) : undefined}
+                    onChange={
+                        onChange
+                            ? (e) => onChange(e.currentTarget.checked)
+                            : undefined
+                    }
                 />
                 {children}
             </label>

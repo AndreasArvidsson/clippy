@@ -1,5 +1,11 @@
 import type { JSX } from "preact";
-import { CaretDownFill, PinAngleFill, Search, XCircleFill, XLg } from "react-bootstrap-icons";
+import {
+    CaretDownFill,
+    PinAngleFill,
+    Search,
+    XCircleFill,
+    XLg,
+} from "react-bootstrap-icons";
 import classNames from "./classNames";
 import { getText } from "./texts";
 import "./titlebar.css";
@@ -79,7 +85,10 @@ export function Titlebar({
 
         return (
             <div className={className}>
-                <button className="icon-btn" onClick={() => window.api.menu({ type: "lists" })}>
+                <button
+                    className="icon-btn"
+                    onClick={() => window.api.menu({ type: "lists" })}
+                >
                     {activeListName} ({count}) <CaretDownFill />
                 </button>
             </div>

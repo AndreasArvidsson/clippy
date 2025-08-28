@@ -15,7 +15,10 @@ export function getListItems(isVisible: boolean): ClipItem[] {
     }
 }
 
-export function applySearchFilters(items: ClipItem[], isVisible: boolean): ClipItem[] {
+export function applySearchFilters(
+    items: ClipItem[],
+    isVisible: boolean,
+): ClipItem[] {
     const search = storage.getSearch();
 
     if (search.show && isVisible) {
@@ -28,7 +31,9 @@ export function applySearchFilters(items: ClipItem[], isVisible: boolean): ClipI
             items = items.filter(
                 (item) =>
                     item.name?.toLowerCase().includes(searchText) ||
-                    (item.text ?? item.rtf)?.toLowerCase().includes(searchText) ||
+                    (item.text ?? item.rtf)
+                        ?.toLowerCase()
+                        .includes(searchText) ||
                     item.html?.toLowerCase().includes(searchText) ||
                     item.bookmark?.title?.toLowerCase().includes(searchText) ||
                     item.image?.alt?.toLowerCase().includes(searchText),

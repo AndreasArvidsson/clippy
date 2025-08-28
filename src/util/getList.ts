@@ -1,8 +1,13 @@
 import { storage } from "../storage";
 import { type List, defaultLists } from "../types/types";
 
-export function getActiveList(): { activeList: List; activeListIsDefault: boolean } {
-    const [activeList, activeListIsDefault] = getListInternal(storage.getConfig().activeList);
+export function getActiveList(): {
+    activeList: List;
+    activeListIsDefault: boolean;
+} {
+    const [activeList, activeListIsDefault] = getListInternal(
+        storage.getConfig().activeList,
+    );
     return { activeList, activeListIsDefault };
 }
 

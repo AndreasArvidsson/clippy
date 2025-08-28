@@ -3,7 +3,10 @@ import { Fragment } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
 import { StarFill } from "react-bootstrap-icons";
 import { StarredList, UnstarredList, type ClipItem } from "../types/types";
-import { getCommandForHints, hintsToPrimitiveTargets } from "../common/getCommandForHints";
+import {
+    getCommandForHints,
+    hintsToPrimitiveTargets,
+} from "../common/getCommandForHints";
 import { indexToHint } from "../common/hints";
 import classNames from "./classNames";
 import InputText from "./InputText";
@@ -29,7 +32,8 @@ export function ClipboardList({ items }: Props): JSX.Element {
     }, [items]);
 
     useEffect(() => {
-        const unregisterRenameListener = window.api.onRenameItem(setRenameItemId);
+        const unregisterRenameListener =
+            window.api.onRenameItem(setRenameItemId);
 
         const listener = (key: string): boolean => {
             switch (key) {
@@ -132,7 +136,10 @@ export function ClipboardList({ items }: Props): JSX.Element {
         );
     };
 
-    const renderName = (item: ClipItem, hint: string): JSX.Element | undefined => {
+    const renderName = (
+        item: ClipItem,
+        hint: string,
+    ): JSX.Element | undefined => {
         if (item.id === renameItemId) {
             return renderRenameName(item, hint);
         }
@@ -147,7 +154,9 @@ export function ClipboardList({ items }: Props): JSX.Element {
 
         return (
             <div
-                className={classNames("row clip-item", { selected: isSelected })}
+                className={classNames("row clip-item", {
+                    selected: isSelected,
+                })}
                 onClick={(e) => clickItem(hint, e.ctrlKey || e.metaKey)}
                 onContextMenu={(e) => {
                     e.preventDefault();
@@ -178,7 +187,10 @@ export function ClipboardList({ items }: Props): JSX.Element {
                             window.api.command({
                                 id: "assignItemsToList",
                                 targets: hintsToPrimitiveTargets([hint]),
-                                name: item.list != null ? UnstarredList.id : StarredList.id,
+                                name:
+                                    item.list != null
+                                        ? UnstarredList.id
+                                        : StarredList.id,
                             });
                         }}
                     >

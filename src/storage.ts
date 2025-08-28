@@ -136,7 +136,9 @@ export const storage = {
 async function readStateFile() {
     const { stateFile } = storagePaths.get();
     if (fileExists(stateFile)) {
-        const state = normalizeStorageState(await readJsonFile<StorageState>(stateFile));
+        const state = normalizeStorageState(
+            await readJsonFile<StorageState>(stateFile),
+        );
         return { ...stateDefault, ...state };
     }
     return { ...stateDefault };
@@ -176,12 +178,18 @@ async function deleteFileFromDiskWithRetry(path: string) {
     try {
         return await deleteFile(path);
     } catch (error) {
-        console.warn("Failed to delete clipboard item from disk. Retry...", error);
+        console.warn(
+            "Failed to delete clipboard item from disk. Retry...",
+            error,
+        );
         if (fileExists(path)) {
             try {
                 return await deleteFile(path);
             } catch (error) {
-                showErrorNotification("Failed to delete clipboard item from disk", error);
+                showErrorNotification(
+                    "Failed to delete clipboard item from disk",
+                    error,
+                );
             }
         }
     }
