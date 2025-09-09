@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
 import classNames from "./classNames";
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
     invalid?: boolean;
     autoFocus?: boolean;
     timeout?: boolean;
-    onChange: (value: string) => void;
+    onChange: (value: string, target: HTMLInputElement) => void;
     onBlur?: () => void;
     onEscape?: () => void;
 }
@@ -32,14 +32,25 @@ export default function InputText({
 }: Props) {
     const [currentValue, setCurrentValue] = useState("");
     const [timeoutHandle, setTimeoutHandle] = useState<number>();
+    const ref = useRef<HTMLInputElement>(null);
     const escapeBlurRef = useRef(false);
 
     useEffect(() => {
         setCurrentValue(value ?? "");
     }, [value]);
 
+    // Focus the input when it is mounted
+    useLayoutEffect(() => {
+        if (autoFocus && ref.current != null) {
+            if (document.activeElement !== ref.current) {
+                ref.current.focus({ preventScroll: true });
+            }
+        }
+    }, []);
+
     return (
         <input
+            ref={ref}
             type={type ?? "text"}
             className={classNames(
                 "form-control",
@@ -52,14 +63,17 @@ export default function InputText({
             value={currentValue}
             placeholder={placeholder}
             disabled={disabled}
-            autoFocus={autoFocus}
+            onClick={(e) => e.stopPropagation()}
+            onContextMenu={(e) => e.stopPropagation()}
             onChange={(e) => {
                 const value = e.currentTarget.value;
                 setCurrentValue(value);
                 if (timeout) {
                     clearTimeout(timeoutHandle);
                     setTimeoutHandle(
-                        setTimeout(() => onChange(value.trim()), 500),
+                        setTimeout(() => {
+                            onChange(value.trim(), e.currentTarget);
+                        }, 500),
                     );
                 }
             }}
@@ -74,7 +88,7 @@ export default function InputText({
             onKeyDown={(e) => {
                 e.stopPropagation();
                 if (e.key === "Enter") {
-                    onChange(currentValue.trim());
+                    onChange(currentValue.trim(), e.currentTarget);
                 } else if (e.key === "Escape") {
                     e.preventDefault();
                     if (onEscape != null) {

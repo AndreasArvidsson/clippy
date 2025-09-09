@@ -41,6 +41,11 @@ main {
     outline-offset: -1px;
 }
 
+.clip-item:not(.selected):not(:hover) + .clip-item:not(.selected):not(:hover) {
+    border-top: 1px solid #ddd;
+    border-radius: 0;
+}
+
 .clip-item > div {
     padding: 0 0.5rem;
     align-items: center;
@@ -111,5 +116,10 @@ button.star-btn.active {
 
     button.icon-btn {
         color: #f0f0f0;
+    }
+
+    .clip-item:not(.selected):not(:hover)
+        + .clip-item:not(.selected):not(:hover) {
+        border-top-color: #666;
     }
 }
