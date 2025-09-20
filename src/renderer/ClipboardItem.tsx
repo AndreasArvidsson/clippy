@@ -2,11 +2,11 @@ import type { JSX } from "preact";
 import { memo } from "preact/compat";
 import { StarFill } from "react-bootstrap-icons";
 import { hintsToPrimitiveTargets } from "../common/getCommandForHints";
-import { type ClipItem } from "../types/types";
+import { type ClipItemRender } from "../types/types";
 import InputText from "./InputText";
 
 interface Props {
-    item: ClipItem;
+    item: ClipItemRender;
     hint: string;
     isSelected: boolean;
     isRenaming: boolean;
@@ -38,7 +38,7 @@ export function ClipboardItem({
 }
 
 interface MemoProps {
-    item: ClipItem;
+    item: ClipItemRender;
     isRenaming: boolean;
     stopRenaming: () => void;
 }
@@ -60,8 +60,7 @@ const ClipboardItemMemo = memo(function ClipboardItemMemo({
                     data-source="star"
                     type="button"
                     className={
-                        "icon-btn star-btn" +
-                        (item.list != null ? " active" : "")
+                        "icon-btn star-btn" + (item.starred ? " active" : "")
                     }
                 >
                     <StarFill />
@@ -73,16 +72,16 @@ const ClipboardItemMemo = memo(function ClipboardItemMemo({
 
 function isMemoPropsEqual(prev: MemoProps, next: MemoProps): boolean {
     return (
-        // id, name, list are only necessary on item. Rest are readonly.
+        // id, name, starred are only necessary on item. Rest are immutable.
         prev.item.id === next.item.id &&
         prev.item.name === next.item.name &&
-        prev.item.list === next.item.list &&
+        prev.item.starred === next.item.starred &&
         prev.isRenaming === next.isRenaming
     );
 }
 
 function renderName(
-    item: ClipItem,
+    item: ClipItemRender,
     isRenaming: boolean,
     stopRenaming: () => void,
 ): JSX.Element | null {
@@ -121,30 +120,24 @@ function renderName(
     return <div className="clip-name">{item.name}</div>;
 }
 
-function renderItemContent(item: ClipItem): JSX.Element {
-    if (item.image != null) {
+function renderItemContent(item: ClipItemRender): JSX.Element {
+    if (item.type === "image") {
         return (
-            <div className="clip-content-image" title={item.image.alt}>
-                <img src={item.image.data} alt={item.image.alt} />
+            <div className="clip-content-image">
+                <img
+                    src={`clip://image/${item.id}`}
+                    loading="lazy"
+                    decoding="async"
+                />
             </div>
         );
     }
 
-    const text = item.text ?? item.rtf ?? item.html ?? "";
-
-    if (text.includes("\n")) {
-        return (
-            <pre className="clip-content-text" title={text}>
-                {text}
-            </pre>
-        );
+    if (item.text?.includes("\n")) {
+        return <pre className="clip-content-text">{item.text}</pre>;
     }
 
-    return (
-        <div className="clip-content-text" title={text}>
-            {text}
-        </div>
-    );
+    return <div className="clip-content-text">{item.text}</div>;
 }
 
 export type DataSource = "item" | "star";

@@ -108,6 +108,10 @@ export const storage = {
         return _clipboardItems;
     },
 
+    getClipboardItem(id: string): ClipItem | undefined {
+        return _clipboardItems.find((item) => item.id === id);
+    },
+
     addNewItem(item: ClipItem) {
         _clipboardItems.unshift(item);
         writeClipItemToDisk(item);

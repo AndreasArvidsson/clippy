@@ -35,6 +35,14 @@ export interface ClipItem {
     readonly image: ClipItemImage | undefined;
 }
 
+export interface ClipItemRender {
+    readonly id: string;
+    readonly type: ClipItemType;
+    readonly starred: boolean;
+    readonly name: string | undefined;
+    readonly text: string | undefined;
+}
+
 interface Bookmark {
     title: string;
     url: string;
@@ -80,7 +88,7 @@ export interface RendererData {
     readonly activeListName: string;
     readonly search: Search;
     readonly showSettings: boolean;
-    readonly items: ClipItem[];
+    readonly items: ClipItemRender[];
 }
 
 interface ClipItemContextMenu {

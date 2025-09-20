@@ -31,7 +31,7 @@ function read(): ClipItem | null {
     const text = electron.clipboard.readText() || undefined;
     const rtf = electron.clipboard.readRTF() || undefined;
     const html = electron.clipboard.readHTML() || undefined;
-    const image = redImage(html);
+    const image = readImage(html);
     const bookmark = readBookmark();
     const type: ClipItemType = image != null ? "image" : "text";
     const hash = createHash(image?.data ?? text ?? rtf ?? html ?? "");
@@ -51,7 +51,7 @@ function read(): ClipItem | null {
     };
 }
 
-function redImage(html: string | undefined): ClipItemImage | undefined {
+function readImage(html: string | undefined): ClipItemImage | undefined {
     const nativeImage = electron.clipboard.readImage();
     if (nativeImage.isEmpty()) {
         return undefined;

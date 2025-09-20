@@ -5,7 +5,11 @@ import {
     hintsToPrimitiveTargets,
 } from "../common/getCommandForHints";
 import { indexToHint } from "../common/hints";
-import { StarredList, UnstarredList, type ClipItem } from "../types/types";
+import {
+    StarredList,
+    UnstarredList,
+    type ClipItemRender,
+} from "../types/types";
 import {
     ClipboardItem,
     getDataHint,
@@ -16,7 +20,7 @@ import { keyListeners } from "./keyListeners";
 import { parseHintKey } from "./parseHintKey";
 
 interface Props {
-    items: ClipItem[];
+    items: ClipItemRender[];
 }
 
 export function ClipboardList({ items }: Props): JSX.Element {

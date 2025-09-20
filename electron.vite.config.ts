@@ -26,7 +26,7 @@ export default defineConfig(({ mode }) => {
                 rollupOptions: {
                     input: path.join(__dirname, "src/main.ts"),
                     // The clipboard events doesn't work if we roll them up in the same bundle
-                    external: ["clipboard-event"],
+                    external: ["clipboard-event", "sharp"],
                     output: {
                         entryFileNames,
                         assetFileNames,
