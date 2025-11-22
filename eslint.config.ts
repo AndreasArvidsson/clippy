@@ -24,8 +24,7 @@ export default eslintTs.config(
             ecmaVersion: "latest",
             sourceType: "module",
             parserOptions: {
-                projectService: true,
-                tsconfigRootDir: import.meta.dirname,
+                project: true,
                 ecmaFeatures: {
                     jsx: true,
                 },
