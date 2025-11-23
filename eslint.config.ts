@@ -2,6 +2,7 @@ import eslintJs from "@eslint/js";
 import eslintPrettier from "eslint-config-prettier/flat";
 import importPlugin from "eslint-plugin-import";
 import reactPlugin from "eslint-plugin-react";
+import { defineConfig } from "eslint/config";
 import path from "node:path";
 import eslintTs from "typescript-eslint";
 
@@ -11,7 +12,7 @@ const COMMON = path.join(SRC, "common");
 const TYPES = path.join(SRC, "types");
 const NODE_MODULES = path.resolve("node_modules");
 
-export default eslintTs.config(
+export default defineConfig(
     eslintJs.configs.recommended,
     eslintTs.configs.recommendedTypeChecked,
     reactPlugin.configs.flat.recommended,
