@@ -30,7 +30,7 @@
         "@eslint/js": "^9.31.0",
         "@preact/preset-vite": "^2.10.2",
         "@types/node": "^24.10.1",
-        "@types/react": "^19.2.6",
+        "@types/react": "^19.2.7",
         "electron-vite": "^4.0.1",
         "electron": "^39.2.3",
         "eslint-config-prettier": "^10.1.8",
@@ -40,7 +40,7 @@
         "eslint": "^9.39.1",
         "jiti": "^2.6.1",
         "prettier": "^3.6.2",
-        "typescript-eslint": "^8.47.0",
+        "typescript-eslint": "^8.48.0",
         "typescript": "^5.9.3",
         "vite-plugin-purgecss": "^0.2.13"
     }
