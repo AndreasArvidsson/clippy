@@ -3,7 +3,7 @@
     "displayName": "Clippy",
     "productName": "Clippy",
     "description": "Clipboard manager with RPC",
-    "version": "0.22.0",
+    "version": "0.23.0",
     "author": "AndreasArvidsson",
     "license": "MIT",
     "main": "out/main.js",
