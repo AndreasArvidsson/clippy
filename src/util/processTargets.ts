@@ -7,8 +7,9 @@ import type {
 } from "../types/targets";
 import type { ClipItem, SearchType } from "../types/types";
 import { isWindowVisible } from "../window";
+import { constructSearchRegexp } from "./constructSearchRegexp";
 import { applySearchFilters, getListItems } from "./filterItems";
-import { constructSearchRegexp, isUrl } from "./regex";
+import { isUrl } from "./isUrl";
 
 export function processTargets(targets: Target[]): ClipItem[] {
     const isVisible = isWindowVisible();
