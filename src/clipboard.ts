@@ -57,16 +57,21 @@ function readImage(html: string | undefined): ClipItemImage | undefined {
         return undefined;
     }
     return {
-        src:
-            html != null
-                ? /<img.*?src=(?:"(.+?)"|'(.+?)').*?>/g.exec(html)?.[1]
-                : undefined,
-        alt:
-            html != null
-                ? /<img.*?alt=(?:"(.+?)"|'(.+?)').*?>/g.exec(html)?.[1]
-                : undefined,
+        src: html != null ? getImageAttribute(html, "src") : undefined,
+        alt: html != null ? getImageAttribute(html, "alt") : undefined,
         data: nativeImage.toDataURL(),
     };
+}
+
+function getImageAttribute(
+    html: string,
+    attribute: "src" | "alt",
+): string | undefined {
+    const match = new RegExp(
+        `<img[^>]*?${attribute}=(?:"([^"]*)"|'([^']*)')`,
+        "i",
+    ).exec(html);
+    return match?.[1] ?? match?.[2];
 }
 
 function readBookmark(): electron.ReadBookmark | undefined {
