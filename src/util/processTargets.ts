@@ -8,7 +8,7 @@ import type {
 import type { ClipItem, SearchType } from "../types/types";
 import { isWindowVisible } from "../window";
 import { applySearchFilters, getListItems } from "./filterItems";
-import { constructSearchRegexp, urlRegex } from "./regex";
+import { constructSearchRegexp, isUrl } from "./regex";
 
 export function processTargets(targets: Target[]): ClipItem[] {
     const isVisible = isWindowVisible();
@@ -110,7 +110,7 @@ function isSearchMatch(
 ): boolean {
     if (itemType != null) {
         if (itemType === "url") {
-            if (item.text == null || !urlRegex.test(item.text)) {
+            if (item.text == null || !isUrl(item.text)) {
                 return false;
             }
         } else if (item.type !== itemType) {
