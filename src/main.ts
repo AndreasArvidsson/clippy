@@ -12,6 +12,7 @@ import type { Command } from "./types/command";
 import { getIconPath } from "./util/getIconPath";
 import { getRendererData } from "./util/getRendererData";
 import { registerGlobalShortcuts } from "./util/globalShortcuts";
+import { showBlockingErrorDialog } from "./util/notifications";
 import { onDarkModeChange } from "./util/onDarkModeChange";
 import { updateRenderer } from "./util/updateRenderer";
 import { createWindow } from "./window";
@@ -22,7 +23,13 @@ if (!app.requestSingleInstanceLock()) {
 }
 
 void app.whenReady().then(async () => {
-    await storage.init();
+    try {
+        await storage.init();
+    } catch (error) {
+        showBlockingErrorDialog("Failed to initialize storage", error);
+        app.quit();
+        return;
+    }
 
     clipboardList.onChange(updateRenderer);
 

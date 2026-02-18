@@ -139,13 +139,28 @@ export const storage = {
 
 async function readStateFile() {
     const { stateFile } = storagePaths.get();
-    if (fileExists(stateFile)) {
+
+    if (!fileExists(stateFile)) {
+        return { ...stateDefault };
+    }
+
+    try {
         const state = normalizeStorageState(
             await readJsonFile<StorageState>(stateFile),
         );
-        return { ...stateDefault, ...state };
+
+        return {
+            ...stateDefault,
+            ...state,
+            config: { ...stateDefault.config, ...state.config },
+        };
+    } catch (error) {
+        showErrorNotification(
+            `Failed to parse state file: ${path.basename(stateFile)}`,
+            error,
+        );
+        return { ...stateDefault };
     }
-    return { ...stateDefault };
 }
 
 export function saveStateFile() {
@@ -158,12 +173,23 @@ export function saveStateFile() {
 async function readItemsFromDisk(): Promise<ClipItem[]> {
     const { clipItemsDir } = storagePaths.get();
     const files = await getFilesInFolder(clipItemsDir);
-    const promises = files.map((file) => {
+    const items: ClipItem[] = [];
+
+    for (const file of files) {
         const filepath = path.join(clipItemsDir, file);
-        return readJsonFile<ClipItem>(filepath);
-    });
-    const items = await Promise.all(promises);
+        try {
+            const item = await readJsonFile<ClipItem>(filepath);
+            items.push(item);
+        } catch (error) {
+            showErrorNotification(
+                `Failed to parse clipboard item file: ${filepath}`,
+                error,
+            );
+        }
+    }
+
     items.sort((a, b) => b.created - a.created);
+
     return items;
 }
 
