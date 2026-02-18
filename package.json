@@ -19,7 +19,7 @@
     "dependencies": {
         "bootstrap": "^5.3.8",
         "clipboard-event": "^1.6.0",
-        "preact": "^10.28.2",
+        "preact": "^10.28.3",
         "react-bootstrap-icons": "^1.11.6",
         "sharp": "^0.34.5",
         "talon-rpc": "^2.2.0",
@@ -28,9 +28,9 @@
     "devDependencies": {
         "@electron/packager": "^18.4.4",
         "@eslint/js": "^9.39.2",
-        "@preact/preset-vite": "^2.10.2",
-        "@types/node": "^25.0.8",
-        "@types/react": "^19.2.8",
+        "@preact/preset-vite": "^2.10.3",
+        "@types/node": "^25.2.3",
+        "@types/react": "^19.2.14",
         "electron-vite": "^5.0.0",
         "electron": "^39.2.7",
         "eslint-config-prettier": "^10.1.8",
@@ -39,8 +39,8 @@
         "eslint-plugin-react": "^7.37.5",
         "eslint": "^9.39.2",
         "jiti": "^2.6.1",
-        "prettier": "^3.7.4",
-        "typescript-eslint": "^8.53.0",
+        "prettier": "^3.8.1",
+        "typescript-eslint": "^8.56.0",
         "typescript": "^5.9.3",
         "vite-plugin-purgecss": "^0.2.13"
     }
