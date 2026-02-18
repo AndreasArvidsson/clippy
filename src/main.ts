@@ -39,7 +39,7 @@ void app.whenReady().then(async () => {
     registerClipProtocol();
 
     const iconPath = getIconPath();
-    const tray = await createTray(iconPath);
+    const tray = createTray(iconPath);
     const window = createWindow(iconPath);
 
     onDarkModeChange(() => {

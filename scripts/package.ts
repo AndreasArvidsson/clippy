@@ -13,6 +13,10 @@ import { changePermissionOfClipboardEventHandlerMac } from "./prepareAssets";
         overwrite: true,
         icon: "images/icon_dark",
         appBundleId: "com.github.andreasarvidsson.clippy",
+        asar: {
+            // Keep native binaries outside app.asar.
+            unpack: "**/*.{node,dll,so,dylib}",
+        },
         ignore: [
             whitelistToIgnore(["out", "node_modules", "package.json"]),
             ".map$",

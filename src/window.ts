@@ -50,7 +50,7 @@ function getBounds(): Partial<Rectangle> {
     };
 }
 
-function _createWindow(icon: string): BrowserWindow {
+function _createWindow(iconPath: string): BrowserWindow {
     const bounds = getBounds();
     const { alwaysOnTop } = storage.getConfig();
 
@@ -58,7 +58,7 @@ function _createWindow(icon: string): BrowserWindow {
 
     const win = new BrowserWindow({
         title: NAME,
-        icon,
+        icon: iconPath,
         alwaysOnTop,
 
         show: false,
