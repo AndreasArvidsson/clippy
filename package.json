@@ -32,7 +32,7 @@
         "@types/node": "^25.2.3",
         "@types/react": "^19.2.14",
         "electron-vite": "^5.0.0",
-        "electron": "^39.2.7",
+        "electron": "^40.4.1",
         "eslint-config-prettier": "^10.1.8",
         "eslint-import-resolver-typescript": "^4.4.4",
         "eslint-plugin-import": "^2.32.0",
