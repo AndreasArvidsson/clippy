@@ -21,6 +21,11 @@ async function loadTestFile(file: string): Promise<void> {
 }
 
 void (async () => {
+    if (files.length === 0) {
+        console.error("No test files found.");
+        process.exit(1);
+    }
+
     for (const file of files) {
         await loadTestFile(file);
     }
