@@ -10,6 +10,7 @@ jobs:
   create-release:
     name: Create release
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     outputs:
       upload_url: ${{ steps.create-release.outputs.upload_url }}
       version: ${{ steps.get-version.outputs.version }}
