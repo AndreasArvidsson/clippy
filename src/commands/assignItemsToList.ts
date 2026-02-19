@@ -1,6 +1,6 @@
 import { storage } from "../storage";
 import type { AssignItemsToListCommand } from "../types/command";
-import { UnstarredList } from "../types/types";
+import { AllList, UnstarredList } from "../types/types";
 import { getListByNameIgnoreCase } from "../util/getList";
 import { processTargets } from "../util/processTargets";
 import { updateRenderer } from "../util/updateRenderer";
@@ -26,8 +26,11 @@ function getListId(listName: string | undefined): string | undefined {
 
     const list = getListByNameIgnoreCase(listName);
 
-    if (list.id === UnstarredList.id) {
-        return undefined;
+    // Both of these are virtual lists that don't actually exist, so we shouldn't assign items to them
+    switch (list.id) {
+        case AllList.id:
+        case UnstarredList.id:
+            return undefined;
     }
 
     return list.id;
