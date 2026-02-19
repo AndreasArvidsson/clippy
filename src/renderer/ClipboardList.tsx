@@ -33,11 +33,15 @@ export function ClipboardList({ items }: Props): JSX.Element {
         _setSelected(ref.current);
     };
 
-    useEffect(() => {
-        // If the items change, we need to clear the selection, otherwise the hints might point to the wrong items
+    const clearSelection = () => {
         if (ref.current.size > 0) {
             setSelected([]);
         }
+    };
+
+    useEffect(() => {
+        // If the items change, we need to clear the selection, otherwise the hints might point to the wrong items
+        clearSelection();
     }, [items]);
 
     useEffect(() => {
@@ -57,7 +61,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
                         renameSelected();
                         break;
                     case "Escape": {
-                        setSelected([]);
+                        clearSelection();
                         break;
                     }
                     default: {
@@ -85,7 +89,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
         const hints = [...ref.current];
         hints.sort((a, b) => hintToIndex(a) - hintToIndex(b));
         window.api.command(getCommandForHints("copyItems", hints));
-        setSelected([]);
+        clearSelection();
     };
 
     const removeSelected = () => {
@@ -94,7 +98,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
         }
         const hints = [...ref.current];
         window.api.command(getCommandForHints("removeItems", hints));
-        setSelected([]);
+        clearSelection();
     };
 
     const renameSelected = () => {
@@ -107,7 +111,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
             id: "renameItems",
             targets: hintsToPrimitiveTargets(hints),
         });
-        setSelected([]);
+        clearSelection();
     };
 
     const clickItem = (hint: string, superKey: boolean) => {
@@ -162,7 +166,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
         e.preventDefault();
         const isSelected = _selected.has(hint);
         if (!isSelected) {
-            setSelected([]);
+            clearSelection();
         }
         const hints = isSelected ? [..._selected] : [hint];
         window.api.menu({
