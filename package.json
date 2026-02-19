@@ -14,7 +14,8 @@
         "package": "npm run clean && npm run build && jiti scripts/package.ts",
         "typecheck": "tsc -p . && tsc -p src/renderer",
         "lint": "npm run typecheck && eslint src && prettier --check .",
-        "fix": "eslint src --fix && prettier --write ."
+        "fix": "eslint src --fix && prettier --write .",
+        "test": "jiti src/tests/runAllTests.ts"
     },
     "dependencies": {
         "bootstrap": "^5.3.8",
@@ -29,6 +30,7 @@
         "@electron/packager": "^19.0.5",
         "@eslint/js": "^9.39.2",
         "@preact/preset-vite": "^2.10.3",
+        "@types/mocha": "^10.0.10",
         "@types/node": "^25.2.3",
         "@types/react": "^19.2.14",
         "electron-vite": "^5.0.0",
@@ -38,7 +40,9 @@
         "eslint-plugin-import": "^2.32.0",
         "eslint-plugin-react": "^7.37.5",
         "eslint": "^9.39.2",
+        "glob": "^13.0.5",
         "jiti": "^2.6.1",
+        "mocha": "^11.7.5",
         "prettier": "^3.8.1",
         "typescript-eslint": "^8.56.0",
         "typescript": "^5.9.3",

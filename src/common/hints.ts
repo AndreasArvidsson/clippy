@@ -6,42 +6,31 @@ export function indexToHint(index: number): string {
         return String(index + 1);
     }
 
-    index -= 9;
+    let n = index - 9;
+    let hint = "";
 
-    const letters: string[] = [];
+    do {
+        hint = String.fromCharCode(refUC + (n % 26)) + hint;
+        n = Math.trunc(n / 26) - 1;
+    } while (n >= 0);
 
-    const div = Math.trunc(index / 26);
-
-    if (div > 0) {
-        letters.push(String.fromCharCode(refUC + div - 1));
-    }
-
-    const mod = index % 26;
-
-    if (mod > -1) {
-        letters.push(String.fromCharCode(refUC + mod));
-    }
-
-    return letters.join("");
+    return hint;
 }
 
 export function hintToIndex(hint: string): number {
     if (/^\d+$/.test(hint)) {
-        const index = parseInt(hint, 10);
-        return index - 1;
+        return parseInt(hint, 10) - 1;
     }
 
-    const letters = hint.toLowerCase().split("").reverse();
+    if (!/^[a-zA-Z]+$/.test(hint)) {
+        throw new Error(`Invalid hint: ${hint}`);
+    }
+
     let result = 0;
 
-    letters.forEach((letter, index) => {
-        const value = letter.charCodeAt(0) - refLC;
-        if (index > 0) {
-            result += (value + 1) * Math.pow(26, index);
-        } else {
-            result += value;
-        }
-    });
+    for (const letter of hint.toLowerCase()) {
+        result = result * 26 + (letter.charCodeAt(0) - refLC + 1);
+    }
 
-    return result + 9;
+    return result + 8;
 }
