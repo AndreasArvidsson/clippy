@@ -26,9 +26,8 @@ export function indexToHint(index: number): string {
 }
 
 export function hintToIndex(hint: string): number {
-    const index = parseInt(hint, 10);
-
-    if (!isNaN(index)) {
+    if (/^\d+$/.test(hint)) {
+        const index = parseInt(hint, 10);
         return index - 1;
     }
 
