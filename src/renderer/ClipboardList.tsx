@@ -97,7 +97,8 @@ export function ClipboardList({ items }: Props): JSX.Element {
     };
 
     const renameSelected = () => {
-        if (ref.current.length === 0) {
+        // Can only rename one item at the time
+        if (ref.current.length !== 1) {
             return;
         }
         const hints = ref.current.slice();
