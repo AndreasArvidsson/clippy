@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer } from "electron";
+import { contextBridge, ipcRenderer, type IpcRendererEvent } from "electron";
 import {
     COMMAND,
     CREATE_LIST,
@@ -8,9 +8,8 @@ import {
     RENAME_LIST,
     UPDATE,
 } from "./common/constants";
-import type { Command } from "./types/command";
 import type { PreloadApi, PreloadPlatform } from "./types/preload.types";
-import type { MenuType, RendererData } from "./types/types";
+import type { RendererData } from "./types/types";
 import { isMacOS } from "./util/isMacOS";
 
 const api: PreloadApi = {
@@ -18,28 +17,33 @@ const api: PreloadApi = {
     getRendererData(): Promise<RendererData> {
         return ipcRenderer.invoke(GET_RENDERER_DATA) as Promise<RendererData>;
     },
-    command(command: Command) {
+    command(command) {
         ipcRenderer.send(COMMAND, command);
     },
-    menu(menu: MenuType) {
+    menu(menu) {
         ipcRenderer.send(MENU, menu);
     },
 
     // Listen for events from main process
-    onUpdate(callback: (data: RendererData) => void) {
-        ipcRenderer.on(UPDATE, (_, data: RendererData) => callback(data));
+    onUpdate(callback) {
+        const listener = (_: IpcRendererEvent, d: RendererData) => callback(d);
+        ipcRenderer.on(UPDATE, listener);
+        return { dispose: () => ipcRenderer.off(UPDATE, listener) };
     },
-    onCreateList(callback: () => void) {
-        ipcRenderer.on(CREATE_LIST, () => callback());
+    onCreateList(callback) {
+        const listener = (_: IpcRendererEvent) => callback();
+        ipcRenderer.on(CREATE_LIST, listener);
+        return { dispose: () => ipcRenderer.off(CREATE_LIST, listener) };
     },
-    onRenameList(callback: () => void) {
-        ipcRenderer.on(RENAME_LIST, () => callback());
+    onRenameList(callback) {
+        const listener = (_: IpcRendererEvent) => callback();
+        ipcRenderer.on(RENAME_LIST, listener);
+        return { dispose: () => ipcRenderer.off(RENAME_LIST, listener) };
     },
-    onRenameItem(callback: (id: string) => void) {
-        const listener = (_: Electron.IpcRendererEvent, id: string): void =>
-            callback(id);
+    onRenameItem(callback) {
+        const listener = (_: IpcRendererEvent, id: string) => callback(id);
         ipcRenderer.on(RENAME_ITEM, listener);
-        return () => ipcRenderer.off(RENAME_ITEM, listener);
+        return { dispose: () => ipcRenderer.off(RENAME_ITEM, listener) };
     },
 };
 

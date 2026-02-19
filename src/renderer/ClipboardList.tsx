@@ -38,42 +38,40 @@ export function ClipboardList({ items }: Props): JSX.Element {
     }, [items]);
 
     useEffect(() => {
-        const unregisterRenameListener =
-            window.api.onRenameItem(setRenameItemId);
+        const disposables = [
+            window.api.onRenameItem(setRenameItemId),
 
-        const listener = (key: string): boolean => {
-            switch (key) {
-                case "Enter": {
-                    copySelected();
-                    break;
-                }
-                case "Delete":
-                    removeSelected();
-                    break;
-                case "F2":
-                    renameSelected();
-                    break;
-                case "Escape": {
-                    setSelected([]);
-                    break;
-                }
-                default: {
-                    const hint = parseHintKey(key);
-                    if (hint != null) {
-                        clickItem(hint.hint, hint.superKey);
-                        return true;
+            keyListeners.register((key) => {
+                switch (key) {
+                    case "Enter": {
+                        copySelected();
+                        break;
                     }
-                    return false;
+                    case "Delete":
+                        removeSelected();
+                        break;
+                    case "F2":
+                        renameSelected();
+                        break;
+                    case "Escape": {
+                        setSelected([]);
+                        break;
+                    }
+                    default: {
+                        const hint = parseHintKey(key);
+                        if (hint != null) {
+                            clickItem(hint.hint, hint.superKey);
+                            return true;
+                        }
+                        return false;
+                    }
                 }
-            }
-            return true;
-        };
-
-        keyListeners.register(listener);
+                return true;
+            }),
+        ];
 
         return () => {
-            unregisterRenameListener();
-            keyListeners.unregister(listener);
+            disposables.forEach((d) => d.dispose());
         };
     }, []);
 

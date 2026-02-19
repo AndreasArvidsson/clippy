@@ -15,6 +15,10 @@ export type Visibility =
     // Hide window if not pinned. If pinned, blur window
     | "hideOrBlurIfPinned";
 
+export interface Disposable {
+    dispose(): void;
+}
+
 export interface ClipItemImage {
     readonly src: string | undefined;
     readonly alt: string | undefined;

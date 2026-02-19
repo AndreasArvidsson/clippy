@@ -1,6 +1,6 @@
 import type { JSX } from "preact";
 import { useEffect, useState } from "preact/hooks";
-import type { RendererData } from "../types/types";
+import type { Disposable, RendererData } from "../types/types";
 import { ClipboardList } from "./ClipboardList";
 import { Footer } from "./Footer";
 import type { ListNameType } from "./ListName";
@@ -16,10 +16,17 @@ export function Root(): JSX.Element | null {
 
     useEffect(() => {
         window.api.getRendererData().then(setData).catch(console.error);
-        window.api.onUpdate(setData);
-        window.api.onCreateList(() => setListNameType("createList"));
-        window.api.onRenameList(() => setListNameType("renameList"));
-        keyListeners.initialize();
+
+        const disposables: Disposable[] = [
+            window.api.onUpdate(setData),
+            window.api.onCreateList(() => setListNameType("createList")),
+            window.api.onRenameList(() => setListNameType("renameList")),
+            keyListeners.initialize(),
+        ];
+
+        return () => {
+            disposables.forEach((d) => d.dispose());
+        };
     }, []);
 
     if (data == null) {
