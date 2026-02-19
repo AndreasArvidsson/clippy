@@ -24,18 +24,18 @@ interface Props {
 }
 
 export function ClipboardList({ items }: Props): JSX.Element {
-    const ref = useRef<string[]>([]);
-    const [_selected, _setSelected] = useState<string[]>(ref.current);
+    const ref = useRef<Set<string>>(new Set());
+    const [_selected, _setSelected] = useState<Set<string>>(ref.current);
     const [renameItemId, setRenameItemId] = useState<string>();
 
-    const setSelected = (selected: string[]) => {
-        ref.current = selected;
+    const setSelected = (selected: Iterable<string>) => {
+        ref.current = new Set(selected);
         _setSelected(ref.current);
     };
 
     useEffect(() => {
         // If the items change, we need to clear the selection, otherwise the hints might point to the wrong items
-        if (ref.current.length > 0) {
+        if (ref.current.size > 0) {
             setSelected([]);
         }
     }, [items]);
@@ -79,30 +79,30 @@ export function ClipboardList({ items }: Props): JSX.Element {
     }, []);
 
     const copySelected = () => {
-        if (ref.current.length === 0) {
+        if (ref.current.size === 0) {
             return;
         }
-        const hints = ref.current.slice();
+        const hints = [...ref.current];
         hints.sort((a, b) => hintToIndex(a) - hintToIndex(b));
         window.api.command(getCommandForHints("copyItems", hints));
         setSelected([]);
     };
 
     const removeSelected = () => {
-        if (ref.current.length === 0) {
+        if (ref.current.size === 0) {
             return;
         }
-        const hints = ref.current.slice();
+        const hints = [...ref.current];
         window.api.command(getCommandForHints("removeItems", hints));
         setSelected([]);
     };
 
     const renameSelected = () => {
         // Can only rename one item at the time
-        if (ref.current.length !== 1) {
+        if (ref.current.size !== 1) {
             return;
         }
-        const hints = ref.current.slice();
+        const hints = [...ref.current];
         window.api.command({
             id: "renameItems",
             targets: hintsToPrimitiveTargets(hints),
@@ -111,17 +111,17 @@ export function ClipboardList({ items }: Props): JSX.Element {
     };
 
     const clickItem = (hint: string, superKey: boolean) => {
-        const selected = ref.current;
         // ctrl + hint key: Toggle item selection
         // If we already have selection we always toggle selection
-        if (superKey || selected.length > 0) {
-            const isSelected = selected.includes(hint);
+        if (superKey || ref.current.size > 0) {
+            const selected = new Set(ref.current);
+            const isSelected = selected.has(hint);
             if (isSelected) {
-                selected.splice(selected.indexOf(hint), 1);
+                selected.delete(hint);
             } else {
-                selected.push(hint);
+                selected.add(hint);
             }
-            setSelected([...selected]);
+            setSelected(selected);
         }
         // hint key: Copy item
         else {
@@ -160,11 +160,11 @@ export function ClipboardList({ items }: Props): JSX.Element {
         }
 
         e.preventDefault();
-        const isSelected = _selected.includes(hint);
+        const isSelected = _selected.has(hint);
         if (!isSelected) {
             setSelected([]);
         }
-        const hints = isSelected ? _selected.slice() : [hint];
+        const hints = isSelected ? [..._selected] : [hint];
         window.api.menu({
             type: "clipItemContext",
             hints,
@@ -188,7 +188,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
                         key={item.id}
                         item={item}
                         hint={hint}
-                        isSelected={_selected.includes(hint)}
+                        isSelected={_selected.has(hint)}
                         isRenaming={item.id === renameItemId}
                         stopRenaming={stopRenaming}
                     />
