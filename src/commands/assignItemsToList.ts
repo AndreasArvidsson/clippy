@@ -22,10 +22,10 @@ function getListId(listName: string | undefined): string | undefined {
     if (listName == null) {
         return undefined;
     }
-    if (listName === UnstarredList.id) {
+    if (listName === UnstarredList.name) {
         return undefined;
     }
-    if (listName === StarredList.id) {
+    if (listName === StarredList.name) {
         return StarredList.id;
     }
     const list = storage.getLists().find((l) => l.name === listName);

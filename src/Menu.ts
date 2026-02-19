@@ -50,7 +50,7 @@ function clipItemContextMenu(hints: string[]) {
                 click: () => {
                     runCommand({
                         id: "assignItemsToList",
-                        name: list.id,
+                        name: list.name,
                         targets: hintsToPrimitiveTargets(hints),
                     });
                 },

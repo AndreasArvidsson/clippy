@@ -1,4 +1,4 @@
-import { type JSX } from "preact";
+import type { JSX, TargetedMouseEvent } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
 import {
     getCommandForHints,
@@ -118,7 +118,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
         }
     };
 
-    const onClick = (e: JSX.TargetedMouseEvent<HTMLElement>) => {
+    const onClick = (e: TargetedMouseEvent<HTMLElement>) => {
         const target = e.target as HTMLElement;
         const hint = getDataHint(target);
         const source = getDataSource(target);
@@ -136,12 +136,12 @@ export function ClipboardList({ items }: Props): JSX.Element {
             window.api.command({
                 id: "assignItemsToList",
                 targets: hintsToPrimitiveTargets([hint]),
-                name: isStarred(target) ? UnstarredList.id : StarredList.id,
+                name: isStarred(target) ? UnstarredList.name : StarredList.name,
             });
         }
     };
 
-    const onContextMenu = (e: JSX.TargetedMouseEvent<HTMLElement>) => {
+    const onContextMenu = (e: TargetedMouseEvent<HTMLElement>) => {
         const hint = getDataHint(e.target as HTMLElement);
 
         if (hint == null) {
