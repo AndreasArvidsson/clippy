@@ -4,7 +4,7 @@ import {
     getCommandForHints,
     hintsToPrimitiveTargets,
 } from "../common/getCommandForHints";
-import { indexToHint } from "../common/hints";
+import { hintToIndex, indexToHint } from "../common/hints";
 import {
     StarredList,
     UnstarredList,
@@ -82,7 +82,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
             return;
         }
         const hints = ref.current.slice();
-        hints.sort();
+        hints.sort((a, b) => hintToIndex(a) - hintToIndex(b));
         window.api.command(getCommandForHints("copyItems", hints));
         setSelected([]);
     };
