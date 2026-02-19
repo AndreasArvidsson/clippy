@@ -1,6 +1,7 @@
 import { storage } from "../storage";
 import type { AssignItemsToListCommand } from "../types/command";
-import { StarredList, UnstarredList } from "../types/types";
+import { UnstarredList } from "../types/types";
+import { getListByNameIgnoreCase } from "../util/getList";
 import { processTargets } from "../util/processTargets";
 import { updateRenderer } from "../util/updateRenderer";
 
@@ -22,15 +23,12 @@ function getListId(listName: string | undefined): string | undefined {
     if (listName == null) {
         return undefined;
     }
-    if (listName === UnstarredList.name) {
+
+    const list = getListByNameIgnoreCase(listName);
+
+    if (list.id === UnstarredList.id) {
         return undefined;
     }
-    if (listName === StarredList.name) {
-        return StarredList.id;
-    }
-    const list = storage.getLists().find((l) => l.name === listName);
-    if (list == null) {
-        throw Error(`Can't assign item to unknown list '${listName}'`);
-    }
+
     return list.id;
 }

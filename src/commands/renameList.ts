@@ -13,6 +13,8 @@ export function renameList(command: RenameListCommand) {
     const name = command.name.trim();
     const { activeList, activeListIsDefault } = getActiveList();
 
+    // no-op. Do nothing.
+    // Note that we still allow a change in case
     if (activeList.name === name) {
         return;
     }
@@ -27,6 +29,7 @@ export function renameList(command: RenameListCommand) {
 
     const existingList = tryGetListByNameIgnoreCase(name);
 
+    // Renaming the same list with a different case is allowed
     if (existingList != null && existingList.id !== activeList.id) {
         throw Error(
             `Can't rename list: List '${existingList.name}' already exists`,
