@@ -34,7 +34,10 @@ export function ClipboardList({ items }: Props): JSX.Element {
     };
 
     useEffect(() => {
-        setSelected([]);
+        // If the items change, we need to clear the selection, otherwise the hints might point to the wrong items
+        if (ref.current.length > 0) {
+            setSelected([]);
+        }
     }, [items]);
 
     useEffect(() => {
