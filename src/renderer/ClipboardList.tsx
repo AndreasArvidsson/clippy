@@ -78,6 +78,9 @@ export function ClipboardList({ items }: Props): JSX.Element {
     }, []);
 
     const copySelected = () => {
+        if (ref.current.length === 0) {
+            return;
+        }
         const hints = ref.current.slice();
         hints.sort();
         window.api.command(getCommandForHints("copyItems", hints));
@@ -85,12 +88,18 @@ export function ClipboardList({ items }: Props): JSX.Element {
     };
 
     const removeSelected = () => {
+        if (ref.current.length === 0) {
+            return;
+        }
         const hints = ref.current.slice();
         window.api.command(getCommandForHints("removeItems", hints));
         setSelected([]);
     };
 
     const renameSelected = () => {
+        if (ref.current.length === 0) {
+            return;
+        }
         const hints = ref.current.slice();
         window.api.command({
             id: "renameItems",
