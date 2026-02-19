@@ -62,7 +62,7 @@ Items in a list will not be removed automatically when the size limit is reached
 
 The Talon voice commands are documented in the [Clippy Talon](https://github.com/AndreasArvidsson/clippy-talon) repository.
 
-[Available RPC commands](./src/types/Command.ts)
+[Available RPC commands](./src/types/command.ts)
 
 ## Run source code
 
