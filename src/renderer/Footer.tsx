@@ -14,7 +14,7 @@ export function Footer({ paused, autoStar, showSettings }: Props): JSX.Element {
         <footer>
             <button
                 title={getText("paused")}
-                className={classNames("icon-btn", { active: paused })}
+                className={classNames("icon-btn", paused && "active")}
                 onClick={() => window.api.command({ id: "togglePaused" })}
             >
                 <PauseFill />
@@ -22,7 +22,7 @@ export function Footer({ paused, autoStar, showSettings }: Props): JSX.Element {
 
             <button
                 title={getText("autoStar")}
-                className={classNames("icon-btn", { active: autoStar })}
+                className={classNames("icon-btn", autoStar && "active")}
                 onClick={() => window.api.command({ id: "toggleAutoStar" })}
             >
                 <StarFill />
@@ -32,7 +32,7 @@ export function Footer({ paused, autoStar, showSettings }: Props): JSX.Element {
 
             <button
                 title={getText("showSettings")}
-                className={classNames("icon-btn", { active: showSettings })}
+                className={classNames("icon-btn", showSettings && "active")}
                 onClick={() => window.api.command({ id: "toggleSettings" })}
             >
                 <GearFill />

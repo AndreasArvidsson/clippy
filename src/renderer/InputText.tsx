@@ -54,9 +54,7 @@ export default function InputText({
             type={type ?? "text"}
             className={classNames(
                 "form-control",
-                {
-                    "is-invalid": invalid,
-                },
+                invalid && "is-invalid",
                 className,
             )}
             title={title}

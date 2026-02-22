@@ -33,7 +33,7 @@ export function Titlebar({
         return (
             <button
                 title={getText("pinned")}
-                className={classNames("icon-btn", { active: pinned })}
+                className={classNames("icon-btn", pinned && "active")}
                 onClick={() => window.api.command({ id: "togglePinned" })}
             >
                 <PinAngleFill />
@@ -45,7 +45,7 @@ export function Titlebar({
         return (
             <button
                 title={getText("search")}
-                className={classNames("icon-btn", { active: showSearch })}
+                className={classNames("icon-btn", showSearch && "active")}
                 onClick={() => window.api.command({ id: "toggleSearch" })}
             >
                 <Search />
@@ -67,10 +67,10 @@ export function Titlebar({
     }
 
     function renderTitle() {
-        const className = classNames("title", {
-            "padding-left": isMac,
-            "padding-right": !isMac,
-        });
+        const className = classNames(
+            "title",
+            isMac ? "padding-left" : "padding-right",
+        );
 
         if (showSettings) {
             return <div className={className}>Settings</div>;

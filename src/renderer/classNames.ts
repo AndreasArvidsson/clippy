@@ -1,27 +1,5 @@
-export default function classNames(
-    ...args: (string | undefined | Record<string, boolean | undefined>)[]
-): string | undefined {
-    const classes: string[] = [];
+type Arg = string | undefined | false;
 
-    for (const arg of args) {
-        if (!arg) {
-            continue;
-        }
-
-        if (typeof arg === "string") {
-            classes.push(arg);
-        } else {
-            for (const [cls, active] of Object.entries(arg)) {
-                if (active) {
-                    classes.push(cls);
-                }
-            }
-        }
-    }
-
-    if (classes.length === 0) {
-        return undefined;
-    }
-
-    return classes.join(" ");
+export default function classNames(...args: Arg[]): string | undefined {
+    return args.filter(Boolean).join(" ") || undefined;
 }

@@ -50,9 +50,7 @@ export default function InputNumber({
                 type="text"
                 className={classNames(
                     "form-control",
-                    {
-                        "is-invalid": invalid,
-                    },
+                    invalid && "is-invalid",
                     className,
                 )}
                 value={currentValue}
