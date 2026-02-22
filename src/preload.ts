@@ -2,6 +2,7 @@ import { contextBridge, ipcRenderer, type IpcRendererEvent } from "electron";
 import {
     COMMAND,
     CREATE_LIST,
+    GET_APP_VERSION,
     GET_RENDERER_DATA,
     MENU,
     RENAME_ITEM,
@@ -14,8 +15,11 @@ import { isMacOS } from "./util/isMacOS";
 
 const api: PreloadApi = {
     // Send events to main process
+    getAppVersion(): Promise<string> {
+        return ipcRenderer.invoke(GET_APP_VERSION);
+    },
     getRendererData(): Promise<RendererData> {
-        return ipcRenderer.invoke(GET_RENDERER_DATA) as Promise<RendererData>;
+        return ipcRenderer.invoke(GET_RENDERER_DATA);
     },
     command(command) {
         ipcRenderer.send(COMMAND, command);

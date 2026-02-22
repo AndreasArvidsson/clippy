@@ -2,6 +2,7 @@ import type { Command } from "./command";
 import type { Disposable, MenuType, RendererData } from "./types";
 
 export interface PreloadApi {
+    getAppVersion(): Promise<string>;
     getRendererData(): Promise<RendererData>;
     command(command: Command): void;
     menu(menu: MenuType): void;

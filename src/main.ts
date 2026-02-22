@@ -33,6 +33,7 @@ void app.whenReady().then(async () => {
 
     clipboardList.onChange(updateRenderer);
 
+    api.onGetAppVersion(() => app.getVersion());
     api.onGetRendererData(getRendererData);
     api.onMenu(showMenu);
     api.onCommand(runCommand);

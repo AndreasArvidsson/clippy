@@ -3,6 +3,7 @@ import type { Config } from "../types/types";
 import InputCheckbox from "./InputCheckbox";
 import InputNumber from "./InputNumber";
 import { texts } from "./texts";
+import { useEffect, useState } from "preact/hooks";
 
 interface Props {
     config: Config;
@@ -13,6 +14,12 @@ function patchConfig(config: Partial<Config>) {
 }
 
 export function Settings({ config }: Props): JSX.Element {
+    const [version, setVersion] = useState<string>();
+
+    useEffect(() => {
+        window.api.getAppVersion().then(setVersion).catch(console.error);
+    }, []);
+
     return (
         <main className="container-fluid">
             <InputCheckbox
@@ -55,15 +62,19 @@ export function Settings({ config }: Props): JSX.Element {
                 {texts.autoStar.title}
             </InputCheckbox>
 
-            <InputNumber
-                title={texts.limit.desc}
-                isInteger
-                value={config.limit}
-                onChange={(limit) => patchConfig({ limit })}
-                onBlur={(limit) => patchConfig({ limit })}
-            >
-                {texts.limit.title}
-            </InputNumber>
+            <div className="mt-2" style={{ width: "10rem" }}>
+                <InputNumber
+                    title={texts.limit.desc}
+                    isInteger
+                    value={config.limit}
+                    onChange={(limit) => patchConfig({ limit })}
+                    onBlur={(limit) => patchConfig({ limit })}
+                >
+                    {texts.limit.title}
+                </InputNumber>
+            </div>
+
+            <div className="mt-2 ">version: {version}</div>
 
             <button
                 className="btn btn-sm btn-primary mt-3"

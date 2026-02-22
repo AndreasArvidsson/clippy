@@ -2,6 +2,7 @@ import { ipcMain } from "electron";
 import {
     COMMAND,
     type CREATE_LIST,
+    GET_APP_VERSION,
     GET_RENDERER_DATA,
     MENU,
     RENAME_ITEM,
@@ -27,6 +28,9 @@ export const api = {
     },
 
     // Listen for events from renderer process
+    onGetAppVersion(callback: () => string) {
+        ipcMain.handle(GET_APP_VERSION, callback);
+    },
     onGetRendererData(callback: () => RendererData) {
         ipcMain.handle(GET_RENDERER_DATA, callback);
     },
