@@ -6,22 +6,27 @@ on:
     types: [completed]
     branches: [main]
 
+permissions:
+  contents: write
+
 jobs:
   create-release:
     name: Create release
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     outputs:
-      upload_url: ${{ steps.create-release.outputs.upload_url }}
       version: ${{ steps.get-version.outputs.version }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: .nvmrc
+          cache: npm
 
       - name: Read version from package.json
         id: get-version
@@ -32,22 +37,21 @@ jobs:
 
       - name: Create Git tag
         run: |
-          git tag v${{ env.version }}
-          git push origin v${{ env.version }}
+          git tag v${{ steps.get-version.outputs.version }}
+          git push origin v${{ steps.get-version.outputs.version }}
 
       - name: Create GitHub release
-        id: create-release
         uses: softprops/action-gh-release@v2
         with:
-          name: "${{ env.version }}"
-          tag_name: "v${{ env.version }}"
-          body: "Release for version ${{ env.version }}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: ${{ steps.get-version.outputs.version }}
+          tag_name: v${{ steps.get-version.outputs.version }}
+          body: Release for version ${{ steps.get-version.outputs.version }}
+          target_commitish: ${{ github.event.workflow_run.head_sha }}
 
   upload-assets:
-    name: Upload asset
+    name: Upload assets
     needs: create-release
+    if: ${{ needs.create-release.result == 'success' }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -55,35 +59,40 @@ jobs:
         os: [windows-latest, ubuntu-latest, macos-latest]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: .nvmrc
+          cache: npm
 
       - name: Install dependencies
-        run: npm --color install
+        run: npm --color ci
 
       - name: Package artifact
         run: npm --color run package
 
       - name: Compress artifact (Windows)
-        run: powershell.exe Compress-Archive -Path 'dist/*' -DestinationPath 'artifact.zip'
+        shell: pwsh
+        run: >
+          Compress-Archive -Path 'dist/*'
+          -DestinationPath "Clippy-${{ needs.create-release.outputs.version }}-${{ runner.os }}.zip"
         if: runner.os == 'Windows'
 
-      - name: Compress artifact (Linux)
+      - name: Compress artifact (macOS and Linux)
+        shell: bash
         run: |
           cd dist
-          zip -r ../artifact.zip *
+          zip -r "../Clippy-${{ needs.create-release.outputs.version }}-${{ runner.os }}.zip" *
         if: runner.os != 'Windows'
 
       - name: Upload release asset
-        uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: ./artifact.zip
-          asset_name: Clippy-${{ needs.create-release.outputs.version }}-${{ runner.os }}.zip
-          asset_content_type: application/zip
+          GH_TOKEN: ${{ github.token }}
+        run: >
+          gh release upload
+          "v${{ needs.create-release.outputs.version }}"
+          "Clippy-${{ needs.create-release.outputs.version }}-${{ runner.os }}.zip"
