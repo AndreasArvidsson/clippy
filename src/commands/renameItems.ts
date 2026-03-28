@@ -5,7 +5,7 @@ import type { ClipItem } from "../types/types";
 import { processTargets } from "../util/processTargets";
 import { updateRenderer } from "../util/updateRenderer";
 
-export function renameItems(command: RenameItemsCommand) {
+export function renameItems(command: RenameItemsCommand): void {
     const items = processTargets(command.targets);
 
     if (command.name != null) {

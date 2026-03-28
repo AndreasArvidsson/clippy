@@ -5,11 +5,8 @@ import {
     hintsToPrimitiveTargets,
 } from "../common/getCommandForHints";
 import { hintToIndex, indexToHint } from "../common/hints";
-import {
-    StarredList,
-    UnstarredList,
-    type ClipItemRender,
-} from "../types/types";
+import { StarredList, UnstarredList } from "../types/types";
+import type { ClipItemRender } from "../types/types";
 import {
     ClipboardItem,
     getDataHint,
@@ -46,7 +43,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
 
     useEffect(() => {
         const disposables = [
-            window.api.onRenameItem(setRenameItemId),
+            globalThis.window.api.onRenameItem(setRenameItemId),
 
             keyListeners.register((key) => {
                 switch (key) {
@@ -78,7 +75,9 @@ export function ClipboardList({ items }: Props): JSX.Element {
         ];
 
         return () => {
-            disposables.forEach((d) => d.dispose());
+            disposables.forEach((d) => {
+                d.dispose();
+            });
         };
     }, []);
 
@@ -88,7 +87,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
         }
         const hints = [...ref.current];
         hints.sort((a, b) => hintToIndex(a) - hintToIndex(b));
-        window.api.command(getCommandForHints("copyItems", hints));
+        globalThis.window.api.command(getCommandForHints("copyItems", hints));
         clearSelection();
     };
 
@@ -97,7 +96,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
             return;
         }
         const hints = [...ref.current];
-        window.api.command(getCommandForHints("removeItems", hints));
+        globalThis.window.api.command(getCommandForHints("removeItems", hints));
         clearSelection();
     };
 
@@ -107,7 +106,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
             return;
         }
         const hints = [...ref.current];
-        window.api.command({
+        globalThis.window.api.command({
             id: "renameItems",
             targets: hintsToPrimitiveTargets(hints),
         });
@@ -129,11 +128,14 @@ export function ClipboardList({ items }: Props): JSX.Element {
         }
         // hint key: Copy item
         else {
-            window.api.command(getCommandForHints("copyItems", [hint]));
+            globalThis.window.api.command(
+                getCommandForHints("copyItems", [hint]),
+            );
         }
     };
 
     const onClick = (e: TargetedMouseEvent<HTMLElement>) => {
+        // oxlint-disable-next-line typescript/no-unsafe-type-assertion
         const target = e.target as HTMLElement;
         const hint = getDataHint(target);
         const source = getDataSource(target);
@@ -147,8 +149,8 @@ export function ClipboardList({ items }: Props): JSX.Element {
         if (source === "item") {
             const superKey = e.ctrlKey || e.metaKey;
             clickItem(hint, superKey);
-        } else if (source === "star") {
-            window.api.command({
+        } else {
+            globalThis.window.api.command({
                 id: "assignItemsToList",
                 targets: hintsToPrimitiveTargets([hint]),
                 name: isStarred(target) ? UnstarredList.name : StarredList.name,
@@ -157,6 +159,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
     };
 
     const onContextMenu = (e: TargetedMouseEvent<HTMLElement>) => {
+        // oxlint-disable-next-line typescript/no-unsafe-type-assertion
         const hint = getDataHint(e.target as HTMLElement);
 
         if (hint == null) {
@@ -169,7 +172,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
             clearSelection();
         }
         const hints = isSelected ? [..._selected] : [hint];
-        window.api.menu({
+        globalThis.window.api.menu({
             type: "clipItemContext",
             hints,
         });

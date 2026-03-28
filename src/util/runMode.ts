@@ -1,3 +1,5 @@
+// oxlint-disable node/no-process-env
+
 type RunMode = "production" | "development" | "test";
 
 const mode = ((): RunMode => {

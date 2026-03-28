@@ -2,7 +2,6 @@
     "extends": "../../tsconfig.json",
     "compilerOptions": {
         "lib": ["ES2024", "DOM", "DOM.Iterable"],
-        // Drop node types
         "types": [],
         "jsx": "react-jsx",
         "jsxImportSource": "preact"

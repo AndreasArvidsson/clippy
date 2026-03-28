@@ -1,5 +1,5 @@
 import type { JSX } from "preact";
-import InputText from "./InputText";
+import { InputText } from "./InputText";
 
 export type ListNameType = "createList" | "renameList";
 
@@ -26,11 +26,15 @@ export function ListName({
                 autoFocus
                 placeholder="List name"
                 value={defaultValue}
-                onBlur={() => done()}
-                onEscape={() => done()}
+                onBlur={() => {
+                    done();
+                }}
+                onEscape={() => {
+                    done();
+                }}
                 onChange={(value) => {
                     done();
-                    window.api.command({ id: type, name: value });
+                    globalThis.window.api.command({ id: type, name: value });
                 }}
             />
         </div>

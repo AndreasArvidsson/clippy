@@ -3,29 +3,42 @@ import { useEffect, useState } from "preact/hooks";
 import type { Disposable, RendererData } from "../types/types";
 import { ClipboardList } from "./ClipboardList";
 import { Footer } from "./Footer";
+import { keyListeners } from "./keyListeners";
 import type { ListNameType } from "./ListName";
 import { ListName } from "./ListName";
 import { Search } from "./Search";
 import { Settings } from "./Settings";
 import { Titlebar } from "./Titlebar";
-import { keyListeners } from "./keyListeners";
 
 export function Root(): JSX.Element | null {
     const [data, setData] = useState<RendererData>();
     const [listNameType, setListNameType] = useState<ListNameType>();
 
     useEffect(() => {
-        window.api.getRendererData().then(setData).catch(console.error);
+        void (async () => {
+            try {
+                const newData = await globalThis.window.api.getRendererData();
+                setData(newData);
+            } catch (error) {
+                console.error(error);
+            }
+        })();
 
         const disposables: Disposable[] = [
-            window.api.onUpdate(setData),
-            window.api.onCreateList(() => setListNameType("createList")),
-            window.api.onRenameList(() => setListNameType("renameList")),
+            globalThis.window.api.onUpdate(setData),
+            globalThis.window.api.onCreateList(() => {
+                setListNameType("createList");
+            }),
+            globalThis.window.api.onRenameList(() => {
+                setListNameType("renameList");
+            }),
             keyListeners.initialize(),
         ];
 
         return () => {
-            disposables.forEach((d) => d.dispose());
+            disposables.forEach((d) => {
+                d.dispose();
+            });
         };
     }, []);
 
@@ -43,7 +56,9 @@ export function Root(): JSX.Element | null {
                 <ListName
                     type={listNameType}
                     activeListName={data.activeListName}
-                    done={() => setListNameType(undefined)}
+                    done={() => {
+                        setListNameType(undefined);
+                    }}
                 />
 
                 <Search search={data.search} />

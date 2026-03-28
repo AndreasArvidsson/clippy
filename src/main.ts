@@ -1,11 +1,11 @@
 import { app } from "electron";
 import { NodeIo, TalonRpcServer } from "talon-rpc";
-import { showMenu } from "./Menu";
 import { api } from "./api";
-import { registerClipProtocol } from "./clipProtocol";
 import * as clipboardList from "./clipboardList";
+import { registerClipProtocol } from "./clipProtocol";
 import { runCommand, runCommandWithThrow } from "./commands/runCommand";
 import { RPC_COMMAND, RPC_DIR_NAME } from "./common/constants";
+import { showMenu } from "./Menu";
 import { storage } from "./storage";
 import { createTray } from "./tray";
 import type { Command } from "./types/command";
@@ -22,7 +22,10 @@ if (!app.requestSingleInstanceLock()) {
     app.quit();
 }
 
-void app.whenReady().then(async () => {
+// oxlint-disable-next-line unicorn/prefer-top-level-await
+void (async () => {
+    await app.whenReady();
+
     try {
         await storage.init();
     } catch (error) {
@@ -51,11 +54,11 @@ void app.whenReady().then(async () => {
     const window = createWindow(iconPath);
 
     onDarkModeChange(() => {
-        const iconPath = getIconPath();
-        tray.updateIcon(iconPath);
-        window.updateIcon(iconPath);
+        const newIconPath = getIconPath();
+        tray.updateIcon(newIconPath);
+        window.updateIcon(newIconPath);
     });
-});
+})();
 
 function executeRequest(commandId: string, args: unknown[]) {
     const command = extractCommand(commandId, args);
@@ -64,10 +67,11 @@ function executeRequest(commandId: string, args: unknown[]) {
 
 function extractCommand(commandId: string, args: unknown[]): Command {
     if (commandId !== RPC_COMMAND) {
-        throw Error(`Unknown command id '${commandId}'`);
+        throw new Error(`Unknown command id '${commandId}'`);
     }
     if (args.length !== 1) {
-        throw Error(`Expected 1 argument, got ${args.length}`);
+        throw new Error(`Expected 1 argument, got ${args.length}`);
     }
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
     return args[0] as Command;
 }

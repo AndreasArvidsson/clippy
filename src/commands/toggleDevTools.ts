@@ -1,7 +1,7 @@
 import type { BrowserWindow } from "electron";
 import { getWindow } from "../window";
 
-export function toggleDevTools(enabled?: boolean) {
+export function toggleDevTools(enabled?: boolean): void {
     const window = getWindow();
     const show = enabled ?? shouldShow(window);
 

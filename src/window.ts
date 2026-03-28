@@ -1,19 +1,18 @@
-import {
-    BrowserWindow,
-    app,
-    nativeTheme,
-    screen,
-    type Rectangle,
-} from "electron";
 import path from "node:path";
+import { BrowserWindow, app, nativeTheme, screen } from "electron";
+import type { Rectangle } from "electron";
 import { NAME } from "./common/constants";
 import { storage } from "./storage";
 import { isMacOS } from "./util/isMacOS";
 
 let _window: BrowserWindow | null = null;
-let _bounds: Rectangle | undefined = undefined;
+let _bounds: Rectangle | undefined;
 
-export function createWindow(iconPath: string) {
+interface ReturnValue {
+    updateIcon: (iconPath: string) => void;
+}
+
+export function createWindow(iconPath: string): ReturnValue {
     _bounds = storage.getWindowBounds();
     _window = _createWindow(iconPath);
 
@@ -22,8 +21,8 @@ export function createWindow(iconPath: string) {
     }
 
     return {
-        updateIcon: (iconPath: string) => {
-            getWindow().setIcon(iconPath);
+        updateIcon: (newIconPath: string) => {
+            getWindow().setIcon(newIconPath);
         },
     };
 }
@@ -64,10 +63,10 @@ function _createWindow(iconPath: string): BrowserWindow {
         show: false,
         frame: false,
         center: true,
-        x: bounds?.x,
-        y: bounds?.y,
-        width: bounds?.width,
-        height: bounds?.height,
+        x: bounds.x,
+        y: bounds.y,
+        width: bounds.width,
+        height: bounds.height,
 
         webPreferences: {
             preload: path.resolve(__dirname, "preload.js"),
@@ -88,6 +87,7 @@ function _createWindow(iconPath: string): BrowserWindow {
     win.on("resize", updateBounds);
 
     // Set by electron-vite dev
+    // oxlint-disable-next-line node/no-process-env
     const devUrl = process.env.ELECTRON_RENDERER_URL;
 
     // DEV: served from Vite dev server (no files on disk)

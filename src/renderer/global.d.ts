@@ -6,5 +6,3 @@ declare global {
         platform: PreloadPlatform;
     }
 }
-
-export {};

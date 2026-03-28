@@ -42,7 +42,7 @@ export const texts: Record<TextId, Text> = {
 
 export function getText(id: TextId): string {
     const text = texts[id];
-    return text.desc ? `${text.title}: ${text.desc}` : text.title;
+    return text.desc != null ? `${text.title}: ${text.desc}` : text.title;
 }
 
 type TextId =

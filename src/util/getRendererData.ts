@@ -32,7 +32,7 @@ function getRenderItems(items: ClipItem[]): ClipItemRender[] {
 function getRenderText(item: ClipItem): string {
     const text = item.text ?? item.rtf ?? item.html ?? "";
     if (text.length > 500) {
-        return text.slice(0, 500) + "…";
+        return `${text.slice(0, 500)}…`;
     }
     return text;
 }

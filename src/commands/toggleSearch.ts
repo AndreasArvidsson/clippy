@@ -2,7 +2,7 @@ import { storage } from "../storage";
 import { updateRenderer } from "../util/updateRenderer";
 import { isWindowVisible } from "../window";
 
-export function toggleSearch(enabled?: boolean) {
+export function toggleSearch(enabled?: boolean): void {
     const showSearch = enabled ?? shouldShow();
 
     storage.setShowSearch(showSearch);

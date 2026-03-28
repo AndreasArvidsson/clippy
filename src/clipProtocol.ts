@@ -14,12 +14,13 @@ protocol.registerSchemesAsPrivileged([
     },
 ]);
 
-export function registerClipProtocol() {
+export function registerClipProtocol(): void {
     protocol.handle("clip", async (req): Promise<Response> => {
         // clip://image/<id>
         const url = new URL(req.url);
         const kind = url.hostname;
-        const id = url.pathname.slice(1); // remove leading /
+        // remove leading /
+        const id = url.pathname.slice(1);
 
         if (kind !== "image" || !id) {
             return new Response("Not Found", { status: 404 });
@@ -78,9 +79,12 @@ export async function createThumbnail(
     const buf = await img
         .png({
             palette: true,
-            compressionLevel: 9, // max zlib compression
-            quality: 50, // libimagequant quality (0–100)
-            colors: 128, // try 64–128; lower -> smaller
+            // max zlib compression
+            compressionLevel: 9,
+            // libimagequant quality (0–100)
+            quality: 50,
+            // try 64–128; lower -> smaller
+            colors: 128,
         })
         .toBuffer();
 

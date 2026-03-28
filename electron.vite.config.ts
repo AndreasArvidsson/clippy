@@ -1,8 +1,9 @@
-import preact from "@preact/preset-vite";
-import { defineConfig } from "electron-vite";
 import * as path from "node:path";
+import preactPlugin from "@preact/preset-vite";
+import { defineConfig } from "electron-vite";
 import purgeCss from "vite-plugin-purgecss";
 
+// oxlint-disable-next-line import/no-default-export
 export default defineConfig(({ mode }) => {
     // electron 37 uses node 22 and chromium 138
     const nodeTarget = "node22";
@@ -75,7 +76,7 @@ export default defineConfig(({ mode }) => {
                 },
             },
 
-            plugins: [preact(), { ...purgeCss({}), enforce: "post" }],
+            plugins: [preactPlugin(), { ...purgeCss({}), enforce: "post" }],
         },
     };
 });

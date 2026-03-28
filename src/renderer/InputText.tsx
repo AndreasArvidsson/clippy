@@ -1,5 +1,6 @@
+import type { JSX } from "preact";
 import { useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
-import classNames from "./classNames";
+import { classNames } from "./classNames";
 
 interface Props {
     type?: "text" | "search";
@@ -16,7 +17,7 @@ interface Props {
     onEscape?: () => void;
 }
 
-export default function InputText({
+export function InputText({
     type,
     value,
     placeholder,
@@ -29,7 +30,7 @@ export default function InputText({
     onChange,
     onBlur,
     onEscape,
-}: Props) {
+}: Props): JSX.Element {
     const [currentValue, setCurrentValue] = useState("");
     const [timeoutHandle, setTimeoutHandle] = useState<number>();
     const ref = useRef<HTMLInputElement>(null);
@@ -41,10 +42,12 @@ export default function InputText({
 
     // Focus the input when it is mounted
     useLayoutEffect(() => {
-        if (autoFocus && ref.current != null) {
-            if (document.activeElement !== ref.current) {
-                ref.current.focus({ preventScroll: true });
-            }
+        if (
+            autoFocus &&
+            ref.current != null &&
+            globalThis.document.activeElement !== ref.current
+        ) {
+            ref.current.focus({ preventScroll: true });
         }
     }, []);
 
@@ -61,16 +64,20 @@ export default function InputText({
             value={currentValue}
             placeholder={placeholder}
             disabled={disabled}
-            onClick={(e) => e.stopPropagation()}
-            onContextMenu={(e) => e.stopPropagation()}
+            onClick={(e) => {
+                e.stopPropagation();
+            }}
+            onContextMenu={(e) => {
+                e.stopPropagation();
+            }}
             onChange={(e) => {
-                const value = e.currentTarget.value;
-                setCurrentValue(value);
+                const newValue = e.currentTarget.value;
+                setCurrentValue(newValue);
                 if (timeout) {
                     clearTimeout(timeoutHandle);
                     setTimeoutHandle(
                         setTimeout(() => {
-                            onChange(value.trim(), e.currentTarget);
+                            onChange(newValue.trim(), e.currentTarget);
                         }, 500),
                     );
                 }

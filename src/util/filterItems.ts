@@ -1,5 +1,7 @@
+// oxlint-disable typescript/prefer-nullish-coalescing
 import { storage } from "../storage";
-import { AllList, UnstarredList, type ClipItem } from "../types/types";
+import { AllList, UnstarredList } from "../types/types";
+import type { ClipItem } from "../types/types";
 
 export function getListItems(isVisible: boolean): ClipItem[] {
     const items = storage.getClipboardItems();
@@ -20,26 +22,27 @@ export function applySearchFilters(
     isVisible: boolean,
 ): ClipItem[] {
     const search = storage.getSearch();
+    let result = items;
 
     if (search.show && isVisible) {
         if (search.type) {
-            items = items.filter((item) => item.type === search.type);
+            result = result.filter((item) => item.type === search.type);
         }
 
         const searchText = search.text?.trim().toLowerCase();
-        if (searchText) {
-            items = items.filter(
+        if (searchText != null && searchText !== "") {
+            result = result.filter(
                 (item) =>
                     item.name?.toLowerCase().includes(searchText) ||
                     (item.text ?? item.rtf)
                         ?.toLowerCase()
                         .includes(searchText) ||
                     item.html?.toLowerCase().includes(searchText) ||
-                    item.bookmark?.title?.toLowerCase().includes(searchText) ||
+                    item.bookmark?.title.toLowerCase().includes(searchText) ||
                     item.image?.alt?.toLowerCase().includes(searchText),
             );
         }
     }
 
-    return items;
+    return result;
 }

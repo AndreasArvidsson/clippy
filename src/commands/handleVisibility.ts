@@ -10,7 +10,7 @@ import {
 export function handleVisibility(
     preferredVisibility: Visibility,
     commandVisibility?: Visibility,
-) {
+): void {
     const visibility = commandVisibility ?? preferredVisibility;
 
     switch (visibility) {
