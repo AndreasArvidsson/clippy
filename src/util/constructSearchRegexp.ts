@@ -8,6 +8,6 @@ export function constructSearchRegexp(text: string): RegExp | undefined {
     }
 
     // Between each word there can be nothing(camelCase), space, underscore, dash, slash or backslash
-    const pattern = parts.join("[\\s_/\\-\\\\]*");
+    const pattern = parts.join(String.raw`[\s_/\-\\]*`);
     return new RegExp(pattern, "i");
 }

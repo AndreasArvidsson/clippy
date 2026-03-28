@@ -3,7 +3,7 @@ import type { SwitchListCommand } from "../types/command";
 import { getActiveList, getListByNameIgnoreCase } from "../util/getList";
 import { updateRenderer } from "../util/updateRenderer";
 
-export function switchList(command: SwitchListCommand) {
+export function switchList(command: SwitchListCommand): void {
     const { activeList } = getActiveList();
     const namedList = getListByNameIgnoreCase(command.name);
 

@@ -96,13 +96,15 @@ function writeItems(items: ClipItem[]) {
                 break;
             case "image": {
                 const name = item.name ?? item.image?.alt ?? "IMAGE";
-                if (item.image?.src) {
+                if (item.image?.src != null) {
                     texts.push(toMarkdownImageLink(name, item.image.src));
                 } else {
                     texts.push(name);
                 }
                 break;
             }
+            default:
+                throw new Error("Unsupported item type");
         }
     }
     electron.clipboard.writeText(texts.join("\n"));

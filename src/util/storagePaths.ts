@@ -1,12 +1,12 @@
-import { app } from "electron";
 import path from "node:path";
+import { app } from "electron";
 
 interface StoragePaths {
     stateFile: string;
     clipItemsDir: string;
 }
 
-let _paths: StoragePaths | undefined = undefined;
+let _paths: StoragePaths | undefined;
 
 function init(): StoragePaths {
     const userDataDir = app.getPath("userData");
@@ -18,7 +18,7 @@ function init(): StoragePaths {
 
 function get(): StoragePaths {
     if (_paths == null) {
-        throw Error("Storage paths not initialized");
+        throw new Error("Storage paths not initialized");
     }
     return _paths;
 }

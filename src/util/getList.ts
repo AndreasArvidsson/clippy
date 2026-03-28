@@ -1,5 +1,6 @@
 import { storage } from "../storage";
-import { type List, defaultLists } from "../types/types";
+import { defaultLists } from "../types/types";
+import type { List } from "../types/types";
 
 export function getActiveList(): {
     activeList: List;
@@ -23,7 +24,7 @@ export function getListByNameIgnoreCase(name: string): List {
     const list = tryGetListByNameIgnoreCase(name);
 
     if (list == null) {
-        throw Error(`Can't find list named '${name}'`);
+        throw new Error(`Can't find list named '${name}'`);
     }
 
     return list;
@@ -42,5 +43,5 @@ function getListInternal(id: string): [List, boolean] {
         return [userList, false];
     }
 
-    throw Error(`Can't find list '${id}'`);
+    throw new Error(`Can't find list '${id}'`);
 }

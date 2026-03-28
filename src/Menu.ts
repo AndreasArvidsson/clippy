@@ -1,17 +1,13 @@
-import { Menu, type MenuItemConstructorOptions } from "electron";
+import { Menu } from "electron";
+import type { MenuItemConstructorOptions } from "electron";
 import { runCommand } from "./commands/runCommand";
 import {
     getCommandForHints,
     hintsToPrimitiveTargets,
 } from "./common/getCommandForHints";
 import { storage } from "./storage";
-import {
-    StarredList,
-    UnstarredList,
-    defaultLists,
-    type List,
-    type MenuType,
-} from "./types/types";
+import { StarredList, UnstarredList, defaultLists } from "./types/types";
+import type { List, MenuType } from "./types/types";
 import { getActiveList } from "./util/getList";
 
 Menu.setApplicationMenu(null);
@@ -24,7 +20,7 @@ const removeMenu = Menu.buildFromTemplate([
     },
 ]);
 
-function clipItemContextMenu(hints: string[]) {
+function clipItemContextMenu(hints: string[]): void {
     const lists = [StarredList, UnstarredList, ...storage.getLists()];
     const singleItem = hints.length === 1;
     const itemsLabel = singleItem ? "item" : `${hints.length} items`;
@@ -123,7 +119,7 @@ function listsMenu() {
     menu.popup();
 }
 
-export function showMenu(menuType: MenuType) {
+export function showMenu(menuType: MenuType): void {
     switch (menuType.type) {
         case "clipItemContext":
             clipItemContextMenu(menuType.hints);

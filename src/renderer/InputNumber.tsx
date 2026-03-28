@@ -1,6 +1,6 @@
-import type { ComponentChildren } from "preact";
+import type { ComponentChildren, JSX } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
-import classNames from "./classNames";
+import { classNames } from "./classNames";
 
 export interface Props {
     isInteger?: boolean;
@@ -16,7 +16,7 @@ export interface Props {
     children?: ComponentChildren;
 }
 
-export default function InputNumber({
+export function InputNumber({
     isInteger,
     value,
     placeholder,
@@ -28,7 +28,7 @@ export default function InputNumber({
     onChange,
     onBlur,
     children,
-}: Props) {
+}: Props): JSX.Element {
     const [currentValue, setCurrentValue] = useState("");
     const escapeBlurRef = useRef(false);
 
@@ -38,9 +38,9 @@ export default function InputNumber({
 
     const parseCurrentValue = () => {
         const num = isInteger
-            ? parseInt(currentValue)
-            : parseFloat(currentValue);
-        return isNaN(num) ? value : num;
+            ? Number.parseInt(currentValue, 10)
+            : Number.parseFloat(currentValue);
+        return Number.isNaN(num) ? value : num;
     };
 
     return (
@@ -57,7 +57,9 @@ export default function InputNumber({
                 placeholder={placeholder}
                 disabled={disabled}
                 autoFocus={autoFocus}
-                onChange={(e) => setCurrentValue(e.currentTarget.value)}
+                onChange={(e) => {
+                    setCurrentValue(e.currentTarget.value);
+                }}
                 onBlur={() => {
                     if (onBlur != null && !escapeBlurRef.current) {
                         const num = parseCurrentValue();

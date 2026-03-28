@@ -1,5 +1,5 @@
 import type { ComponentChildren, JSX } from "preact";
-import classNames from "./classNames";
+import { classNames } from "./classNames";
 
 interface Props {
     className?: string;
@@ -10,7 +10,7 @@ interface Props {
     children?: ComponentChildren;
 }
 
-export default function InputCheckbox({
+export function InputCheckbox({
     className,
     checked,
     title,
@@ -28,7 +28,9 @@ export default function InputCheckbox({
                     disabled={disabled}
                     onChange={
                         onChange
-                            ? (e) => onChange(e.currentTarget.checked)
+                            ? (e) => {
+                                  onChange(e.currentTarget.checked);
+                              }
                             : undefined
                     }
                 />

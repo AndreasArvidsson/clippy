@@ -1,8 +1,11 @@
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
+import { fileURLToPath } from "node:url";
 
-export function changePermissionOfClipboardEventHandlerMac() {
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+export function changePermissionOfClipboardEventHandlerMac(): void {
     // clipboard-event-handler-mac is missing executable permission on macOS.
     // https://github.com/AndreasArvidsson/clippy/issues/3
 
@@ -12,6 +15,7 @@ export function changePermissionOfClipboardEventHandlerMac() {
         const filePath = path.join(__dirname, "..", filename);
         let currentMode = fs.statSync(filePath).mode;
         // 0o111 is the same as +x
+        // oxlint-disable-next-line no-bitwise
         const desiredMode = currentMode | 0o111;
 
         if (currentMode !== desiredMode) {
@@ -34,6 +38,7 @@ export function changePermissionOfClipboardEventHandlerMac() {
     }
 }
 
-function formatMode(mode: number) {
+function formatMode(mode: number): string {
+    // oxlint-disable-next-line no-bitwise
     return (mode & 0o777).toString(8);
 }

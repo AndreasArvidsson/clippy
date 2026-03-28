@@ -1,12 +1,15 @@
 import { Notification, dialog } from "electron";
 
-export function showErrorNotification(message: string, error?: unknown) {
+export function showErrorNotification(message: string, error?: unknown): void {
     const body = getErrorBody(message, error);
 
     new Notification({ title: "Error", body }).show();
 }
 
-export function showBlockingErrorDialog(message: string, error?: unknown) {
+export function showBlockingErrorDialog(
+    message: string,
+    error?: unknown,
+): void {
     const body = getErrorBody(message, error);
     dialog.showErrorBox("Error", body);
 }

@@ -30,6 +30,8 @@ function processTarget(items: ClipItem[], target: Target): ClipItem[] {
             return processRangeTarget(items, target);
         case "search":
             return processSearchTarget(items, target);
+        default:
+            throw new Error("Unsupported target type");
     }
 }
 
@@ -47,7 +49,7 @@ function processesPrimitiveTarget(
     const end = start + count - 1;
     const results = getItemsRange(items, start, end);
 
-    return reverse ? results.reverse() : results;
+    return reverse ? results.toReversed() : results;
 }
 
 function processRangeTarget(
@@ -62,7 +64,7 @@ function processRangeTarget(
 export function processHint(items: ClipItem[], hint: string): number {
     const index = hintToIndex(hint);
     if (index < 0 || index >= items.length) {
-        throw Error(`Item '${hint}' not found`);
+        throw new Error(`Item '${hint}' not found`);
     }
     return index;
 }
@@ -73,13 +75,13 @@ function getItemsRange(
     end: number,
 ): ClipItem[] {
     if (start < 0 || start >= items.length || end < 0 || end >= items.length) {
-        throw Error(`Invalid range: ${start}-${end}`);
+        throw new Error(`Invalid range: ${start}-${end}`);
     }
     const min = Math.min(start, end);
     const max = Math.max(start, end);
     const isReversed = start > end;
     const results = items.slice(min, max + 1);
-    return isReversed ? results.reverse() : results;
+    return isReversed ? results.toReversed() : results;
 }
 
 function processSearchTarget(
@@ -99,7 +101,7 @@ function processSearchTarget(
             left--;
         }
     }
-    throw Error(
+    throw new Error(
         `No matching item found for search parameters type: ${target.itemType}, text: ${target.itemText}, offset: ${target.offset}`,
     );
 }

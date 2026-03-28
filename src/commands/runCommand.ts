@@ -29,15 +29,15 @@ import { togglePinned } from "./togglePinned";
 import { toggleSearch } from "./toggleSearch";
 import { toggleSettings } from "./toggleSettings";
 
-export function runCommand(command: Command): ClipItem[] | void {
+export function runCommand(command: Command): ClipItem[] | undefined {
     try {
         return runCommandWithThrow(command);
-    } catch (_error) {
-        // Do nothing
+    } catch {
+        return undefined;
     }
 }
 
-export function runCommandWithThrow(command: Command): ClipItem[] | void {
+export function runCommandWithThrow(command: Command): ClipItem[] | undefined {
     try {
         return runCommandInternal(command);
     } catch (error) {
@@ -46,7 +46,7 @@ export function runCommandWithThrow(command: Command): ClipItem[] | void {
     }
 }
 
-function runCommandInternal(command: Command): ClipItem[] | void {
+function runCommandInternal(command: Command): ClipItem[] | undefined {
     console.debug(command);
 
     let result: ClipItem[] | undefined;
@@ -55,23 +55,23 @@ function runCommandInternal(command: Command): ClipItem[] | void {
     switch (command.id) {
         case "exit":
             app.exit();
-            return;
+            return undefined;
 
         case "toggleShowHide":
             toggleShowHide();
-            return;
+            return undefined;
         case "toggleShowInactiveHide":
             toggleShowInactiveHide();
-            return;
+            return undefined;
         case "show":
             showWindow();
-            return;
+            return undefined;
         case "showInactive":
             showInactiveWindow();
-            return;
+            return undefined;
         case "hide":
             hideWindow();
-            return;
+            return undefined;
 
         case "togglePinned":
             togglePinned();

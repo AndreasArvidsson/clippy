@@ -1,5 +1,7 @@
-const refLC = "a".charCodeAt(0);
-const refUC = "A".charCodeAt(0);
+// oxlint-disable typescript/no-non-null-assertion
+
+const refLC = "a".codePointAt(0)!;
+const refUC = "A".codePointAt(0)!;
 
 export function indexToHint(index: number): string {
     if (index < 9) {
@@ -10,7 +12,7 @@ export function indexToHint(index: number): string {
     let hint = "";
 
     do {
-        hint = String.fromCharCode(refUC + (n % 26)) + hint;
+        hint = String.fromCodePoint(refUC + (n % 26)) + hint;
         n = Math.trunc(n / 26) - 1;
     } while (n >= 0);
 
@@ -19,7 +21,7 @@ export function indexToHint(index: number): string {
 
 export function hintToIndex(hint: string): number {
     if (/^\d+$/.test(hint)) {
-        return parseInt(hint, 10) - 1;
+        return Number.parseInt(hint, 10) - 1;
     }
 
     if (!/^[a-zA-Z]+$/.test(hint)) {
@@ -29,7 +31,7 @@ export function hintToIndex(hint: string): number {
     let result = 0;
 
     for (const letter of hint.toLowerCase()) {
-        result = result * 26 + (letter.charCodeAt(0) - refLC + 1);
+        result = result * 26 + (letter.codePointAt(0)! - refLC + 1);
     }
 
     return result + 8;

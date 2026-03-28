@@ -3,7 +3,7 @@ import { AllList, UnstarredList } from "../types/types";
 import { getActiveList } from "../util/getList";
 import { updateRenderer } from "../util/updateRenderer";
 
-export function removeAllItems(render = true) {
+export function removeAllItems(render = true): void {
     const { activeList } = getActiveList();
     const allItems = storage.getClipboardItems();
 

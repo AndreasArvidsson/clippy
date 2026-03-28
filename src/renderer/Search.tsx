@@ -1,6 +1,6 @@
 import type { JSX } from "preact";
 import type { ClipItemType, Search } from "../types/types";
-import InputText from "./InputText";
+import { InputText } from "./InputText";
 
 interface Props {
     search: Search;
@@ -9,7 +9,7 @@ interface Props {
 export function Search({ search }: Props): JSX.Element | null {
     function onChange(change: Partial<Search>) {
         const value = { ...search, ...change };
-        window.api.command({
+        globalThis.window.api.command({
             id: "searchItems",
             text: value.text,
             type: value.type,
@@ -29,9 +29,15 @@ export function Search({ search }: Props): JSX.Element | null {
                 autoFocus
                 timeout
                 value={search.text}
-                onChange={(value) => onChange({ text: value })}
-                onBlur={() => {}} // Do nothing
-                onEscape={() => window.api.command({ id: "hideSearch" })}
+                onChange={(value) => {
+                    onChange({ text: value });
+                }}
+                onBlur={() => {
+                    // Do nothing
+                }}
+                onEscape={() => {
+                    globalThis.window.api.command({ id: "hideSearch" });
+                }}
             />
 
             <span>
@@ -40,6 +46,7 @@ export function Search({ search }: Props): JSX.Element | null {
                     value={search.type}
                     onChange={(e) => {
                         const value = e.currentTarget.value || undefined;
+                        // oxlint-disable-next-line typescript/no-unsafe-type-assertion
                         onChange({ type: value as ClipItemType });
                     }}
                 >

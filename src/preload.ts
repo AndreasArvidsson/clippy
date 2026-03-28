@@ -1,4 +1,5 @@
-import { contextBridge, ipcRenderer, type IpcRendererEvent } from "electron";
+import { contextBridge, ipcRenderer } from "electron";
+import type { IpcRendererEvent } from "electron";
 import {
     COMMAND,
     CREATE_LIST,
@@ -30,22 +31,30 @@ const api: PreloadApi = {
 
     // Listen for events from main process
     onUpdate(callback) {
-        const listener = (_: IpcRendererEvent, d: RendererData) => callback(d);
+        const listener = (_: IpcRendererEvent, d: RendererData) => {
+            callback(d);
+        };
         ipcRenderer.on(UPDATE, listener);
         return { dispose: () => ipcRenderer.off(UPDATE, listener) };
     },
     onCreateList(callback) {
-        const listener = (_: IpcRendererEvent) => callback();
+        const listener = (_: IpcRendererEvent) => {
+            callback();
+        };
         ipcRenderer.on(CREATE_LIST, listener);
         return { dispose: () => ipcRenderer.off(CREATE_LIST, listener) };
     },
     onRenameList(callback) {
-        const listener = (_: IpcRendererEvent) => callback();
+        const listener = (_: IpcRendererEvent) => {
+            callback();
+        };
         ipcRenderer.on(RENAME_LIST, listener);
         return { dispose: () => ipcRenderer.off(RENAME_LIST, listener) };
     },
     onRenameItem(callback) {
-        const listener = (_: IpcRendererEvent, id: string) => callback(id);
+        const listener = (_: IpcRendererEvent, id: string) => {
+            callback(id);
+        };
         ipcRenderer.on(RENAME_ITEM, listener);
         return { dispose: () => ipcRenderer.off(RENAME_ITEM, listener) };
     },

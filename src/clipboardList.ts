@@ -1,15 +1,11 @@
 import { clipboard } from "./clipboard";
 import { storage } from "./storage";
-import {
-    AllList,
-    StarredList,
-    UnstarredList,
-    type ClipItem,
-} from "./types/types";
+import { AllList, StarredList, UnstarredList } from "./types/types";
+import type { ClipItem } from "./types/types";
 
 let t1 = 0;
 
-export function onChange(listener: () => void) {
+export function onChange(listener: () => void): void {
     clipboard.onChange((item) => {
         const t2 = Date.now();
 

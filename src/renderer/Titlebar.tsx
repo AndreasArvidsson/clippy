@@ -6,8 +6,9 @@ import {
     XCircleFill,
     XLg,
 } from "react-bootstrap-icons";
-import classNames from "./classNames";
+import { classNames } from "./classNames";
 import { getText } from "./texts";
+// oxlint-disable-next-line import/no-unassigned-import
 import "./titlebar.css";
 
 interface Props {
@@ -19,7 +20,7 @@ interface Props {
     showSettings: boolean;
 }
 
-const isMac = window.platform.isMacOS;
+const isMac = globalThis.window.platform.isMacOS;
 
 export function Titlebar({
     activeListName,
@@ -34,7 +35,9 @@ export function Titlebar({
             <button
                 title={getText("pinned")}
                 className={classNames("icon-btn", pinned && "active")}
-                onClick={() => window.api.command({ id: "togglePinned" })}
+                onClick={() => {
+                    globalThis.window.api.command({ id: "togglePinned" });
+                }}
             >
                 <PinAngleFill />
             </button>
@@ -46,7 +49,9 @@ export function Titlebar({
             <button
                 title={getText("search")}
                 className={classNames("icon-btn", showSearch && "active")}
-                onClick={() => window.api.command({ id: "toggleSearch" })}
+                onClick={() => {
+                    globalThis.window.api.command({ id: "toggleSearch" });
+                }}
             >
                 <Search />
             </button>
@@ -59,7 +64,9 @@ export function Titlebar({
                 title={getText("close")}
                 className="icon-btn"
                 id="close-btn"
-                onClick={() => window.api.command({ id: "toggleShowHide" })}
+                onClick={() => {
+                    globalThis.window.api.command({ id: "toggleShowHide" });
+                }}
             >
                 {isMac ? <XCircleFill /> : <XLg />}
             </button>
@@ -87,7 +94,9 @@ export function Titlebar({
             <div className={className}>
                 <button
                     className="icon-btn"
-                    onClick={() => window.api.menu({ type: "lists" })}
+                    onClick={() => {
+                        globalThis.window.api.menu({ type: "lists" });
+                    }}
                 >
                     {activeListName} ({count}) <CaretDownFill />
                 </button>

@@ -5,7 +5,7 @@ import { getListByNameIgnoreCase } from "../util/getList";
 import { processTargets } from "../util/processTargets";
 import { updateRenderer } from "../util/updateRenderer";
 
-export function assignItemsToList(command: AssignItemsToListCommand) {
+export function assignItemsToList(command: AssignItemsToListCommand): void {
     const listId = getListId(command.name);
 
     const items = processTargets(command.targets);
@@ -31,6 +31,7 @@ function getListId(listName: string | undefined): string | undefined {
         case AllList.id:
         case UnstarredList.id:
             return undefined;
+        // no default
     }
 
     return list.id;

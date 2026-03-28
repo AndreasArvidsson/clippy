@@ -8,16 +8,18 @@ let initialized = false;
 function initialize(): Disposable {
     if (initialized) {
         return {
-            dispose: () => {},
+            dispose: () => {
+                // noop
+            },
         };
     }
 
     initialized = true;
-    window.addEventListener("keydown", keyDownListener);
+    globalThis.window.addEventListener("keydown", keyDownListener);
 
     return {
         dispose: () => {
-            window.removeEventListener("keydown", keyDownListener);
+            globalThis.window.removeEventListener("keydown", keyDownListener);
             initialized = false;
         },
     };
@@ -28,7 +30,7 @@ function keyDownListener(e: KeyboardEvent) {
     let handled = false;
 
     if (key === "F12") {
-        window.api.command({ id: "toggleDevTools" });
+        globalThis.window.api.command({ id: "toggleDevTools" });
         handled = true;
     } else {
         for (const listener of listeners) {
@@ -58,11 +60,11 @@ export const keyListeners = {
     register,
 };
 
-export function isNormal(event: KeyboardEvent) {
+export function isNormal(event: KeyboardEvent): boolean {
     return !event.ctrlKey && !event.altKey && !event.metaKey;
 }
 
-function parseEvent(e: KeyboardEvent) {
+function parseEvent(e: KeyboardEvent): string {
     const parts: string[] = [];
     if (e.ctrlKey || e.metaKey) {
         parts.push("super");

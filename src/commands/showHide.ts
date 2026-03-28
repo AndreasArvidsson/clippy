@@ -2,7 +2,7 @@ import { storage } from "../storage";
 import { updateRenderer } from "../util/updateRenderer";
 import { getWindow } from "../window";
 
-export function showWindow() {
+export function showWindow(): void {
     const window = getWindow();
 
     if (!window.isVisible()) {
@@ -17,7 +17,7 @@ export function showWindow() {
     }
 }
 
-export function showInactiveWindow() {
+export function showInactiveWindow(): void {
     const window = getWindow();
 
     if (!window.isVisible()) {
@@ -27,7 +27,7 @@ export function showInactiveWindow() {
     }
 }
 
-export function hideWindow() {
+export function hideWindow(): void {
     const window = getWindow();
 
     if (window.isVisible()) {
@@ -35,7 +35,7 @@ export function hideWindow() {
     }
 }
 
-export function hideWindowIfNotPinned() {
+export function hideWindowIfNotPinned(): void {
     const config = storage.getConfig();
 
     if (!config.pinned) {
@@ -43,7 +43,7 @@ export function hideWindowIfNotPinned() {
     }
 }
 
-export function hideOrBlurWindowIfPinned() {
+export function hideOrBlurWindowIfPinned(): void {
     const window = getWindow();
     const config = storage.getConfig();
 
@@ -58,7 +58,7 @@ export function hideOrBlurWindowIfPinned() {
     }
 }
 
-export function toggleShowHide() {
+export function toggleShowHide(): void {
     const window = getWindow();
 
     if (window.isVisible()) {
@@ -68,7 +68,7 @@ export function toggleShowHide() {
     }
 }
 
-export function toggleShowInactiveHide() {
+export function toggleShowInactiveHide(): void {
     const window = getWindow();
 
     if (window.isVisible()) {

@@ -2,11 +2,11 @@ import { v4 as uuid } from "uuid";
 import { api } from "../api";
 import { storage } from "../storage";
 import type { CreateListCommand } from "../types/command";
-import { type List } from "../types/types";
+import type { List } from "../types/types";
 import { tryGetListByNameIgnoreCase } from "../util/getList";
 import { updateRenderer } from "../util/updateRenderer";
 
-export function createList(command: CreateListCommand) {
+export function createList(command: CreateListCommand): void {
     if (command.name == null) {
         api.simple("createList");
         return;
@@ -15,13 +15,13 @@ export function createList(command: CreateListCommand) {
     const name = command.name.trim();
 
     if (!name) {
-        throw Error("Can't create list: Name can't be empty");
+        throw new Error("Can't create list: Name can't be empty");
     }
 
     const existingList = tryGetListByNameIgnoreCase(name);
 
     if (existingList != null) {
-        throw Error(
+        throw new Error(
             `Can't create list: List '${existingList.name}' already exists`,
         );
     }

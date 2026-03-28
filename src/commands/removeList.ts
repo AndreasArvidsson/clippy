@@ -4,11 +4,11 @@ import { getActiveList } from "../util/getList";
 import { updateRenderer } from "../util/updateRenderer";
 import { removeAllItems } from "./removeAllItems";
 
-export function removeList() {
+export function removeList(): void {
     const { activeList, activeListIsDefault } = getActiveList();
 
     if (activeListIsDefault) {
-        throw Error(`Can't remove default list '${activeList.name}'`);
+        throw new Error(`Can't remove default list '${activeList.name}'`);
     }
 
     removeAllItems(false);

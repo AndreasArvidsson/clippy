@@ -1,7 +1,9 @@
 export function parseHintKey(
-    key: string,
+    keySource: string,
 ): { superKey: boolean; hint: string } | null {
+    let key = keySource.trim().toLowerCase();
     let superKey = false;
+
     if (key.startsWith("super+")) {
         superKey = true;
         key = key.slice(6);

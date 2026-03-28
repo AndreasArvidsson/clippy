@@ -1,10 +1,15 @@
-import { Menu, nativeImage, Tray, type NativeImage } from "electron";
+import { Menu, nativeImage, Tray } from "electron";
+import type { NativeImage } from "electron";
 import { runCommand } from "./commands/runCommand";
 import { NAME } from "./common/constants";
 
 const ICON_SIZE = 24;
 
-export function createTray(iconPath: string) {
+interface ReturnValue {
+    updateIcon: (iconPath: string) => void;
+}
+
+export function createTray(iconPath: string): ReturnValue {
     const tray = new Tray(getTrayIcon(iconPath));
 
     tray.setToolTip(NAME);
@@ -22,8 +27,8 @@ export function createTray(iconPath: string) {
     tray.addListener("click", () => runCommand({ id: "toggleShowHide" }));
 
     return {
-        updateIcon: (iconPath: string) => {
-            tray.setImage(getTrayIcon(iconPath));
+        updateIcon: (newIconPath: string) => {
+            tray.setImage(getTrayIcon(newIconPath));
         },
     };
 }

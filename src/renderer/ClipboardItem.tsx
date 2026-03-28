@@ -2,8 +2,9 @@ import type { JSX } from "preact";
 import { memo } from "preact/compat";
 import { StarFill } from "react-bootstrap-icons";
 import { hintsToPrimitiveTargets } from "../common/getCommandForHints";
-import { type ClipItemRender } from "../types/types";
-import InputText from "./InputText";
+import type { ClipItemRender } from "../types/types";
+import { classNames } from "./classNames";
+import { InputText } from "./InputText";
 
 interface Props {
     item: ClipItemRender;
@@ -24,7 +25,7 @@ export function ClipboardItem({
         <div
             data-hint={hint}
             data-source="item"
-            className={"row clip-item" + (isSelected ? " selected" : "")}
+            className={classNames("row clip-item", isSelected && "selected")}
         >
             <div className="col-auto clip-hint">{hint}</div>
 
@@ -59,9 +60,10 @@ const ClipboardItemMemo = memo(function ClipboardItemMemo({
                 <button
                     data-source="star"
                     type="button"
-                    className={
-                        "icon-btn star-btn" + (item.starred ? " active" : "")
-                    }
+                    className={classNames(
+                        "icon-btn star-btn",
+                        item.starred && "active",
+                    )}
                 >
                     <StarFill />
                 </button>
@@ -101,7 +103,7 @@ function renderName(
                         const hint = getDataHint(target);
 
                         if (hint != null) {
-                            window.api.command({
+                            globalThis.window.api.command({
                                 id: "renameItems",
                                 targets: hintsToPrimitiveTargets([hint]),
                                 name: value,
@@ -149,10 +151,11 @@ export function getDataHint(target: HTMLElement): string | undefined {
 
 export function getDataSource(target: HTMLElement): DataSource | undefined {
     const el = target.closest<HTMLElement>("[data-source]");
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
     return el?.dataset.source as DataSource | undefined;
 }
 
 export function isStarred(target: HTMLElement): boolean {
     const starEl = target.closest<HTMLElement>("[data-source='star']");
-    return starEl != null && starEl.classList.contains("active");
+    return starEl?.classList.contains("active") ?? false;
 }
