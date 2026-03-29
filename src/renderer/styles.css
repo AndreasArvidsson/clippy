@@ -99,6 +99,10 @@ button.star-btn.active {
     color: gold;
 }
 
+.setting-input {
+    width: 10rem;
+}
+
 @media (prefers-color-scheme: dark) {
     body,
     input.form-control,

@@ -13,6 +13,7 @@ export function Footer({ paused, autoStar, showSettings }: Props): JSX.Element {
     return (
         <footer>
             <button
+                type="button"
                 title={getText("paused")}
                 className={classNames("icon-btn", paused && "active")}
                 onClick={() => {
@@ -23,6 +24,7 @@ export function Footer({ paused, autoStar, showSettings }: Props): JSX.Element {
             </button>
 
             <button
+                type="button"
                 title={getText("autoStar")}
                 className={classNames("icon-btn", autoStar && "active")}
                 onClick={() => {
@@ -35,6 +37,7 @@ export function Footer({ paused, autoStar, showSettings }: Props): JSX.Element {
             <div className="title" />
 
             <button
+                type="button"
                 title={getText("showSettings")}
                 className={classNames("icon-btn", showSettings && "active")}
                 onClick={() => {

@@ -33,6 +33,7 @@ export function Titlebar({
     function renderPinned() {
         return (
             <button
+                type="button"
                 title={getText("pinned")}
                 className={classNames("icon-btn", pinned && "active")}
                 onClick={() => {
@@ -47,6 +48,7 @@ export function Titlebar({
     function renderSearch() {
         return (
             <button
+                type="button"
                 title={getText("search")}
                 className={classNames("icon-btn", showSearch && "active")}
                 onClick={() => {
@@ -61,6 +63,7 @@ export function Titlebar({
     function renderClose() {
         return (
             <button
+                type="button"
                 title={getText("close")}
                 className="icon-btn"
                 id="close-btn"
@@ -93,6 +96,7 @@ export function Titlebar({
         return (
             <div className={className}>
                 <button
+                    type="button"
                     className="icon-btn"
                     onClick={() => {
                         globalThis.window.api.menu({ type: "lists" });

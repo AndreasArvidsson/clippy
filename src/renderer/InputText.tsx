@@ -49,6 +49,7 @@ export function InputText({
         ) {
             ref.current.focus({ preventScroll: true });
         }
+        // oxlint-disable-next-line eslint-plugin-react-hooks/exhaustive-deps
     }, []);
 
     return (

@@ -79,7 +79,7 @@ export function Settings({ config }: Props): JSX.Element {
                 {texts.autoStar.title}
             </InputCheckbox>
 
-            <div className="mt-2" style={{ width: "10rem" }}>
+            <div className="mt-2 setting-input">
                 <InputNumber
                     title={texts.limit.desc}
                     isInteger
@@ -98,6 +98,7 @@ export function Settings({ config }: Props): JSX.Element {
             <div className="mt-2 ">version: {version}</div>
 
             <button
+                type="button"
                 className="btn btn-sm btn-primary mt-3"
                 title={texts.hideSettings.desc}
                 onClick={() => {

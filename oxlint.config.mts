@@ -40,6 +40,11 @@ const disabledRules = [
     "oxc/no-rest-spread-properties",
     "promise/avoid-new",
     "promise/prefer-await-to-callbacks",
+    "react-perf/jsx-no-new-function-as-prop",
+    "react/jsx-max-depth",
+    "react/no-multi-comp",
+    "react/only-export-components",
+    "react/react-in-jsx-scope",
     "typescript/explicit-function-return-type",
     "typescript/parameter-properties",
     "typescript/prefer-readonly-parameter-types",
@@ -75,6 +80,8 @@ export default defineConfig({
         "import",
         "node",
         "promise",
+        "react",
+        "react-perf",
     ],
     categories: {
         correctness: "warn",
@@ -87,6 +94,13 @@ export default defineConfig({
     },
     rules: {
         ...Object.fromEntries(disabledRules.map((r) => [r, "off"])),
+        eqeqeq: [
+            "warn",
+            "always",
+            {
+                null: "never",
+            },
+        ],
         "eslint/no-duplicate-imports": [
             "warn",
             {
@@ -118,17 +132,16 @@ export default defineConfig({
                 terms: ["todo"],
             },
         ],
+        "react/jsx-filename-extension": [
+            "warn",
+            {
+                extensions: [".tsx"],
+            },
+        ],
         "typescript/strict-boolean-expressions": [
             "warn",
             {
                 allowNullableBoolean: true,
-            },
-        ],
-        eqeqeq: [
-            "warn",
-            "always",
-            {
-                null: "never",
             },
         ],
     },
