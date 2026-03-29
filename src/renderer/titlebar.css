@@ -7,6 +7,8 @@ footer {
 }
 
 header {
+    -webkit-app-region: drag;
+    user-select: none;
     border-bottom-style: solid;
 }
 
@@ -16,13 +18,7 @@ footer {
 
 header button.active,
 footer button.active {
-    color: DodgerBlue;
-}
-
-header {
-    -webkit-app-region: drag;
-    -webkit-user-select: none;
-    user-select: none;
+    color: dodgerblue;
 }
 
 .title {
@@ -43,14 +39,16 @@ header {
 .title.padding-left {
     padding-left: 2.75rem;
 }
+
 .title.padding-right {
     padding-right: 2.75rem;
 }
 
 header button:hover,
 footer button:hover {
-    background-color: #dddddd;
+    background-color: #ddd;
 }
+
 header button:active,
 footer button:active {
     background-color: #c0c0c0;
@@ -58,8 +56,9 @@ footer button:active {
 
 #close-btn:hover {
     background-color: #e81123;
-    color: #ffffff;
+    color: #fff;
 }
+
 #close-btn:active {
     background-color: #f1707a;
 }
