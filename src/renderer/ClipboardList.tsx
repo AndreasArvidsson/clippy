@@ -21,13 +21,13 @@ interface Props {
 }
 
 export function ClipboardList({ items }: Props): JSX.Element {
-    const ref = useRef<Set<string>>(new Set());
-    const [_selected, _setSelected] = useState<Set<string>>(ref.current);
+    const ref = useRef(new Set<string>());
+    const [rawSelected, setRawSelected] = useState(ref.current);
     const [renameItemId, setRenameItemId] = useState<string>();
 
     const setSelected = (selected: Iterable<string>) => {
         ref.current = new Set(selected);
-        _setSelected(ref.current);
+        setRawSelected(ref.current);
     };
 
     const clearSelection = () => {
@@ -167,11 +167,11 @@ export function ClipboardList({ items }: Props): JSX.Element {
         }
 
         e.preventDefault();
-        const isSelected = _selected.has(hint);
+        const isSelected = rawSelected.has(hint);
         if (!isSelected) {
             clearSelection();
         }
-        const hints = isSelected ? [..._selected] : [hint];
+        const hints = isSelected ? [...rawSelected] : [hint];
         globalThis.window.api.menu({
             type: "clipItemContext",
             hints,
@@ -195,7 +195,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
                         key={item.id}
                         item={item}
                         hint={hint}
-                        isSelected={_selected.has(hint)}
+                        isSelected={rawSelected.has(hint)}
                         isRenaming={item.id === renameItemId}
                         stopRenaming={stopRenaming}
                     />

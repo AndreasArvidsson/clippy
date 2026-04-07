@@ -1,9 +1,8 @@
 import * as path from "node:path";
-import { fileURLToPath } from "node:url";
 import { packager } from "@electron/packager";
 import { changePermissionOfClipboardEventHandlerMac } from "./prepareAssets.mts";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = import.meta.dirname;
 
 console.log("Packaging...");
 

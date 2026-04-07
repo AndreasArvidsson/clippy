@@ -61,7 +61,7 @@ const api: PreloadApi = {
 };
 
 const platform: PreloadPlatform = {
-    isMacOS: isMacOS,
+    isMacOS,
 };
 
 contextBridge.exposeInMainWorld("api", api);

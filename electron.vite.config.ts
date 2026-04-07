@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => {
         main: {
             build: {
                 target: nodeTarget,
-                outDir: outDir,
+                outDir,
                 minify,
                 sourcemap,
                 emptyOutDir,
