@@ -50,7 +50,7 @@ export function registerClipProtocol(): void {
 }
 
 function parseDataUrl(dataUrl: string): { mime: string; buf: Buffer } | null {
-    const m = /^data:([^;]+);base64,(.+)$/i.exec(dataUrl);
+    const m = /^data:([^;]+);base64,(.+)$/iu.exec(dataUrl);
     if (m == null) {
         return null;
     }

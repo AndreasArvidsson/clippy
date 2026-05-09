@@ -1,4 +1,4 @@
-const urlRegex = /^(https?:\/\/|www\.)[\w.:/#?\\-]+$/g;
+const urlRegex = /^(https?:\/\/|www\.)[\w.:/#?\\-]+$/gu;
 
 export function isUrl(text: string): boolean {
     // Reset regex state

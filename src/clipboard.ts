@@ -69,7 +69,7 @@ function getImageAttribute(
 ): string | undefined {
     const match = new RegExp(
         `<img[^>]*?${attribute}=(?:"([^"]*)"|'([^']*)')`,
-        "i",
+        "iu",
     ).exec(html);
     return match?.[1] ?? match?.[2];
 }

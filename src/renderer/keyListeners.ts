@@ -34,7 +34,7 @@ function keyDownListener(e: KeyboardEvent) {
         handled = true;
     } else {
         for (const listener of listeners) {
-            handled = handled || listener(key);
+            handled ||= listener(key);
         }
     }
     if (handled) {

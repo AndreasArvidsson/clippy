@@ -1,7 +1,7 @@
 import { escapeRegex } from "./escapeRegex";
 
 export function constructSearchRegexp(text: string): RegExp | undefined {
-    const parts = text.split(/\s+/).filter(Boolean).map(escapeRegex);
+    const parts = text.split(/\s+/u).filter(Boolean).map(escapeRegex);
 
     if (parts.length === 0) {
         return undefined;
@@ -9,5 +9,5 @@ export function constructSearchRegexp(text: string): RegExp | undefined {
 
     // Between each word there can be nothing(camelCase), space, underscore, dash, slash or backslash
     const pattern = parts.join(String.raw`[\s_/\-\\]*`);
-    return new RegExp(pattern, "i");
+    return new RegExp(pattern, "iu");
 }

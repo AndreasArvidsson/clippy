@@ -15,5 +15,5 @@ export function parseHintKey(
 }
 
 function isHint(key: string): boolean {
-    return /^[a-zA-Z0-9]$/.test(key);
+    return /^[a-zA-Z0-9]$/u.test(key);
 }

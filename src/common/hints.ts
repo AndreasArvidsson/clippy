@@ -20,11 +20,11 @@ export function indexToHint(index: number): string {
 }
 
 export function hintToIndex(hint: string): number {
-    if (/^\d+$/.test(hint)) {
+    if (/^\d+$/u.test(hint)) {
         return Number.parseInt(hint, 10) - 1;
     }
 
-    if (!/^[a-zA-Z]+$/.test(hint)) {
+    if (!/^[a-zA-Z]+$/u.test(hint)) {
         throw new Error(`Invalid hint: ${hint}`);
     }
 

@@ -25,10 +25,10 @@ suite("Hints", () => {
         assert.equal(hintToIndex("ZZ"), 710);
         assert.equal(hintToIndex("AAA"), 711);
 
-        assert.throws(() => hintToIndex(""), /Invalid hint/);
-        assert.throws(() => hintToIndex(" "), /Invalid hint/);
-        assert.throws(() => hintToIndex("1a"), /Invalid hint/);
-        assert.throws(() => hintToIndex("a1"), /Invalid hint/);
-        assert.throws(() => hintToIndex("@"), /Invalid hint/);
+        assert.throws(() => hintToIndex(""), /Invalid hint/u);
+        assert.throws(() => hintToIndex(" "), /Invalid hint/u);
+        assert.throws(() => hintToIndex("1a"), /Invalid hint/u);
+        assert.throws(() => hintToIndex("a1"), /Invalid hint/u);
+        assert.throws(() => hintToIndex("@"), /Invalid hint/u);
     });
 });
