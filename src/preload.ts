@@ -12,7 +12,7 @@ import {
 } from "./common/constants";
 import type { PreloadApi, PreloadPlatform } from "./types/preload.types";
 import type { RendererData } from "./types/types";
-import { isMacOS } from "./util/isMacOS";
+import { isMacOS } from "./util/isOS";
 
 const api: PreloadApi = {
     // Send events to main process

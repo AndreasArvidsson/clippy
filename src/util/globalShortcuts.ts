@@ -1,7 +1,7 @@
 import { globalShortcut } from "electron";
 import type { TalonRpcServer } from "talon-rpc";
 import { runCommandWithThrow } from "../commands/runCommand";
-import { isMacOS } from "./isMacOS";
+import { isMacOS } from "./isOS";
 import { showErrorNotification } from "./notifications";
 
 export function registerGlobalShortcuts(rpc: TalonRpcServer): void {

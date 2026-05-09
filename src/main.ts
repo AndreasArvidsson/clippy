@@ -4,7 +4,7 @@ import { api } from "./api";
 import * as clipboardList from "./clipboardList";
 import { registerClipProtocol } from "./clipProtocol";
 import { runCommand, runCommandWithThrow } from "./commands/runCommand";
-import { RPC_COMMAND, RPC_DIR_NAME } from "./common/constants";
+import { APP_ID, RPC_COMMAND, RPC_DIR_NAME } from "./common/constants";
 import { showMenu } from "./Menu";
 import { storage } from "./storage";
 import { createTray } from "./tray";
@@ -12,6 +12,7 @@ import type { Command } from "./types/command";
 import { getIconPath } from "./util/getIconPath";
 import { getRendererData } from "./util/getRendererData";
 import { registerGlobalShortcuts } from "./util/globalShortcuts";
+import { isWindows } from "./util/isOS";
 import { showBlockingErrorDialog } from "./util/notifications";
 import { onDarkModeChange } from "./util/onDarkModeChange";
 import { updateRenderer } from "./util/updateRenderer";
@@ -20,6 +21,10 @@ import { createWindow } from "./window";
 // Ensure single instance of the application
 if (!app.requestSingleInstanceLock()) {
     app.quit();
+}
+
+if (isWindows) {
+    app.setAppUserModelId(APP_ID);
 }
 
 // oxlint-disable-next-line unicorn/prefer-top-level-await

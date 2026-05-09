@@ -3,7 +3,7 @@ import { BrowserWindow, app, nativeTheme, screen } from "electron";
 import type { Rectangle } from "electron";
 import { NAME } from "./common/constants";
 import { storage } from "./storage";
-import { isMacOS } from "./util/isMacOS";
+import { isMacOS } from "./util/isOS";
 
 let _window: BrowserWindow | null = null;
 let _bounds: Rectangle | undefined;
