@@ -14,6 +14,14 @@ export default defineConfig(({ mode }) => {
     const outDir = path.join(__dirname, "out");
     const sourcemap = true;
     const emptyOutDir = false;
+    // oxlint-disable-next-line node/no-process-env
+    const appData = process.env.LOCALAPPDATA;
+
+    if (appData == null) {
+        throw new Error(
+            `Expected LOCALAPPDATA environment variable to be set, but it was not.`,
+        );
+    }
 
     return {
         main: {
@@ -57,6 +65,7 @@ export default defineConfig(({ mode }) => {
         renderer: {
             base: "./",
             root: path.join(__dirname, "src/renderer"),
+            cacheDir: path.join(appData, "clippy-vite"),
 
             build: {
                 target: chromeTarget,

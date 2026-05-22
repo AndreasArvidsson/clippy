@@ -44,6 +44,7 @@ interface MemoProps {
     stopRenaming: () => void;
 }
 
+// oxlint-disable-next-line prefer-arrow-callback
 const ClipboardItemMemo = memo(function ClipboardItemMemo({
     item,
     isRenaming,
