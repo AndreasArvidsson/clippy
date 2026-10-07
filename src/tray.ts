@@ -1,7 +1,7 @@
 import { Menu, nativeImage, Tray } from "electron";
 import type { NativeImage } from "electron";
 import { runCommand } from "./commands/runCommand";
-import { NAME } from "./common/constants";
+import { APP_NAME } from "./common/constants";
 
 const ICON_SIZE = 24;
 
@@ -12,11 +12,11 @@ interface ReturnValue {
 export function createTray(iconPath: string): ReturnValue {
     const tray = new Tray(getTrayIcon(iconPath));
 
-    tray.setToolTip(NAME);
+    tray.setToolTip(APP_NAME);
 
     const contextMenu = Menu.buildFromTemplate([
         {
-            label: `Exit ${NAME}`,
+            label: `Exit ${APP_NAME}`,
             type: "normal",
             click: () => runCommand({ id: "exit" }),
         },

@@ -1,4 +1,4 @@
-export const NAME = "Clippy";
+export const APP_NAME = "Clippy";
 export const RPC_COMMAND = "clippyCommand";
 export const RPC_DIR_NAME = "clippy-command-server";
 export const APP_ID = "com.github.andreasarvidsson.clippy";

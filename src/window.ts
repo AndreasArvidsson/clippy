@@ -1,7 +1,7 @@
 import path from "node:path";
 import { BrowserWindow, app, nativeTheme, screen } from "electron";
 import type { Rectangle } from "electron";
-import { NAME } from "./common/constants";
+import { APP_NAME } from "./common/constants";
 import { storage } from "./storage";
 import { isMacOS } from "./util/isOS";
 
@@ -56,7 +56,7 @@ function _createWindow(iconPath: string): BrowserWindow {
     nativeTheme.themeSource = "system";
 
     const win = new BrowserWindow({
-        title: NAME,
+        title: APP_NAME,
         icon: iconPath,
         alwaysOnTop,
 

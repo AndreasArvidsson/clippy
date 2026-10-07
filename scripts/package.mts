@@ -1,5 +1,6 @@
 import * as path from "node:path";
 import { packager } from "@electron/packager";
+import { APP_ID } from "../src/common/constants";
 import { changePermissionOfClipboardEventHandlerMac } from "./prepareAssets.mts";
 
 const __dirname = import.meta.dirname;
@@ -13,7 +14,7 @@ await packager({
     out: "dist",
     overwrite: true,
     icon: "images/icon_dark",
-    appBundleId: "com.github.andreasarvidsson.clippy",
+    appBundleId: APP_ID,
     asar: {
         // Keep native binaries outside app.asar.
         unpack: "**/*.{node,dll,so,dylib}",
