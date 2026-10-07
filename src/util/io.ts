@@ -1,5 +1,5 @@
-import * as fs from "node:fs";
-import * as fsPromises from "node:fs/promises";
+import fs from "node:fs";
+import fsPromises from "node:fs/promises";
 
 export async function readJsonFile<T>(path: string): Promise<T> {
     const data = await fsPromises.readFile(path, "utf8");
@@ -25,5 +25,6 @@ export function deleteFile(path: string): Promise<void> {
 }
 
 export function fileExists(path: string): boolean {
+    // oxlint-disable-next-line node/no-sync
     return fs.existsSync(path);
 }

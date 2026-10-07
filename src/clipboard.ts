@@ -1,5 +1,5 @@
 import clipboardEvent from "clipboard-event";
-import * as electron from "electron";
+import electron from "electron";
 import { storage } from "./storage";
 import type { ClipItem, ClipItemImage, ClipItemType } from "./types/types";
 import { getNextClipItemId } from "./util/clipItemId";

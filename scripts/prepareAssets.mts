@@ -1,6 +1,7 @@
-import * as fs from "node:fs";
-import * as os from "node:os";
-import * as path from "node:path";
+// oxlint-disable node/no-sync
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 
 const __dirname = import.meta.dirname;
 

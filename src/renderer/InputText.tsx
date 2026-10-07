@@ -52,10 +52,13 @@ export function InputText({
         // oxlint-disable-next-line eslint-plugin-react-hooks/exhaustive-deps
     }, []);
 
+    // oxlint-disable react/jsx-props-no-spreading
     return (
         <input
             ref={ref}
-            type={type ?? "text"}
+            {...(type === "search"
+                ? { type: "search" as const }
+                : { type: "text" as const })}
             className={classNames(
                 "form-control",
                 invalid && "is-invalid",

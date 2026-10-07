@@ -21,7 +21,7 @@ export function indexToHint(index: number): string {
 
 export function hintToIndex(hint: string): number {
     if (/^\d+$/u.test(hint)) {
-        return Number.parseInt(hint, 10) - 1;
+        return Math.trunc(Number(hint)) - 1;
     }
 
     if (!/^[a-zA-Z]+$/u.test(hint)) {

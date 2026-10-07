@@ -16,7 +16,7 @@ export type Visibility =
     | "hideOrBlurIfPinned";
 
 export interface Disposable {
-    dispose(): void;
+    dispose: () => void;
 }
 
 export interface ClipItemImage {

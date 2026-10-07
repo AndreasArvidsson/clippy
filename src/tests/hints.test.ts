@@ -1,4 +1,4 @@
-import * as assert from "node:assert/strict";
+import assert from "node:assert/strict";
 import { hintToIndex, indexToHint } from "../common/hints";
 
 suite("Hints", () => {

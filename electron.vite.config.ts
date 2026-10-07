@@ -1,4 +1,4 @@
-import * as path from "node:path";
+import path from "node:path";
 import preactPlugin from "@preact/preset-vite";
 import { defineConfig } from "electron-vite";
 import purgeCss from "vite-plugin-purgecss";

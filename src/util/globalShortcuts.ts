@@ -15,8 +15,10 @@ export function registerGlobalShortcuts(rpc: TalonRpcServer): void {
         })();
     });
 
-    registerGlobalShortcut("Super+Alt+C", "Super+Alt+C", () =>
-        runCommandWithThrow({ id: "toggleShowHide" }),
+    registerGlobalShortcut(
+        "Super+Alt+C",
+        "Super+Alt+C",
+        () => void runCommandWithThrow({ id: "toggleShowHide" }),
     );
 }
 

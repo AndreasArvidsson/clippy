@@ -6,7 +6,7 @@ interface Props {
     search: Search;
 }
 
-export function Search({ search }: Props): JSX.Element | null {
+export function SearchComponent({ search }: Props): JSX.Element | null {
     function onChange(change: Partial<Search>) {
         const value = { ...search, ...change };
         globalThis.window.api.command({

@@ -22,6 +22,7 @@ interface Props {
 
 export function ClipboardList({ items }: Props): JSX.Element {
     const ref = useRef(new Set<string>());
+    // oxlint-disable-next-line react/refs
     const [rawSelected, setRawSelected] = useState(ref.current);
     const [renameItemId, setRenameItemId] = useState<string>();
 
@@ -48,13 +49,16 @@ export function ClipboardList({ items }: Props): JSX.Element {
             keyListeners.register((key) => {
                 switch (key) {
                     case "Enter": {
+                        // oxlint-disable-next-line react/immutability
                         copySelected();
                         break;
                     }
                     case "Delete":
+                        // oxlint-disable-next-line react/immutability
                         removeSelected();
                         break;
                     case "F2":
+                        // oxlint-disable-next-line react/immutability
                         renameSelected();
                         break;
                     case "Escape": {
@@ -64,6 +68,7 @@ export function ClipboardList({ items }: Props): JSX.Element {
                     default: {
                         const hint = parseHintKey(key);
                         if (hint != null) {
+                            // oxlint-disable-next-line react/immutability
                             clickItem(hint.hint, hint.superKey);
                             return true;
                         }

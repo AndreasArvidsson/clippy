@@ -37,10 +37,13 @@ export function InputNumber({
     }, [value]);
 
     const parseCurrentValue = () => {
+        if (currentValue.trim() === "") {
+            return value;
+        }
         const num = isInteger
-            ? Number.parseInt(currentValue, 10)
-            : Number.parseFloat(currentValue);
-        return Number.isNaN(num) ? value : num;
+            ? Math.trunc(Number(currentValue))
+            : Number(currentValue);
+        return Number.isFinite(num) ? num : value;
     };
 
     return (

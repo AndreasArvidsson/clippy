@@ -24,32 +24,35 @@
         "fix": "npm run fix:ts && npm run fix:style && npm run fix:fmt",
         "test": "tsx ./src/tests/runAllTests.ts"
     },
+    "engines": {
+        "node": ">=v24.14.0"
+    },
     "dependencies": {
         "bootstrap": "^5.3.8",
         "clipboard-event": "^1.6.0",
-        "preact": "^10.29.2",
+        "preact": "^11.0.0",
         "react-bootstrap-icons": "^1.11.6",
-        "sharp": "^0.34.5",
+        "sharp": "^0.35.5",
         "talon-rpc": "^2.2.0",
-        "uuid": "^14.0.0"
+        "uuid": "^14.0.2"
     },
     "devDependencies": {
-        "@electron/packager": "^20.0.0",
-        "@preact/preset-vite": "^2.10.5",
+        "@electron/packager": "^20.3.0",
+        "@preact/preset-vite": "^2.10.6",
         "@types/mocha": "^10.0.10",
-        "@types/node": "^24.12.4",
+        "@types/node": "^24.19.1",
         "@types/react": "^19.2.15",
         "electron-vite": "^5.0.0",
         "electron": "^42.2.0",
         "fast-glob": "^3.3.3",
-        "mocha": "^11.7.6",
-        "oxfmt": "^0.51.0",
-        "oxlint-tsgolint": "^0.23.0",
-        "oxlint": "^1.66.0",
+        "mocha": "^12.0.3",
+        "oxfmt": "^0.72.0",
+        "oxlint-tsgolint": "^7.0.2003",
+        "oxlint": "^1.87.0",
         "stylelint-config-standard": "^40.0.0",
-        "stylelint": "^17.12.0",
-        "tsx": "^4.22.3",
-        "typescript": "^6.0.3",
+        "stylelint": "^17.16.0",
+        "tsx": "^4.23.15",
+        "typescript": "^7.0.2",
         "vite-plugin-purgecss": "^0.2.13"
     }
 }

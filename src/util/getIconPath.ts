@@ -1,4 +1,4 @@
-import * as path from "node:path";
+import path from "node:path";
 import { nativeTheme } from "electron";
 import iconDark from "../../images/icon_dark.png";
 import iconLight from "../../images/icon_light.png";

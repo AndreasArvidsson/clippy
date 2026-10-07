@@ -6,7 +6,7 @@ import { Footer } from "./Footer";
 import { keyListeners } from "./keyListeners";
 import type { ListNameType } from "./ListName";
 import { ListName } from "./ListName";
-import { Search } from "./Search";
+import { SearchComponent } from "./Search";
 import { Settings } from "./Settings";
 import { Titlebar } from "./Titlebar";
 
@@ -61,7 +61,7 @@ export function Root(): JSX.Element | null {
                     }}
                 />
 
-                <Search search={data.search} />
+                <SearchComponent search={data.search} />
 
                 <ClipboardList items={data.items} />
             </>
