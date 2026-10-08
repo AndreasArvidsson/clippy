@@ -1,3 +1,5 @@
+import type { ClipItemV0 } from "./v0/typesV0";
+
 export type ClipItemType = "text" | "image";
 export type SearchType = "text" | "image" | "url";
 
@@ -19,24 +21,44 @@ export interface Disposable {
     dispose: () => void;
 }
 
-export interface ClipItemImage {
-    readonly src: string | undefined;
-    readonly alt: string | undefined;
-    readonly data: string;
-}
-
-export interface ClipItem {
+export interface ClipItemStorage {
+    readonly version: 1;
     readonly id: string;
     readonly created: number;
-    readonly hash: string;
     readonly type: ClipItemType;
     name: string | undefined;
     list: string | undefined;
-    readonly text: string | undefined;
-    readonly rtf: string | undefined;
-    readonly html: string | undefined;
-    readonly bookmark: Bookmark | undefined;
-    readonly image: ClipItemImage | undefined;
+    readonly entries: readonly ClipEntry[];
+}
+
+export interface ClipItemText extends ClipItemStorage {
+    readonly type: "text";
+    readonly hash: string;
+    readonly text: string;
+}
+
+export interface ClipItemImage extends ClipItemStorage {
+    readonly type: "image";
+    readonly hash: string;
+    readonly text: string;
+    readonly image: ClipFormat;
+    readonly src: string | undefined;
+    readonly alt: string | undefined;
+}
+
+export type ClipItem = ClipItemText | ClipItemImage;
+
+export type ClipItemOnDisk = ClipItemStorage | ClipItemV0;
+
+export interface ClipEntry {
+    readonly formats: readonly ClipFormat[];
+    readonly bookmark: ClipBookmark | undefined;
+}
+
+export interface ClipFormat {
+    readonly mime: string;
+    readonly encoding: "utf8" | "base64";
+    readonly data: string;
 }
 
 export interface ClipItemRender {
@@ -47,9 +69,10 @@ export interface ClipItemRender {
     readonly text: string | undefined;
 }
 
-interface Bookmark {
-    title: string;
-    url: string;
+export interface ClipBookmark {
+    readonly mime: string;
+    readonly title: string;
+    readonly url: string;
 }
 
 export interface Config {

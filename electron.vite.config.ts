@@ -5,9 +5,9 @@ import purgeCss from "vite-plugin-purgecss";
 
 // oxlint-disable-next-line import/no-default-export
 export default defineConfig(({ mode }) => {
-    // electron 42 uses node 24 and chromium 148
+    // electron 44 uses node 24 and chromium 152
     const nodeTarget = "node24";
-    const chromeTarget = "chrome148";
+    const chromeTarget = "chrome152";
     const entryFileNames = "[name].js";
     const assetFileNames = "assets/[name][extname]";
     const minify = mode === "production";

@@ -29,24 +29,34 @@ import { togglePinned } from "./togglePinned";
 import { toggleSearch } from "./toggleSearch";
 import { toggleSettings } from "./toggleSettings";
 
-export function runCommand(command: Command): ClipItem[] | undefined {
+export function runCommandNoWait(command: Command): void {
+    void runCommand(command);
+}
+
+export async function runCommand(
+    command: Command,
+): Promise<ClipItem[] | undefined> {
     try {
-        return runCommandWithThrow(command);
+        return await runCommandWithThrow(command);
     } catch {
         return undefined;
     }
 }
 
-export function runCommandWithThrow(command: Command): ClipItem[] | undefined {
+export async function runCommandWithThrow(
+    command: Command,
+): Promise<ClipItem[] | undefined> {
     try {
-        return runCommandInternal(command);
+        return await runCommandInternal(command);
     } catch (error) {
         showErrorNotification(`Command ${command.id} failed`, error);
         throw error;
     }
 }
 
-function runCommandInternal(command: Command): ClipItem[] | undefined {
+async function runCommandInternal(
+    command: Command,
+): Promise<ClipItem[] | undefined> {
     console.debug(command);
 
     let result: ClipItem[] | undefined;
@@ -156,7 +166,7 @@ function runCommandInternal(command: Command): ClipItem[] | undefined {
             assignItemsToList(command);
             break;
         case "copyItems":
-            copyItems(command);
+            await copyItems(command);
             preferredVisibility = "hideIfNotPinned";
             break;
         case "getItems":

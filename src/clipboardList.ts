@@ -1,30 +1,32 @@
 import { clipboard } from "./clipboard";
 import { storage } from "./storage";
-import { AllList, StarredList, UnstarredList } from "./types/types";
 import type { ClipItem } from "./types/types";
-
-let t1 = 0;
+import { AllList, StarredList, UnstarredList } from "./types/types";
+import { haveSameImagePixels } from "./util/haveSameImagePixels";
 
 export function onChange(listener: () => void): void {
-    clipboard.onChange((item) => {
-        const t2 = Date.now();
-
+    clipboard.onChange((item, lastExcludedAt) => {
         const items = storage.getClipboardItems();
+        const previous = items.at(0);
 
         // Don't add the same item multiple times in a sequence
-        if (item.hash !== items[0]?.hash) {
-            // FIXME: Try to detect quick changes that are then reverted.
-            // Remove this once we have proper transient formats from Talon side.
-            if (item.hash === items[1]?.hash && t2 - t1 < 300) {
-                storage.removeItems([items[0]]);
-            } else {
-                addNewItem(item);
-            }
-
-            listener();
+        if (previous?.hash === item.hash) {
+            return;
         }
 
-        t1 = t2;
+        // Talon insert using clipboard can restore images on the clipboard with the same pixels, but a different PNG encoding.
+        if (
+            lastExcludedAt != null &&
+            item.created - lastExcludedAt < 300 &&
+            previous?.type === "image" &&
+            item.type === "image" &&
+            haveSameImagePixels(item, previous)
+        ) {
+            return;
+        }
+
+        addNewItem(item);
+        listener();
     });
 }
 

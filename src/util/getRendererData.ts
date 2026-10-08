@@ -1,5 +1,10 @@
 import { storage } from "../storage";
-import type { ClipItem, ClipItemRender, RendererData } from "../types/types";
+import type {
+    ClipItem,
+    ClipItemRender,
+    ClipItemText,
+    RendererData,
+} from "../types/types";
 import { applySearchFilters, getListItems } from "./filterItems";
 import { getActiveList } from "./getList";
 
@@ -25,14 +30,13 @@ function getRenderItems(items: ClipItem[]): ClipItemRender[] {
         type: item.type,
         name: item.name,
         starred: item.list != null,
-        text: item.image == null ? getRenderText(item) : undefined,
+        text: item.type === "text" ? getRenderText(item) : undefined,
     }));
 }
 
-function getRenderText(item: ClipItem): string {
-    const text = item.text ?? item.rtf ?? item.html ?? "";
-    if (text.length > 500) {
-        return `${text.slice(0, 500)}…`;
+function getRenderText(item: ClipItemText): string {
+    if (item.text.length > 500) {
+        return `${item.text.slice(0, 500)}…`;
     }
-    return text;
+    return item.text;
 }

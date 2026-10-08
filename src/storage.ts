@@ -1,12 +1,15 @@
 import path from "node:path";
-import { AllList } from "./types/types";
 import type {
     ClipItem,
+    ClipItemOnDisk,
     Config,
     List,
     Search,
     StorageState,
 } from "./types/types";
+import { AllList } from "./types/types";
+import { upgradeClipItem } from "./upgradeClipItem";
+import { getItemToStore } from "./util/getItemToStore";
 import {
     deleteFile,
     fileExists,
@@ -190,10 +193,11 @@ async function readItemFromDisk(
     filepath: string,
 ): Promise<ClipItem | undefined> {
     try {
-        return await readJsonFile<ClipItem>(filepath);
+        const itemOnDisk = await readJsonFile<ClipItemOnDisk>(filepath);
+        return upgradeClipItem(itemOnDisk);
     } catch (error) {
         showErrorNotification(
-            `Failed to parse clipboard item file: ${filepath}`,
+            `Failed to load clipboard item file: ${filepath}`,
             error,
         );
         return undefined;
@@ -203,7 +207,7 @@ async function readItemFromDisk(
 function writeClipItemToDisk(item: ClipItem) {
     void (async () => {
         try {
-            await writeJsonFile(getFilePath(item), item);
+            await writeJsonFile(getFilePath(item), getItemToStore(item));
         } catch (error) {
             showErrorNotification(
                 "Failed to save clipboard item to disk",

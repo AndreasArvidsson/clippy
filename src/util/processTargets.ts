@@ -113,14 +113,14 @@ function isSearchMatch(
 ): boolean {
     if (itemType != null) {
         if (itemType === "url") {
-            if (item.text == null || !isUrl(item.text)) {
+            if (!isUrl(item.text)) {
                 return false;
             }
         } else if (item.type !== itemType) {
             return false;
         }
     }
-    if (pattern != null && (item.text == null || !pattern.test(item.text))) {
+    if (pattern != null && !pattern.test(item.text)) {
         return false;
     }
     return true;

@@ -1,6 +1,6 @@
-import { Menu, nativeImage, Tray } from "electron";
 import type { NativeImage } from "electron";
-import { runCommand } from "./commands/runCommand";
+import { Menu, nativeImage, Tray } from "electron";
+import { runCommandNoWait } from "./commands/runCommand";
 import { APP_NAME } from "./common/constants";
 
 const ICON_SIZE = 24;
@@ -18,13 +18,13 @@ export function createTray(iconPath: string): ReturnValue {
         {
             label: `Exit ${APP_NAME}`,
             type: "normal",
-            click: () => runCommand({ id: "exit" }),
+            click: () => runCommandNoWait({ id: "exit" }),
         },
     ]);
 
     tray.setContextMenu(contextMenu);
 
-    tray.addListener("click", () => runCommand({ id: "toggleShowHide" }));
+    tray.addListener("click", () => runCommandNoWait({ id: "toggleShowHide" }));
 
     return {
         updateIcon: (newIconPath: string) => {

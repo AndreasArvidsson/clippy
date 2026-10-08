@@ -34,12 +34,12 @@ export function applySearchFilters(
             result = result.filter(
                 (item) =>
                     item.name?.toLowerCase().includes(searchText) ||
-                    (item.text ?? item.rtf)
-                        ?.toLowerCase()
-                        .includes(searchText) ||
-                    item.html?.toLowerCase().includes(searchText) ||
-                    item.bookmark?.title.toLowerCase().includes(searchText) ||
-                    item.image?.alt?.toLowerCase().includes(searchText),
+                    item.text.toLowerCase().includes(searchText) ||
+                    (item.type === "image" &&
+                        item.alt?.toLowerCase().includes(searchText)) ||
+                    item.entries.some(({ bookmark }) =>
+                        bookmark?.title.toLowerCase().includes(searchText),
+                    ),
             );
         }
     }

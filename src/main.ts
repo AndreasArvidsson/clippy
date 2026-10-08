@@ -3,7 +3,7 @@ import { NodeIo, TalonRpcServer } from "talon-rpc";
 import { api } from "./api";
 import * as clipboardList from "./clipboardList";
 import { registerClipProtocol } from "./clipProtocol";
-import { runCommand, runCommandWithThrow } from "./commands/runCommand";
+import { runCommandNoWait, runCommandWithThrow } from "./commands/runCommand";
 import { APP_ID, RPC_COMMAND, RPC_DIR_NAME } from "./common/constants";
 import { showMenu } from "./Menu";
 import { storage } from "./storage";
@@ -44,10 +44,10 @@ void (async () => {
     api.onGetAppVersion(() => app.getVersion());
     api.onGetRendererData(getRendererData);
     api.onMenu(showMenu);
-    api.onCommand(runCommand);
+    api.onCommand(runCommandNoWait);
 
     const io = new NodeIo(RPC_DIR_NAME);
-    const rpc = new TalonRpcServer(io, executeRequest);
+    const rpc = new TalonRpcServer(io, executeRpcRequest);
 
     await io.initialize();
 
@@ -65,7 +65,7 @@ void (async () => {
     });
 })();
 
-function executeRequest(commandId: string, args: unknown[]) {
+function executeRpcRequest(commandId: string, args: unknown[]) {
     const command = extractCommand(commandId, args);
     return runCommandWithThrow(command);
 }

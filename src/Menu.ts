@@ -1,13 +1,13 @@
-import { Menu } from "electron";
 import type { MenuItemConstructorOptions } from "electron";
-import { runCommand } from "./commands/runCommand";
+import { Menu } from "electron";
+import { runCommandNoWait } from "./commands/runCommand";
 import {
     getCommandForHints,
     hintsToPrimitiveTargets,
 } from "./common/getCommandForHints";
 import { storage } from "./storage";
-import { StarredList, UnstarredList, defaultLists } from "./types/types";
 import type { List, MenuType } from "./types/types";
+import { StarredList, UnstarredList, defaultLists } from "./types/types";
 import { getActiveList } from "./util/getList";
 
 Menu.setApplicationMenu(null);
@@ -16,7 +16,7 @@ const removeMenu = Menu.buildFromTemplate([
     {
         label: "Remove all items in list",
         type: "normal",
-        click: () => runCommand({ id: "removeAllItems" }),
+        click: () => runCommandNoWait({ id: "removeAllItems" }),
     },
 ]);
 
@@ -31,7 +31,7 @@ function clipItemContextMenu(hints: string[]): void {
             type: "normal",
             enabled: singleItem,
             click: () => {
-                runCommand(getCommandForHints("renameItems", [hints[0]]));
+                runCommandNoWait(getCommandForHints("renameItems", [hints[0]]));
             },
         },
         {
@@ -44,7 +44,7 @@ function clipItemContextMenu(hints: string[]): void {
                 label: list.name,
                 type: "normal",
                 click: () => {
-                    runCommand({
+                    runCommandNoWait({
                         id: "assignItemsToList",
                         name: list.name,
                         targets: hintsToPrimitiveTargets(hints),
@@ -59,7 +59,7 @@ function clipItemContextMenu(hints: string[]): void {
             label: `Remove ${itemsLabel}`,
             type: "normal",
             click: () => {
-                runCommand(getCommandForHints("removeItems", hints));
+                runCommandNoWait(getCommandForHints("removeItems", hints));
             },
         },
     ]);
@@ -75,7 +75,7 @@ function listsMenu() {
         label: list.name,
         type: "radio",
         checked: list.id === activeList.id,
-        click: () => runCommand({ id: "switchList", name: list.name }),
+        click: () => runCommandNoWait({ id: "switchList", name: list.name }),
     });
 
     const menu = Menu.buildFromTemplate([
@@ -86,12 +86,12 @@ function listsMenu() {
         {
             label: "Create new list",
             type: "normal",
-            click: () => runCommand({ id: "createList" }),
+            click: () => runCommandNoWait({ id: "createList" }),
         },
         {
             label: "Rename list",
             type: "normal",
-            click: () => runCommand({ id: "renameList" }),
+            click: () => runCommandNoWait({ id: "renameList" }),
             enabled: !activeListIsDefault,
         },
         {
@@ -104,12 +104,12 @@ function listsMenu() {
                 {
                     label: "Delete all items",
                     type: "normal",
-                    click: () => runCommand({ id: "removeAllItems" }),
+                    click: () => runCommandNoWait({ id: "removeAllItems" }),
                 },
                 {
                     label: "Delete list and all items",
                     type: "normal",
-                    click: () => runCommand({ id: "removeList" }),
+                    click: () => runCommandNoWait({ id: "removeList" }),
                     enabled: !activeListIsDefault,
                 },
             ],

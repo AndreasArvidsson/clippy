@@ -27,18 +27,14 @@ export function registerClipProtocol(): void {
         }
 
         const item = storage.getClipboardItem(id);
+        const image = item?.type === "image" ? item.image : undefined;
 
-        if (item?.image == null) {
+        if (image == null) {
             return new Response("Not Found", { status: 404 });
         }
 
-        const parsed = parseDataUrl(item.image.data);
-
-        if (parsed == null) {
-            return new Response("Unsupported Media", { status: 415 });
-        }
-
-        const thumb = await createThumbnail(parsed.buf);
+        const buf = Buffer.from(image.data, image.encoding);
+        const thumb = await createThumbnail(buf);
 
         return new Response(thumb.buf, {
             headers: {
@@ -47,17 +43,6 @@ export function registerClipProtocol(): void {
             },
         });
     });
-}
-
-function parseDataUrl(dataUrl: string): { mime: string; buf: Buffer } | null {
-    const m = /^data:([^;]+);base64,(.+)$/iu.exec(dataUrl);
-    if (m == null) {
-        return null;
-    }
-    return {
-        mime: m[1],
-        buf: Buffer.from(m[2], "base64"),
-    };
 }
 
 export async function createThumbnail(
