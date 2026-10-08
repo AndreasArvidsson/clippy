@@ -1,3 +1,5 @@
+// oxlint-disable node/no-process-env
+
 import path from "node:path";
 import preactPlugin from "@preact/preset-vite";
 import { defineConfig } from "electron-vite";
@@ -14,14 +16,11 @@ export default defineConfig(({ mode }) => {
     const outDir = path.join(__dirname, "out");
     const sourcemap = true;
     const emptyOutDir = false;
-    // oxlint-disable-next-line node/no-process-env
-    const appData = process.env.LOCALAPPDATA;
 
-    if (appData == null) {
-        throw new Error(
-            `Expected LOCALAPPDATA environment variable to be set, but it was not.`,
-        );
-    }
+    const cacheDir =
+        mode === "development" && process.env.LOCALAPPDATA != null
+            ? path.join(process.env.LOCALAPPDATA, "clippy-vite")
+            : undefined;
 
     return {
         main: {
@@ -65,7 +64,7 @@ export default defineConfig(({ mode }) => {
         renderer: {
             base: "./",
             root: path.join(__dirname, "src/renderer"),
-            cacheDir: path.join(appData, "clippy-vite"),
+            cacheDir,
 
             build: {
                 target: chromeTarget,
