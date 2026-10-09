@@ -4,13 +4,13 @@ Clipboard manager with RPC. Support keyboard, mouse and excellent Talon Voice in
 
 ## Installation
 
-1. Download zip-file from [GitHub](https://github.com/AndreasArvidsson/clippy/releases/latest)
+1. Download the ZIP file from [GitHub](https://github.com/AndreasArvidsson/clippy/releases/latest).
     - [Windows](https://github.com/AndreasArvidsson/clippy/releases/latest/download/Clippy-Windows.zip)
     - [Linux](https://github.com/AndreasArvidsson/clippy/releases/latest/download/Clippy-Linux.zip)
     - [macOS](https://github.com/AndreasArvidsson/clippy/releases/latest/download/Clippy-macOS.zip)
-2. Unpack zip-file
-3. Run Clippy executable (eg `Clippy.exe`)
-4. If prompted if you want to run this unrecognized application: press run/continue.
+2. Extract the ZIP file.
+3. Run the Clippy executable (e.g. `Clippy.exe`).
+4. If asked whether you want to run this unrecognized application, choose Run/Continue.
 
 ### MacOS
 
