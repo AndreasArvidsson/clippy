@@ -44,8 +44,8 @@ function getBounds(): Partial<Rectangle> {
     }
     const { workAreaSize } = screen.getPrimaryDisplay();
     return {
-        width: workAreaSize.width * 0.25,
-        height: workAreaSize.height * 0.75,
+        width: Math.round(workAreaSize.width * 0.25),
+        height: Math.round(workAreaSize.height * 0.75),
     };
 }
 
