@@ -2,19 +2,17 @@
 
 Clipboard manager with RPC. Support keyboard, mouse and excellent Talon Voice integration.
 
-## Installation
+## Download latest release
 
-1. Download the ZIP file from [GitHub](https://github.com/AndreasArvidsson/clippy/releases/latest).
-    - [Windows](https://github.com/AndreasArvidsson/clippy/releases/latest/download/Clippy-Windows.zip)
-    - [Linux](https://github.com/AndreasArvidsson/clippy/releases/latest/download/Clippy-Linux.zip)
-    - [macOS](https://github.com/AndreasArvidsson/clippy/releases/latest/download/Clippy-macOS.zip)
-2. Extract the ZIP file.
-3. Run the Clippy executable (e.g. `Clippy.exe`).
-4. If asked whether you want to run this unrecognized application, choose Run/Continue.
+- [Windows](https://github.com/AndreasArvidsson/clippy/releases/latest/download/Clippy-Windows.zip)
+- [Linux](https://github.com/AndreasArvidsson/clippy/releases/latest/download/Clippy-Linux.zip)
+- [macOS](https://github.com/AndreasArvidsson/clippy/releases/latest/download/Clippy-macOS.zip)
 
-### MacOS
+For more details read the [installation and uninstallation instructions](./INSTALLATION.md).
 
-On MacOS applications not downloaded from the app store gets tagged with a quarantine attribute. When you try to run the file you get a message that the file is damaged and can't be opened. Mac users needs to compile the source code themself for now.
+## Privacy policy
+
+Clippy stores clipboard data as JSON files in the `clipboardItems` folder within its local application data directory on your computer. It does not upload this data or include analytics, telemetry, or automatic crash reporting. The released application loads its interface and assets locally and does not require an internet connection.
 
 ## Talon user scripts
 
@@ -22,7 +20,7 @@ If you are going to use Clippy together with Talon you need the Talon user scrip
 
 [Clippy Talon](https://github.com/AndreasArvidsson/clippy-talon)
 
-## Usage
+## User guide
 
 ### Keyboard and mouse control
 
