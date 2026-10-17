@@ -16,12 +16,20 @@ await packager({
     overwrite: true,
     icon: "images/icon_dark",
     appBundleId: APP_ID,
+    // Use ad-hoc code signing for macOS
+    osxSign: {
+        identity: "-",
+        identityValidation: false,
+        continueOnError: false,
+    },
     asar: {
         // Keep native binaries outside app.asar.
         unpack: "**/*.{node,dll,so,dylib}",
     },
     ignore: [
-        whitelistToIgnore(["out", "node_modules", "package.json"]),
+        // Include whitelisted files and directories only
+        whitelistToIgnore(["out", "node_modules", "package.json", "LICENSE"]),
+        // Ignore source map files inside whitelisted directories
         ".map$",
     ],
 });
