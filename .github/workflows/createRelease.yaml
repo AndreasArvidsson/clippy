@@ -64,6 +64,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -82,24 +83,46 @@ jobs:
       - name: Package artifact
         run: npm --color run package
 
+      - name: Verify code signing (macOS)
+        run: |
+          codesign --verify --deep --strict --verbose=1  "dist/Clippy-darwin-arm64/Clippy.app"
+          codesign --display --verbose=1 "dist/Clippy-darwin-arm64/Clippy.app"
+        if: runner.os == 'macOS'
+
       - name: Compress artifact (Windows)
         shell: pwsh
-        run: >
-          Compress-Archive -Path 'dist/*'
-          -DestinationPath "Clippy-${{ runner.os }}.zip"
+        run: Compress-Archive -Path 'dist/*' -DestinationPath "Clippy-${{ runner.os }}.zip"
         if: runner.os == 'Windows'
 
-      - name: Compress artifact (macOS and Linux)
+      - name: Compress artifact (macOS)
         shell: bash
+        run: ditto -c -k --sequesterRsrc dist "Clippy-${{ runner.os }}.zip"
+        if: runner.os == 'macOS'
+
+      - name: Compress artifact (Linux)
+        shell: bash
+        working-directory: dist
+        run: zip -ry "../Clippy-${{ runner.os }}.zip" *
+        if: runner.os == 'Linux'
+
+      - name: Generate hash file (Windows)
+        shell: pwsh
         run: |
-          cd dist
-          zip -r "../Clippy-${{ runner.os }}.zip" *
+          $zip = "Clippy-${{ runner.os }}.zip"
+          $hash = (Get-FileHash -Algorithm SHA256 $zip).Hash.ToLower()
+          "$hash  $zip" | Set-Content -Encoding ascii "$zip.sha256"
+        if: runner.os == 'Windows'
+
+      - name: Generate hash file (macOS and Linux)
+        shell: bash
+        run: shasum -a 256 "Clippy-${{ runner.os }}.zip" > "Clippy-${{ runner.os }}.zip.sha256"
         if: runner.os != 'Windows'
 
-      - name: Upload release asset
+      - name: Upload release assets
         env:
           GH_TOKEN: ${{ github.token }}
         run: >
           gh release upload
           "v${{ needs.create-release.outputs.version }}"
           "Clippy-${{ runner.os }}.zip"
+          "Clippy-${{ runner.os }}.zip.sha256"
