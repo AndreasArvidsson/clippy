@@ -105,7 +105,7 @@ export default defineConfig({
     },
     rules: {
         ...Object.fromEntries(disabledRules.map((r) => [r, "off"])),
-        eqeqeq: [
+        "eslint/eqeqeq": [
             "warn",
             "always",
             {
@@ -149,16 +149,16 @@ export default defineConfig({
                 extensions: [".tsx"],
             },
         ],
-        "typescript/strict-boolean-expressions": [
-            "warn",
-            {
-                allowNullableBoolean: true,
-            },
-        ],
         "typescript/no-confusing-void-expression": [
             "warn",
             {
                 ignoreArrowShorthand: true,
+            },
+        ],
+        "typescript/strict-boolean-expressions": [
+            "warn",
+            {
+                allowNullableBoolean: true,
             },
         ],
     },
