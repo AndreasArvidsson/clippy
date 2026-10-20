@@ -126,7 +126,7 @@ jobs:
       - name: Generate release notes
         run: |
           {
-            echo "Release for version ${{ needs.prepare.outputs.version }}"
+            echo "# Release for version ${{ needs.prepare.outputs.version }}"
             echo
             echo '## SHA-256 checksums'
             echo
