@@ -121,7 +121,7 @@ jobs:
 
       - name: Generate checksums
         working-directory: assets
-        run: sha256sum Clippy-Windows.zip Clippy-macOS.zip Clippy-Linux.zip > SHA256SUMS
+        run: sha256sum Clippy-Linux.zip Clippy-macOS.zip Clippy-Windows.zip > SHA256SUMS
 
       - name: Generate release notes
         run: |
@@ -144,7 +144,7 @@ jobs:
           body_path: release-notes.md
           fail_on_unmatched_files: true
           files: |
-            assets/Clippy-Windows.zip
-            assets/Clippy-macOS.zip
             assets/Clippy-Linux.zip
+            assets/Clippy-macOS.zip
+            assets/Clippy-Windows.zip
             assets/SHA256SUMS
