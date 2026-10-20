@@ -21,6 +21,8 @@ await packager({
         identity: "-",
         identityValidation: false,
         continueOnError: false,
+        // Ad-hoc signatures have no Team ID for library validation.
+        optionsForFile: () => ({ hardenedRuntime: false }),
     },
     asar: {
         // Keep native binaries outside app.asar.
