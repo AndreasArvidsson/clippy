@@ -7,15 +7,21 @@ on:
     branches: [main]
 
 permissions:
-  contents: write
+  contents: read
+
+# Ensure that only one release creation workflow runs at a time, queuing subsequent runs.
+concurrency:
+  group: create-release
+  queue: max
 
 jobs:
-  create-release:
-    name: Create release
+  prepare:
+    name: Prepare release
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     outputs:
       version: ${{ steps.get-version.outputs.version }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -32,33 +38,18 @@ jobs:
         id: get-version
         run: |
           VERSION=$(node -p "require('./package.json').version")
-          echo "version=$VERSION" >> $GITHUB_ENV
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Check whether this version is already published
         run: |
-          if git ls-remote --exit-code --tags origin "refs/tags/${{ env.version }}" > /dev/null; then
-            echo "Version ${{ env.version }} is already tagged."
+          if git ls-remote --exit-code --tags origin "refs/tags/v${{ steps.get-version.outputs.version }}" > /dev/null; then
+            echo "Version v${{ steps.get-version.outputs.version }} is already tagged."
             exit 1
           fi
 
-      - name: Create GitHub release
-        uses: softprops/action-gh-release@v3
-        with:
-          name: ${{ steps.get-version.outputs.version }}
-          tag_name: v${{ steps.get-version.outputs.version }}
-          body: Release for version ${{ steps.get-version.outputs.version }}
-          target_commitish: ${{ github.event.workflow_run.head_sha }}
-
-      - name: Create Git tag
-        run: |
-          git tag v${{ steps.get-version.outputs.version }}
-          git push origin v${{ steps.get-version.outputs.version }}
-
-  upload-assets:
-    name: Upload assets
-    needs: create-release
-    if: ${{ needs.create-release.result == 'success' }}
+  build:
+    name: Build assets
+    needs: prepare
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -105,24 +96,55 @@ jobs:
         run: zip -ry "../Clippy-${{ runner.os }}.zip" *
         if: runner.os == 'Linux'
 
-      - name: Generate hash file (Windows)
-        shell: pwsh
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v7
+        with:
+          path: Clippy-${{ runner.os }}.zip
+          archive: false
+          if-no-files-found: error
+
+  create-release:
+    name: Create release
+    needs: [prepare, build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v8
+        with:
+          pattern: Clippy-*.zip
+          path: assets
+          merge-multiple: true
+          skip-decompress: true
+
+      - name: Generate checksums
+        working-directory: assets
+        run: sha256sum Clippy-Windows.zip Clippy-macOS.zip Clippy-Linux.zip > SHA256SUMS
+
+      - name: Generate release notes
         run: |
-          $zip = "Clippy-${{ runner.os }}.zip"
-          $hash = (Get-FileHash -Algorithm SHA256 $zip).Hash.ToLower()
-          "$hash  $zip" | Set-Content -Encoding ascii "$zip.sha256"
-        if: runner.os == 'Windows'
+          {
+            echo "Release for version ${{ needs.prepare.outputs.version }}"
+            echo
+            echo '## SHA-256 checksums'
+            echo
+            echo '```text'
+            cat assets/SHA256SUMS
+            echo '```'
+          } > release-notes.md
 
-      - name: Generate hash file (macOS and Linux)
-        shell: bash
-        run: shasum -a 256 "Clippy-${{ runner.os }}.zip" > "Clippy-${{ runner.os }}.zip.sha256"
-        if: runner.os != 'Windows'
-
-      - name: Upload release assets
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: >
-          gh release upload
-          "v${{ needs.create-release.outputs.version }}"
-          "Clippy-${{ runner.os }}.zip"
-          "Clippy-${{ runner.os }}.zip.sha256"
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v3
+        with:
+          name: ${{ needs.prepare.outputs.version }}
+          tag_name: v${{ needs.prepare.outputs.version }}
+          target_commitish: ${{ github.event.workflow_run.head_sha }}
+          body_path: release-notes.md
+          fail_on_unmatched_files: true
+          files: |
+            assets/Clippy-Windows.zip
+            assets/Clippy-macOS.zip
+            assets/Clippy-Linux.zip
+            assets/SHA256SUMS

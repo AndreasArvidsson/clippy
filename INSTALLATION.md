@@ -30,11 +30,7 @@ macOS saves an exception for Clippy, so you can open it normally afterward. If m
 
 ## SHA-256 checksums
 
-Use these checksums to verify that your downloaded ZIP file matches the release.
-
-- [Windows](https://github.com/AndreasArvidsson/clippy/releases/latest/download/Clippy-Windows.zip.sha256)
-- [Linux](https://github.com/AndreasArvidsson/clippy/releases/latest/download/Clippy-Linux.zip.sha256)
-- [macOS](https://github.com/AndreasArvidsson/clippy/releases/latest/download/Clippy-macOS.zip.sha256)
+Download [SHA256SUMS](https://github.com/AndreasArvidsson/clippy/releases/latest/download/SHA256SUMS), which contains the SHA-256 checksums for all platforms, to verify that your downloaded ZIP file matches the release.
 
 ## Uninstallation
 
