@@ -32,10 +32,18 @@ macOS saves an exception for Clippy, so you can open it normally afterward. If m
 
 Download [SHA256SUMS](https://github.com/AndreasArvidsson/clippy/releases/latest/download/SHA256SUMS), which contains the SHA-256 checksums for all platforms, to verify that your downloaded ZIP file matches the release.
 
+## Reinstallation
+
+1. Exit Clippy.
+2. Delete the application folder extracted from the ZIP file. On macOS, delete `Clippy.app` if you moved it to Applications.
+3. [Install Clippy again](#installation).
+
+Reinstallation preserves your settings and stored clipboard items.
+
 ## Uninstallation
 
-1. Close Clippy.
-2. Delete the application folder that you extracted from the ZIP file. On macOS, delete `Clippy.app` if you moved it to Applications.
+1. Exit Clippy.
+2. Delete the application folder extracted from the ZIP file. On macOS, delete `Clippy.app` if you moved it to Applications.
 3. Optionally remove Clippy's cache and settings folder. Note that this will remove stored clipboard items:
     - Windows: `%APPDATA%\Clippy`.
     - macOS: `~/Library/Application Support/Clippy`.
