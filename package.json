@@ -8,6 +8,14 @@
     "license": "MIT",
     "main": "out/main.js",
     "private": true,
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/AndreasArvidsson/clippy.git"
+    },
+    "funding": "https://github.com/sponsors/AndreasArvidsson",
+    "sponsor": {
+        "url": "https://github.com/sponsors/AndreasArvidsson"
+    },
     "scripts": {
         "clean": "rm -rf out dist",
         "postinstall": "install-electron",
